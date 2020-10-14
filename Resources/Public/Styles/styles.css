@@ -40,8 +40,9 @@ form[name='storage'] {
     vertical-align: bottom;
 }
 
-.tx_mask_btn_row .tx_mask_btn_img {
+.tx_mask_btn_row .tx_mask_btn_img img {
     width: 37px;
+    height: auto;
 }
 
 .tx_mask_btn_row .tx_mask_btn_img img,
@@ -72,6 +73,7 @@ form[name='storage'] {
 .tx_mask_tabcell2 > .dragtarget {
     display: block;
     min-height: 70px !important;
+    padding-bottom: 40px;
 }
 
 .tx_mask_tabcell2 ul .dragtarget {

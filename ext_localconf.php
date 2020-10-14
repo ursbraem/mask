@@ -25,6 +25,20 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRe
     ]
 ];
 
+if (TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_BE) {
+    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        \TYPO3\CMS\Core\Page\PageRenderer::class
+    )->addRequireJsConfiguration(
+        [
+            'paths' => [
+                'sortablejs' => \TYPO3\CMS\Core\Utility\PathUtility::getAbsoluteWebPath(
+                    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mask', 'Resources/Public/JavaScript/Contrib/sortable')
+                )
+            ]
+        ]
+    );
+}
+
 // Update wizards
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['removeRichtextConfiguration'] = \MASK\Mask\Updates\RemoveRichtextConfiguration::class;
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['convertTemplatesToUppercase'] = \MASK\Mask\Updates\ConvertTemplatesToUppercase::class;

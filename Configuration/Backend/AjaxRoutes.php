@@ -11,4 +11,8 @@ return [
         'path' => '/mask/checkElementKey',
         'target' => \MASK\Mask\Controller\WizardController::class . '::checkElementKey'
     ],
+    'mask_fieldtypes' => [
+        'path' => '/mask/fieldTypes',
+        'target' => \MASK\Mask\Controller\AjaxController::class . '::fieldTypes'
+    ]
 ];
