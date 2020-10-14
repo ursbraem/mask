@@ -28,6 +28,9 @@ define([
           },
           removeField: function (index) {
             this.fields.splice(index, 1);
+          },
+          isParentField: function (field) {
+            return ['Inline', 'Palette'].includes(field.name);
           }
         },
         template: `
@@ -48,7 +51,7 @@ define([
             <span class="id_move" title="Move item" v-html="icons.move"></span>
         </div>
     </div>
-    <div class="tx_mask_btn_caption">
+    <div class="tx_mask_btn_caption" v-if="isParentField(field)">
         <nested-draggable :fields="field.fields" :icons="icons"/>
     </div>
   </li>
