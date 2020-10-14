@@ -14,5 +14,9 @@ return [
     'mask_fieldtypes' => [
         'path' => '/mask/fieldTypes',
         'target' => \MASK\Mask\Controller\AjaxController::class . '::fieldTypes'
+    ],
+    'mask_icons' => [
+        'path' => '/mask/icons',
+        'target' => \MASK\Mask\Controller\AjaxController::class . '::icons'
     ]
 ];

@@ -3,28 +3,30 @@
 </label>
 <div class="t3js-formengine-field-item">
     <div class="form-control-wrap">
-        <f:form.textfield class="form-control lowercase"
-                          id="meta_key"
-                          value="{storage.key}"
-                          required="required"
-                          name="storage[elements][key]"
-                          placeholder="{f:translate(key:'tx_mask.all.fieldkey')}"
-                          title="{f:translate(key:'tx_mask.all.fieldkey')}"
-                          readonly="{f:if(condition: '{editMode}', then: 'readonly', else: '')}"/>
+        <input
+            v-model="element.key"
+            id="meta_key"
+            class="form-control lowercase"
+            required="required"
+            placeholder="{f:translate(key: 'tx_mask.all.fieldkey')}"
+            title="{f:translate(key: 'tx_mask.all.fieldkey')}"
+        />
     </div>
 </div>
+
 <label class="t3js-formengine-label" for="meta_label">
     <f:translate key="tx_mask.content.title"/>*
 </label>
 <div class="t3js-formengine-field-item">
     <div class="form-control-wrap">
-        <f:form.textfield class="form-control"
-                          id="meta_label"
-                          required="required"
-                          value="{storage.label}"
-                          name="storage[elements][label]"
-                          placeholder="{f:translate(key:'tx_mask.content.title')}"
-                          title="{f:translate(key:'tx_mask.content.title')}"/>
+        <input
+            v-model="element.label"
+            id="meta_label"
+            class="form-control"
+            required="required"
+            placeholder="{f:translate(key:  'tx_mask.content.title')}"
+            title="{f:translate(key: 'tx_mask.content.title')}"
+        />
     </div>
 </div>
 <label class="t3js-formengine-label" for="meta_shortlabel">
@@ -32,12 +34,14 @@
 </label>
 <div class="t3js-formengine-field-item">
     <div class="form-control-wrap">
-        <f:form.textfield class="form-control"
-                          id="meta_shortlabel"
-                          name="storage[elements][shortLabel]"
-                          value="{storage.shortLabel}"
-                          placeholder="{f:translate(key:'tx_mask.all.shorttitle')}"
-                          title="{f:translate(key:'tx_mask.all.shorttitle')}"/>
+        <input
+            v-model="element.shortLabel"
+            id="meta_shortlabel"
+            class="form-control"
+            required="required"
+            placeholder="{f:translate(key: 'tx_mask.all.shorttitle')}"
+            title="{f:translate(key: 'tx_mask.all.shorttitle')}"
+        />
     </div>
 </div>
 <label class="t3js-formengine-label" for="meta_description">
@@ -45,12 +49,14 @@
 </label>
 <div class="t3js-formengine-field-item">
     <div class="form-control-wrap">
-        <f:form.textarea class="form-control"
-                          id="meta_description"
-                          name="storage[elements][description]"
-                          value="{storage.description}"
-                          placeholder="{f:translate(key:'tx_mask.all.description')}"
-                          title="{f:translate(key:'tx_mask.all.description')}"/>
+        <textarea
+            v-model="element.description"
+            id="meta_description"
+            class="form-control"
+            required="required"
+            placeholder="{f:translate(key: 'tx_mask.all.description')}"
+            title="{f:translate(key: 'tx_mask.all.description')}"
+        ></textarea>
         <f:form.hidden property="type" value="tt_content"/>
         <f:form.hidden property="orgkey" value="{storage.key}"/>
     </div>
@@ -65,13 +71,12 @@
         </label>
         <div class="t3js-formengine-field-item icon-field">
             <div class="form-control-wrap">
-                <f:form.select class="form-control"
-                               id="meta_icon"
-                               name="storage[elements][icon]"
-                               value="{storage.icon}"
-                               options="{icons}" title="{f:translate(key:'tx_mask.all.icon')}"
-                               prependOptionLabel=""
-                               prependOptionValue=""/>
+                <select
+                    class="form-control"
+                    id="meta_icon"
+                    title="{f:translate(key:'tx_mask.all.icon')}"
+                >
+                </select>
             </div>
         </div>
     </div>
@@ -80,14 +85,15 @@
             <f:translate key="tx_mask.all.color"/>
         </label>
         <div class="t3js-formengine-field-item">
-            <div class="form-control-wrap" style="max-width: 50px">
-                <f:form.textfield class="form-control"
-                                  id="meta_color"
-                                  name="storage[elements][color]"
-                                  type="color"
-                                  value="{storage.color}"
-                                  placeholder="{f:translate(key:'tx_mask.all.color')}"
-                                  title="{f:translate(key:'tx_mask.all.color')}"/>
+            <div class="form-control-wrap">
+                <input
+                    v-model="element.color"
+                    type="color"
+                    class="form-control"
+                    id="meta_color"
+                    placeholder="{f:translate(key: 'tx_mask.all.color')}"
+                    title="{f:translate(key: 'tx_mask.all.color')}"
+                />
             </div>
         </div>
     </div>

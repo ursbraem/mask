@@ -44,8 +44,6 @@ class WizardContentController extends WizardController
      */
     public function newAction(): void
     {
-        $icons = $this->iconRepository->findAll();
-        $this->view->assign('icons', $icons);
     }
 
     /**

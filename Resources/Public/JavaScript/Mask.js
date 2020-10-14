@@ -1,13 +1,14 @@
 define([
   'TYPO3/CMS/Mask/Contrib/vue',
   'TYPO3/CMS/Mask/Contrib/vuedraggable',
-  'TYPO3/CMS/Mask/NestedDraggable',
+  'TYPO3/CMS/Mask/Components/NestedDraggable',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
-  'TYPO3/CMS/Backend/Icons'
+  'TYPO3/CMS/Backend/Icons',
 ], function (Vue, draggable, nestedDraggable, AjaxRequest, Icons) {
   if (!document.getElementById('mask')) {
     return;
   }
+
   var mask = new Vue({
     el: '#mask',
     components: {
@@ -16,6 +17,14 @@ define([
     },
     data: function () {
       return {
+        element: {
+          key: '',
+          label: '',
+          shortLabel: '',
+          description: '',
+          icon: '',
+          color: '#000000'
+        },
         fieldTypes: [],
         fields: [],
         icons: {},
@@ -34,6 +43,7 @@ define([
       Icons.getIcon('actions-move-move', Icons.sizes.small).done(function (icon) {
         mask.icons.move = icon;
       });
+      require(['TYPO3/CMS/Mask/FontIconPicker']);
     },
     methods: {
       handleClone(item) {
