@@ -33,7 +33,7 @@ class AjaxController extends ActionController
         $json = [];
         foreach (FieldType::getConstants() as $type) {
             $json[] = [
-                'name' => GeneralUtility::underscoredToUpperCamelCase($type),
+                'name' => $type,
                 'icon' => $iconFactory->getIcon('mask-fieldtype-' . $type)->getMarkup(),
                 'fields' => []
             ];

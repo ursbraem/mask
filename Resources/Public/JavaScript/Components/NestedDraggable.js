@@ -9,6 +9,8 @@ define([
         props: {
           fields: Array,
           icons: Object,
+          global: Object,
+          setNewAsActive: Function
         },
         components: {
           draggable
@@ -30,7 +32,7 @@ define([
             this.fields.splice(index, 1);
           },
           isParentField: function (field) {
-            return ['Inline', 'Palette'].includes(field.name);
+            return ['inline', 'palette'].includes(field.name);
           }
         },
         template: `
@@ -40,9 +42,10 @@ define([
   :list="fields"
   group="fieldTypes"
   ghost-class="ghost"
+  @add="setNewAsActive"
   >
-  <li v-for="(field, index) in fields" :key="uuid(field)" class="tx_mask_btn">
-    <div class="tx_mask_btn_row">
+  <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field.uid }, 'id_' + field.name]">
+    <div class="tx_mask_btn_row" @click="global.activeField = field.uid">
         <div class="tx_mask_btn_img">
             <div v-html="field.icon"></div>
         </div>
@@ -52,7 +55,7 @@ define([
         </div>
     </div>
     <div class="tx_mask_btn_caption" v-if="isParentField(field)">
-        <nested-draggable :fields="field.fields" :icons="icons"/>
+        <nested-draggable :fields="field.fields" :icons="icons" :global="global" :set-new-as-active="setNewAsActive"/>
     </div>
   </li>
 </draggable>

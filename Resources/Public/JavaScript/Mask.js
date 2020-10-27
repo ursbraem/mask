@@ -28,6 +28,9 @@ define([
         fieldTypes: [],
         fields: [],
         icons: {},
+        global: {
+          activeField: ''
+        }
       }
     },
     mounted: function () {
@@ -53,6 +56,10 @@ define([
 
         return cloneMe;
       },
+
+      setNewAsActive(e) {
+        this.global.activeField = e.item._underlying_vm_.uid;
+      }
     }
   });
 });

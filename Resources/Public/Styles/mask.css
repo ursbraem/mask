@@ -350,11 +350,15 @@
 .icon-module-tools_MaskMask img {
   border-radius: 2px; }
 
-.id_inline > .tx_mask_btn_caption {
-  border-left: 4px solid #9e97d1; }
+.id_inline {
+  border-bottom: 0 !important; }
+  .id_inline > .tx_mask_btn_caption {
+    border-left: 4px solid #9e97d1; }
 
-.id_palette > .tx_mask_btn_caption {
-  border-left: 4px solid #4e4e4e; }
+.id_palette {
+  border-bottom: 0 !important; }
+  .id_palette > .tx_mask_btn_caption {
+    border-left: 4px solid #4e4e4e; }
 
 .tx_mask_field_templates li .tx_mask_btn_actions {
   cursor: pointer;
