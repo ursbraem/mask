@@ -1,0 +1,11 @@
+.tx_mask_tabcell3 {
+    background: #f2f2f2;
+    margin-top: 20px;
+    padding-top: 30px;
+
+    @media screen and (min-width: 1200px) {
+        height: 100%;
+        padding: 30px !important;
+        margin-top: 0;
+    }
+}

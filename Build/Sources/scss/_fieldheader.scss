@@ -1,0 +1,35 @@
+.tx_mask_fieldheader {
+    height: 50px;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+
+    &_icon {
+        float: left;
+        margin-right: 16px;
+        min-height: 32px;
+        width: 32px;
+    }
+
+    &_text {
+        min-height: 32px;
+
+        h1 {
+            font-family: Share, Verdana, Arial, Helvetica, sans-serif;
+            font-size: 165%;
+            font-weight: 400;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        p {
+            font-size: 100%;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+        }
+
+    }
+}

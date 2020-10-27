@@ -1,0 +1,124 @@
+@import "libs/font-icon-picker";
+@import "libs/font-icon-picker-theme";
+
+@import "button";
+@import "tabcell1";
+@import "tabcell2";
+@import "tabcell3";
+@import "tabcell4";
+@import "tabcell5";
+@import "depr";
+@import "fieldheader";
+@import "fieldtypes";
+@import "fieldcontent";
+@import "fieldtemplates";
+@import "footer";
+@import "tooltip";
+
+form[name='storage'] {
+    padding: 0 15px;
+}
+
+@media screen and (min-width: 1200px) {
+    form[name='storage'] {
+        padding: 0;
+    }
+}
+
+.icon-size-default {
+    height: 37px !important;
+    line-height: 37px !important;
+    width: 37px !important;
+}
+
+@media screen and (min-width: 1200px) {
+    .row.bench {
+        height: calc(100vh);
+        margin: 0;
+        overflow: hidden;
+    }
+}
+
+.panel-space {
+    margin: 1em 0;
+}
+
+.alert-info {
+    margin-top: 10px;
+}
+
+.element-hidden {
+    -webkit-filter: saturate(0);
+    filter: saturate(0);
+    opacity: 0.4;
+}
+
+#typo3-inner-docbody {
+    max-width: 1500px;
+}
+
+thead th {
+    height: 42px;
+}
+
+table .btn-add {
+    display: block;
+    margin: 8px auto;
+    width: 270px;
+}
+
+h1 .icon.t3js-icon {
+    margin-right: 10px;
+}
+
+
+.fa.fa-plus-circle {
+    color: #4c7e3a;
+}
+
+.typo3-messages {
+    display: none;
+}
+
+.module-body {
+    padding-top: 25px !important;
+    overflow-y: hidden !important;
+}
+
+.form-group.col-sm-12.tx_mask_borderright.tx_mask_tabcell2 {
+    background: none;
+    height: auto;
+    margin: 0;
+    padding: 11px;
+    border: 1px dashed #bbb;
+}
+
+.icon-size-large .icon-unify {
+    font-size: 35px !important;
+}
+
+.form-control-wrap {
+    margin: 9px 0 12px !important;
+}
+
+#meta_color {
+    min-width: auto !important;
+}
+
+.form-control-wrap {
+    max-width: none !important;
+}
+
+.field-description {
+    min-height: 33px;
+    display: flex;
+    align-items: flex-end;
+}
+
+#meta_icon {
+    display: none !important;
+}
+
+.icons-selector i {
+    font-family: FontAwesome, sans-serif;
+}

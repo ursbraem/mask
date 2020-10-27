@@ -1,0 +1,84 @@
+.tx_mask_btn,
+.tx_mask_fieldtypes {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tx_mask_btn {
+    background: #f2f2f2;
+    cursor: move;
+    display: table;
+    height: 37px;
+    margin-bottom: 4px;
+    width: 100%;
+
+    &.ghost {
+        opacity: 0.5;
+    }
+
+    &_row {
+        display: table-row;
+
+        & > div {
+            display: table-cell;
+        }
+
+        img {
+            vertical-align: bottom;
+        }
+
+        .tx_mask_btn_img img {
+            width: 37px;
+            height: auto;
+        }
+
+        .tx_mask_btn_text {
+            padding-left: 13px;
+            vertical-align: middle;
+        }
+
+        .tx_mask_btn_actions {
+            padding-right: 10px;
+            text-align: right;
+            vertical-align: middle;
+            width: 69px;
+        }
+    }
+
+    &_caption {
+        caption-side: bottom;
+        display: table-caption;
+    }
+
+    .dragtarget {
+        display: block;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+}
+
+.tx_mask_btn_row .tx_mask_btn_img img,
+.tx_mask_fieldheader img,
+.icon-module-tools_MaskMask img {
+    border-radius: 2px;
+}
+
+.id_inline > .tx_mask_btn_caption {
+    border-left: 4px solid #9e97d1;
+}
+
+.id_palette > .tx_mask_btn_caption {
+    border-left: 4px solid #4e4e4e;
+}
+
+.tx_mask_field_templates li .tx_mask_btn_actions {
+    cursor: pointer;
+    display: none;
+}
+
+.tx_mask_field_templates .tx_mask_btn_row .tx_mask_btn_text {
+    background: #ffffffba;
+    display: none;
+}
