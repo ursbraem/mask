@@ -1,18 +1,19 @@
 .tx_mask_fieldheader {
+    display: flex;
     height: 50px;
     margin-bottom: 14px;
     padding-bottom: 6px;
 
-    &_icon {
-        float: left;
-        margin-right: 16px;
-        min-height: 32px;
-        width: 32px;
+    &__icon {
+        margin-right: 10px;
+
+        img {
+            width: 44px;
+            height: auto;
+        }
     }
 
-    &_text {
-        min-height: 32px;
-
+    &__text {
         h1 {
             font-family: Share, Verdana, Arial, Helvetica, sans-serif;
             font-size: 165%;
@@ -30,6 +31,5 @@
             margin: 0;
             padding: 0;
         }
-
     }
 }

@@ -10,7 +10,8 @@ define([
           fields: Array,
           icons: Object,
           global: Object,
-          setNewAsActive: Function
+          depth: Number,
+          index: Number
         },
         components: {
           draggable
@@ -29,7 +30,22 @@ define([
             return e.uid;
           },
           removeField: function (index) {
+            if (this.fields[index - 1]) {
+              this.global.activeField = this.fields[index - 1];
+            } else if (this.fields[index + 1]) {
+              this.global.activeField = this.fields[index + 1];
+            }
             this.fields.splice(index, 1);
+            if (this.fields.length === 0) {
+              if (this.depth > 0) {
+                this.$emit('set-parent-active', this.index);
+              } else {
+                this.global.activeField = {};
+              }
+            }
+          },
+          setParentActive(index) {
+            this.global.activeField = this.fields[index];
           },
           isParentField: function (field) {
             return ['inline', 'palette'].includes(field.name);
@@ -37,25 +53,29 @@ define([
         },
         template: `
 <draggable
-  tag="ul"
-  class="tx_mask_fieldtypes dragtarget"
-  :list="fields"
-  group="fieldTypes"
-  ghost-class="ghost"
-  @add="setNewAsActive"
+    tag="ul"
+    class="tx_mask_fieldtypes dragtarget"
+    :list="fields"
+    group="fieldTypes"
+    ghost-class="ghost"
+    @add="global.activeField = global.clonedField"
   >
-  <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field.uid }, 'id_' + field.name]">
-    <div class="tx_mask_btn_row" @click="global.activeField = field.uid">
+  <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field }, 'id_' + field.name]">
+    <div class="tx_mask_btn_row" @click="global.activeField = field">
         <div class="tx_mask_btn_img">
             <div v-html="field.icon"></div>
         </div>
+        <div class="tx_mask_btn_text">
+          <span class="id_labeltext">{{ field.label }}</span>
+          <span class="id_keytext">{{ field.key }}</span>
+        </div>
         <div class="tx_mask_btn_actions">
-            <span @click="removeField(index)" class="id_delete" title="Delete item" v-html="icons.delete"></span>
+            <span @click.stop="removeField(index)" class="id_delete" title="Delete item" v-html="icons.delete"></span>
             <span class="id_move" title="Move item" v-html="icons.move"></span>
         </div>
     </div>
     <div class="tx_mask_btn_caption" v-if="isParentField(field)">
-        <nested-draggable :fields="field.fields" :icons="icons" :global="global" :set-new-as-active="setNewAsActive"/>
+        <nested-draggable @set-parent-active="setParentActive($event)" :depth="depth + 1" :index="index" :fields="field.fields" :icons="icons" :global="global"/>
     </div>
   </li>
 </draggable>

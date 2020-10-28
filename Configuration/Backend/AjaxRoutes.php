@@ -1,22 +1,27 @@
 <?php
 
-declare(strict_types=1);
+use MASK\Mask\Controller\AjaxController;
+use MASK\Mask\Controller\WizardController;
 
 return [
     'mask_check_field_key' => [
         'path' => '/mask/checkFieldKey',
-        'target' => \MASK\Mask\Controller\WizardController::class . '::checkFieldKey'
+        'target' => WizardController::class . '::checkFieldKey'
     ],
     'mask_check_element_key' => [
         'path' => '/mask/checkElementKey',
-        'target' => \MASK\Mask\Controller\WizardController::class . '::checkElementKey'
+        'target' => WizardController::class . '::checkElementKey'
     ],
     'mask_fieldtypes' => [
         'path' => '/mask/fieldTypes',
-        'target' => \MASK\Mask\Controller\AjaxController::class . '::fieldTypes'
+        'target' => AjaxController::class . '::fieldTypes'
     ],
     'mask_icons' => [
         'path' => '/mask/icons',
-        'target' => \MASK\Mask\Controller\AjaxController::class . '::icons'
+        'target' => AjaxController::class . '::icons'
+    ],
+    'mask_tca' => [
+        'path' => '/mask/tca',
+        'target' => AjaxController::class . '::tca'
     ]
 ];

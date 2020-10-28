@@ -27,4 +27,12 @@
     li:hover {
         background: #eaf4fd;
     }
+
+    &.form-group.col-sm-12.tx_mask_borderright {
+        background: none;
+        height: auto;
+        margin: 0;
+        padding: 11px;
+        border: 1px dashed #bbb;
+    }
 }

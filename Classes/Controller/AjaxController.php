@@ -18,15 +18,46 @@ declare(strict_types=1);
 namespace MASK\Mask\Controller;
 
 use MASK\Mask\DataStructure\FieldType;
+use MASK\Mask\Domain\Repository\StorageRepository;
+use MASK\Mask\Helper\FieldHelper;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class AjaxController extends ActionController
 {
+    /**
+     * FieldHelper
+     *
+     * @var FieldHelper
+     */
+    protected $fieldHelper;
+
+    /**
+     * @var StorageRepository
+     */
+    protected $storageRepository;
+
+    /**
+     * @param FieldHelper $fieldHelper
+     */
+    public function injectFieldHelper(FieldHelper $fieldHelper)
+    {
+        $this->fieldHelper = $fieldHelper;
+    }
+
+    /**
+     * @param StorageRepository $storageRepository
+     */
+    public function injectStorageRepository(StorageRepository $storageRepository)
+    {
+        $this->storageRepository = $storageRepository;
+    }
+
     public function fieldTypes(ServerRequestInterface $request): Response
     {
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
@@ -35,7 +66,9 @@ class AjaxController extends ActionController
             $json[] = [
                 'name' => $type,
                 'icon' => $iconFactory->getIcon('mask-fieldtype-' . $type)->getMarkup(),
-                'fields' => []
+                'fields' => [],
+                'key' => '',
+                'label' => ''
             ];
         }
         return new JsonResponse($json);
@@ -67,5 +100,86 @@ class AjaxController extends ActionController
             }, $values);
         }
         return new JsonResponse($icons);
+    }
+
+    public function tca(ServerRequestInterface $request): Response
+    {
+        $allowedFields = [
+            'tt_content' => [
+                'header',
+                'header_layout',
+                'header_position',
+                'date',
+                'header_link',
+                'subheader',
+                'bodytext',
+                'assets',
+                'image',
+                'media',
+                'imagewidth',
+                'imageheight',
+                'imageborder',
+                'imageorient',
+                'imagecols',
+                'image_zoom',
+                'bullets_type',
+                'table_delimiter',
+                'table_enclosure',
+                'table_caption',
+                'file_collections',
+                'filelink_sorting',
+                'filelink_sorting_direction',
+                'target',
+                'filelink_size',
+                'uploads_description',
+                'uploads_type',
+                'pages',
+                'selected_categories',
+                'category_field',
+            ]
+        ];
+
+        $table = $request->getQueryParams()['table'];
+        $type = $request->getQueryParams()['type'];
+        $emptyFields = ['mask' => [], 'core' => []];
+        $fields = $emptyFields;
+
+        if (in_array($type, [FieldType::PALETTE, FieldType::LINEBREAK])) {
+            return new JsonResponse($fields);
+        }
+
+        if (empty($GLOBALS['TCA'][$table])) {
+            return new JsonResponse($fields);
+        }
+
+        if ($type == FieldType::TAB) {
+            $fields = $this->fieldHelper->getFieldsByType($type, $table);
+            if (empty($fields)) {
+                $fields = $emptyFields;
+            }
+        } elseif (!\MASK\Mask\Utility\GeneralUtility::isMaskIrreTable($table)) {
+            foreach ($GLOBALS['TCA'][$table]['columns'] as $tcaField => $tcaConfig) {
+                $isMaskField = \MASK\Mask\Utility\GeneralUtility::isMaskIrreTable($tcaField);
+                if (!$isMaskField && !in_array($tcaField, $allowedFields[$table] ?? [])) {
+                    continue;
+                }
+                // This is needed because the richtext option of bodytext is set via column overrides.
+                if ($tcaField === 'bodytext' && $table === 'tt_content') {
+                    $fieldType = FieldType::RICHTEXT;
+                } else {
+                    $fieldType = $this->storageRepository->getFormType($tcaField, '', $table);
+                }
+                if ($fieldType === $type) {
+                    $key = $isMaskField ? 'mask' : 'core';
+                    $label = $isMaskField ? (str_replace('tx_mask_', '', $tcaField)) : LocalizationUtility::translate($tcaConfig['label']);
+                    // todo add element argument and resolve mask label
+                    $fields[$key][] = [
+                        'field' => $tcaField,
+                        'label' => $label,
+                    ];
+                }
+            }
+        }
+        return new JsonResponse($fields);
     }
 }

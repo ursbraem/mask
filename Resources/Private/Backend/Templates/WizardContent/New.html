@@ -1,46 +1,46 @@
-<f:layout name="Default"/>
+<f:layout/>
 
 <f:section name="content">
     <div id="mask">
-        <div>
-            <div class="row bench">
-                <div class="form-group col-sm-2 tx_mask_borderright tx_mask_tabcell1">
-                    <h1 v-if="element.label">{{ element.label }}</h1>
-                    <h1 v-else><f:translate key="tx_mask.content.newheader"/></h1>
-                    <f:render partial="WizardContent/Metadata" arguments="{storage: storage}"/>
-                    <div>
-                        <f:render partial="General/Controls" />
-                    </div>
+        <div class="row bench">
+            <div class="form-group col-sm-2 tx_mask_borderright tx_mask_tabcell1">
+                <h1 v-if="element.label">{{ element.label }}</h1>
+                <h1 v-else><f:translate key="tx_mask.content.newheader"/></h1>
+                <f:render partial="WizardContent/Metadata" arguments="{storage: storage}"/>
+                <div>
+                    <f:render partial="General/Controls" />
                 </div>
-                <div class="col-sm-4 tx_mask_tabcell4">
-                    <label class="t3js-formengine-label">
-                        <f:translate key="tx_mask.all.add_new_fields"/>
-                    </label>
-                    <div class="col-sm-12 tx_mask_tabcell5">
-                        <ul class="tx_mask_fieldtypes tx_mask_field_templates" id="dragstart">
-                            <draggable
-                                :list="fieldTypes"
-                                :group="{name: 'fieldTypes', pull: 'clone', 'put': false}"
-                                :sort="false"
-                                :clone="handleClone"
-                            >
-                                <li v-for="type in fieldTypes" class="tx_mask_btn mask_tooltip">
-                                    <span class="tooltiptext">{{ type.name }}</span>
-                                    <div class="tx_mask_btn_row">
-                                        <div class="tx_mask_btn_img" v-html="type.icon"></div>
-                                    </div>
-                                </li>
-                            </draggable>
-                        </ul>
-                    </div>
-                    <label class="t3js-formengine-label">
-                        <f:translate key="tx_mask.all.fields_of_element"/>
-                    </label>
-                    <div class="form-group col-sm-12 tx_mask_borderright tx_mask_tabcell2">
-                        <nested-draggable :fields="fields" :icons="icons" :global="global" :set-new-as-active="setNewAsActive"/>
-                    </div>
+            </div>
+            <div class="col-sm-4 tx_mask_tabcell4">
+                <label class="t3js-formengine-label">
+                    <f:translate key="tx_mask.all.add_new_fields"/>
+                </label>
+                <div class="col-sm-12 tx_mask_tabcell5">
+                    <ul class="tx_mask_fieldtypes tx_mask_field_templates" id="dragstart">
+                        <draggable
+                            :list="fieldTypes"
+                            :group="{name: 'fieldTypes', pull: 'clone', 'put': false}"
+                            :sort="false"
+                            :clone="handleClone"
+                        >
+                            <li v-for="type in fieldTypes" class="tx_mask_btn mask_tooltip">
+                                <span class="tooltiptext">{{ type.name }}</span>
+                                <div class="tx_mask_btn_row">
+                                    <div class="tx_mask_btn_img" v-html="type.icon"></div>
+                                </div>
+                            </li>
+                        </draggable>
+                    </ul>
                 </div>
-                <div class="form-group col-sm-6 tx_mask_tabcell3"></div>
+                <label class="t3js-formengine-label">
+                    <f:translate key="tx_mask.all.fields_of_element"/>
+                </label>
+                <div class="form-group col-sm-12 tx_mask_borderright tx_mask_tabcell2">
+                    <nested-draggable :depth="0" :index="0" :fields="fields" :icons="icons" :global="global" />
+                </div>
+            </div>
+            <div class="form-group col-sm-6 tx_mask_tabcell3">
+                <f:render partial="Forms/General/Form"/>
             </div>
         </div>
     </div>

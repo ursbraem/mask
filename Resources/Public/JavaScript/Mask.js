@@ -28,8 +28,11 @@ define([
         fieldTypes: [],
         fields: [],
         icons: {},
+        editMode: false,
+        availableTca: {},
         global: {
-          activeField: ''
+          activeField: {},
+          clonedField: {}
         }
       }
     },
@@ -38,8 +41,17 @@ define([
         .then(
           async function (response) {
             mask.fieldTypes = await response.resolve();
+            mask.fieldTypes.forEach(function (item) {
+              new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca).withQueryArguments({table: 'tt_content', type: item.name}).get()
+                .then(
+                  async function (response) {
+                    mask.availableTca[item.name] = await response.resolve();
+                  }
+                )
+            });
           }
         );
+
       Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
         mask.icons.delete = icon;
       });
@@ -53,12 +65,27 @@ define([
         // Create a fresh copy of item
         let cloneMe = JSON.parse(JSON.stringify(item));
         this.$delete(cloneMe, 'uid');
-
+        this.global.clonedField = cloneMe;
         return cloneMe;
       },
-
-      setNewAsActive(e) {
-        this.global.activeField = e.item._underlying_vm_.uid;
+    },
+    computed: {
+      isExistingField: function () {
+        if (!this.global.activeField.name) {
+          return false;
+        }
+        var isExisting = false;
+        this.availableTca[this.global.activeField.name].core.forEach(function (item) {
+          if (item.field === mask.global.activeField.key) {
+            isExisting = true;
+          }
+        });
+        this.availableTca[this.global.activeField.name].mask.forEach(function (item) {
+          if (item.field === mask.global.activeField.key) {
+            isExisting = true;
+          }
+        });
+        return isExisting;
       }
     }
   });

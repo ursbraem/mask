@@ -8,8 +8,7 @@
 .tx_mask_btn {
     background: #f2f2f2;
     cursor: move;
-    display: table;
-    height: 37px;
+    min-height: 37px;
     margin-bottom: 4px;
     width: 100%;
 
@@ -18,11 +17,8 @@
     }
 
     &_row {
-        display: table-row;
-
-        & > div {
-            display: table-cell;
-        }
+        display: flex;
+        align-items: center;
 
         img {
             vertical-align: bottom;
@@ -35,20 +31,14 @@
 
         .tx_mask_btn_text {
             padding-left: 13px;
-            vertical-align: middle;
         }
 
         .tx_mask_btn_actions {
             padding-right: 10px;
             text-align: right;
-            vertical-align: middle;
             width: 69px;
+            margin-left: auto;
         }
-    }
-
-    &_caption {
-        caption-side: bottom;
-        display: table-caption;
     }
 
     .dragtarget {
@@ -56,6 +46,7 @@
         margin: 0;
         padding: 0;
         width: 100%;
+        background-color: #fff;
     }
 }
 
