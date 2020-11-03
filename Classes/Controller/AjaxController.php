@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace MASK\Mask\Controller;
 
 use MASK\Mask\DataStructure\FieldType;
+use MASK\Mask\DataStructure\Tab;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Helper\FieldHelper;
 use Psr\Http\Message\ServerRequestInterface;
@@ -62,14 +63,27 @@ class AjaxController extends ActionController
     {
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $json = [];
+        $defaults = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Defaults.php');
         foreach (FieldType::getConstants() as $type) {
-            $json[] = [
+            $config = [
                 'name' => $type,
                 'icon' => $iconFactory->getIcon('mask-fieldtype-' . $type)->getMarkup(),
                 'fields' => [],
                 'key' => '',
-                'label' => ''
+                'label' => '',
+                'tca' => [
+                    'l10n_mode' => ''
+                ]
             ];
+            if ($type == FieldType::CONTENT) {
+                $config['tca']['cTypes'] = [];
+            }
+            if (isset($defaults[$type]['tca_in'])) {
+                foreach ($defaults[$type]['tca_in'] as $tcaKey => $value) {
+                    $config['tca'][$tcaKey] = $value;
+                }
+            }
+            $json[] = $config;
         }
         return new JsonResponse($json);
     }
@@ -102,7 +116,7 @@ class AjaxController extends ActionController
         return new JsonResponse($icons);
     }
 
-    public function tca(ServerRequestInterface $request): Response
+    public function existingTca(ServerRequestInterface $request): Response
     {
         $allowedFields = [
             'tt_content' => [
@@ -181,5 +195,83 @@ class AjaxController extends ActionController
             }
         }
         return new JsonResponse($fields);
+    }
+
+    public function tcaFields(ServerRequestInterface $request): Response
+    {
+        $tcaFields = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/TcaFields.php');
+        foreach ($tcaFields as $key => $field) {
+            $tcaFields[$key]['label'] = LocalizationUtility::translate($field['label'], 'mask');
+            if (isset($field['placeholder'])) {
+                $tcaFields[$key]['placeholder'] = LocalizationUtility::translate($field['placeholder'], 'mask');
+            }
+            if (isset($field['description'])) {
+                $tcaFields[$key]['description'] = LocalizationUtility::translate($field['description'], 'mask');
+            }
+            if (isset($tcaFields[$key]['items'])) {
+                foreach ($tcaFields[$key]['items'] as $itemKey => $item) {
+                    $tcaFields[$key]['items'][$itemKey] = LocalizationUtility::translate($item, 'mask');
+                }
+            }
+        }
+        return new JsonResponse($tcaFields);
+    }
+
+    public function cTypes(ServerRequestInterface $request): Response
+    {
+        $items = [];
+        $cTypes = $GLOBALS['TCA']['tt_content']['columns']['CType']['config']['items'];
+        if ($cTypes) {
+            foreach ($cTypes as $type) {
+                if ($type[1] !== '--div--') {
+                    if (GeneralUtility::isFirstPartOfStr($type[0], 'LLL:')) {
+                        $items[$type[1]] = LocalizationUtility::translate($type[0], 'mask') . ' (' . $type[1] . ')';
+                    } else {
+                        $items[$type[1]] = $type[0] . ' (' . $type[1] . ')';
+                    }
+                }
+            }
+        }
+        return new JsonResponse($items);
+    }
+
+    public function tabs(ServerRequestInterface $request): Response
+    {
+        $tabs = [];
+        foreach (FieldType::getConstants() as $type) {
+            $tabs[$type] = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Tabs/' . $type . '.php');
+        }
+        return new JsonResponse($tabs);
+    }
+
+    public function language(ServerRequestInterface $request): Response
+    {
+        $language = [];
+        $tabs = [
+            Tab::GENERAL => 'tx_mask.tabs.default',
+            Tab::APPEARANCE => 'tx_mask.tabs.appearance',
+            Tab::DATABASE => 'tx_mask.tabs.database',
+            Tab::EXTENDED => 'tx_mask.tabs.extended',
+            Tab::FIELD_CONTROL => 'tx_mask.tabs.fieldControl',
+            Tab::FILES => 'tx_mask.tabs.files',
+            Tab::LOCALIZATION => 'tx_mask.tabs.localization',
+            Tab::VALIDATION => 'tx_mask.tabs.validation',
+            Tab::WIZARDS => 'tx_mask.tabs.wizards',
+        ];
+
+        foreach ($tabs as $key => $tab) {
+            $tabs[$key] = LocalizationUtility::translate($tab, 'mask');
+        }
+        $language['tabs'] = $tabs;
+        return new JsonResponse($language);
+    }
+
+    public function richtextConfiguration(ServerRequestInterface $request): Response
+    {
+        $config[''] = LocalizationUtility::translate('tx_mask.config.richtextConfiguration.none', 'mask');
+        $presets = array_keys($GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']);
+        $presets = array_combine($presets, $presets);
+        $config = array_merge($config, $presets);
+        return new JsonResponse($config);
     }
 }

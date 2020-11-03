@@ -2,14 +2,13 @@
     <f:translate key="tx_mask.all.fieldkey"/>*
 </label>
 <div class="t3js-formengine-field-item">
+    <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.all.fieldkey.description')}</span>
     <div class="form-control-wrap">
         <input
             v-model="element.key"
             id="meta_key"
             class="form-control lowercase"
             required="required"
-            placeholder="{f:translate(key: 'tx_mask.all.fieldkey')}"
-            title="{f:translate(key: 'tx_mask.all.fieldkey')}"
         />
     </div>
 </div>
@@ -24,8 +23,6 @@
             id="meta_label"
             class="form-control"
             required="required"
-            placeholder="{f:translate(key:  'tx_mask.content.title')}"
-            title="{f:translate(key: 'tx_mask.content.title')}"
         />
     </div>
 </div>
@@ -39,8 +36,6 @@
             id="meta_shortlabel"
             class="form-control"
             required="required"
-            placeholder="{f:translate(key: 'tx_mask.all.shorttitle')}"
-            title="{f:translate(key: 'tx_mask.all.shorttitle')}"
         />
     </div>
 </div>
@@ -53,10 +48,8 @@
             v-model="element.description"
             id="meta_description"
             class="form-control"
-            required="required"
-            placeholder="{f:translate(key: 'tx_mask.all.description')}"
-            title="{f:translate(key: 'tx_mask.all.description')}"
-        ></textarea>
+            required="required">
+        </textarea>
         <f:form.hidden property="type" value="tt_content"/>
         <f:form.hidden property="orgkey" value="{storage.key}"/>
     </div>

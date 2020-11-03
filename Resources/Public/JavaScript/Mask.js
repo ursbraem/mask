@@ -2,9 +2,10 @@ define([
   'TYPO3/CMS/Mask/Contrib/vue',
   'TYPO3/CMS/Mask/Contrib/vuedraggable',
   'TYPO3/CMS/Mask/Components/NestedDraggable',
+  'TYPO3/CMS/Mask/Components/FormField',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
-], function (Vue, draggable, nestedDraggable, AjaxRequest, Icons) {
+], function (Vue, draggable, nestedDraggable, formField, AjaxRequest, Icons) {
   if (!document.getElementById('mask')) {
     return;
   }
@@ -13,7 +14,8 @@ define([
     el: '#mask',
     components: {
       draggable,
-      nestedDraggable
+      nestedDraggable,
+      formField,
     },
     data: function () {
       return {
@@ -26,13 +28,19 @@ define([
           color: '#000000'
         },
         fieldTypes: [],
+        tcaFields: {},
+        tabs: {},
         fields: [],
+        language: [],
         icons: {},
         editMode: false,
         availableTca: {},
         global: {
           activeField: {},
-          clonedField: {}
+          clonedField: {},
+          richtextConfiguration: {},
+          currentTab: 'general',
+          ctypes: {}
         }
       }
     },
@@ -42,7 +50,8 @@ define([
           async function (response) {
             mask.fieldTypes = await response.resolve();
             mask.fieldTypes.forEach(function (item) {
-              new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca).withQueryArguments({table: 'tt_content', type: item.name}).get()
+              // TODO table tt_content or pages
+              new AjaxRequest(TYPO3.settings.ajaxUrls.mask_existing_tca).withQueryArguments({table: 'tt_content', type: item.name}).get()
                 .then(
                   async function (response) {
                     mask.availableTca[item.name] = await response.resolve();
@@ -52,13 +61,64 @@ define([
           }
         );
 
+      // Fetch language
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_language).get()
+        .then(
+          async function (response) {
+            mask.language = await response.resolve();
+          }
+        );
+
+      // Fetch tcaFields for existing core and mask fields
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca_fields).get()
+        .then(
+          async function (response) {
+            mask.tcaFields = await response.resolve();
+          }
+        );
+
+      // fetch tab declaratuins
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tabs).get()
+        .then(
+          async function (response) {
+            mask.tabs = await response.resolve();
+          }
+        );
+
+      // fetch richtext configuration
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_richtext_configuration).get()
+        .then(
+          async function (response) {
+            mask.global.richtextConfiguration = await response.resolve();
+          }
+        );
+
+      // fetch CTypes
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_ctypes).get()
+        .then(
+          async function (response) {
+            mask.global.ctypes = await response.resolve();
+          }
+        );
+
       Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
         mask.icons.delete = icon;
       });
       Icons.getIcon('actions-move-move', Icons.sizes.small).done(function (icon) {
         mask.icons.move = icon;
       });
+      Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
+        mask.icons.date = icon;
+      });
       require(['TYPO3/CMS/Mask/FontIconPicker']);
+
+      // TODO in v11 this is a regular event (no jquery)
+      // Trigger input change on TYPO3 datepicker change event.
+      $(document).on('formengine.dp.change', function () {
+        document.querySelectorAll('.t3js-datetimepicker').forEach(function (input) {
+          input.dispatchEvent((new Event('input')));
+        });
+      });
     },
     methods: {
       handleClone(item) {
@@ -86,6 +146,12 @@ define([
           }
         });
         return isExisting;
+      },
+      fieldTabs: function () {
+        if (!this.global.activeField.name) {
+          return [];
+        }
+        return this.tabs[this.global.activeField.name];
       }
     }
   });

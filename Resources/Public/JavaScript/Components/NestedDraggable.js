@@ -43,6 +43,8 @@ define([
                 this.global.activeField = {};
               }
             }
+            // Reset current tab
+            this.global.currentTab = 'general';
           },
           setParentActive(index) {
             this.global.activeField = this.fields[index];
@@ -58,15 +60,16 @@ define([
     :list="fields"
     group="fieldTypes"
     ghost-class="ghost"
-    @add="global.activeField = global.clonedField"
+    @add="global.activeField = global.clonedField; global.currentTab = 'general';"
   >
   <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field }, 'id_' + field.name]">
-    <div class="tx_mask_btn_row" @click="global.activeField = field">
+    <div class="tx_mask_btn_row" @click="global.activeField = field; global.currentTab = 'general'">
         <div class="tx_mask_btn_img">
             <div v-html="field.icon"></div>
         </div>
         <div class="tx_mask_btn_text">
-          <span class="id_labeltext">{{ field.label }}</span>
+          <span v-if="field.name == 'linebreak'" class="id_labeltext">Linebreak</span>
+          <span v-else class="id_labeltext">{{ field.label }}</span>
           <span class="id_keytext">{{ field.key }}</span>
         </div>
         <div class="tx_mask_btn_actions">
