@@ -40,7 +40,6 @@ if (TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_BE) {
 }
 
 // Update wizards
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['removeRichtextConfiguration'] = \MASK\Mask\Updates\RemoveRichtextConfiguration::class;
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['convertTemplatesToUppercase'] = \MASK\Mask\Updates\ConvertTemplatesToUppercase::class;
 
 (function () {
