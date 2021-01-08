@@ -21,6 +21,7 @@ use MASK\Mask\DataStructure\FieldType;
 use MASK\Mask\DataStructure\Tab;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Helper\FieldHelper;
+use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
@@ -32,8 +33,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class AjaxController extends ActionController
 {
     /**
-     * FieldHelper
-     *
      * @var FieldHelper
      */
     protected $fieldHelper;
@@ -44,30 +43,91 @@ class AjaxController extends ActionController
     protected $storageRepository;
 
     /**
-     * @param FieldHelper $fieldHelper
+     * @var IconFactory
      */
-    public function injectFieldHelper(FieldHelper $fieldHelper)
-    {
+    protected $iconFactory;
+
+    public function __construct(
+        StorageRepository $storageRepository,
+        FieldHelper $fieldHelper,
+        IconFactory $iconFactory
+    ) {
+        $this->storageRepository = $storageRepository;
         $this->fieldHelper = $fieldHelper;
+        $this->iconFactory = $iconFactory;
     }
 
-    /**
-     * @param StorageRepository $storageRepository
-     */
-    public function injectStorageRepository(StorageRepository $storageRepository)
+    public function elements(ServerRequestInterface $request): Response
     {
-        $this->storageRepository = $storageRepository;
+        $storages = $this->storageRepository->load();
+        $elements = [];
+        foreach ($storages['tt_content']['elements'] ?? [] as $element) {
+            $elements[$element['key']] = [
+                'color' => $element['color'],
+                'description' => $element['description'],
+                'icon' => $element['icon'],
+                'key' => $element['key'],
+                'label' => $element['label'],
+                'shortLabel' => $element['shortLabel'],
+            ];
+        }
+        return new JsonResponse($elements);
+    }
+
+    public function loadElement(ServerRequestInterface $request): Response
+    {
+        $params = $request->getQueryParams();
+        $table = $params['type'];
+        $elementKey = $params['key'];
+        $storage = $this->storageRepository->loadElement($table, $elementKey);
+        $storage = $this->storageRepository->prepareStorage($storage, $params['key']);
+
+        $fields = $this->addFields($elementKey, $table, $storage['tca'] ?? []);
+
+        return new JsonResponse($fields);
+    }
+
+    protected function addFields($elementKey, $table, $fields, $parent = [])
+    {
+        $nestedFields = [];
+        foreach ($fields as $key => $field) {
+            $newField = [
+                'fields' => [],
+                'parent' => $parent
+            ];
+            $newField['key'] = is_int($key) ? ($field['maskKey'] ?? $field['key']) : $key;
+
+            if ($field['inPalette'] || !$field['inlineParent']) {
+                $formType = $this->getFormType($elementKey, $newField['key'], $table);
+            } else {
+                $formType = $this->getFormType($elementKey, $newField['key'], $field['inlineParent']);
+            }
+
+            $newField['isMaskField'] = MaskUtility::isMaskIrreTable($newField['key']);
+            $newField['name'] = $formType;
+            $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $formType)->getMarkup();
+            $newField['label'] = $this->getLabel($field, $table, $newField['key'], $elementKey);
+            $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
+            $newField['description'] = $field['description'] ?? '';
+            $newField['tca'] = $field['config'];
+            $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
+
+            if (FieldType::cast($formType)->isParentField()) {
+                $newField['fields'] = $this->addFields($elementKey, $table, $field['inlineFields'], $newField);
+            }
+            $nestedFields[] = $newField;
+        }
+        return $nestedFields;
     }
 
     public function fieldTypes(ServerRequestInterface $request): Response
     {
-        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $json = [];
         $defaults = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Defaults.php');
         foreach (FieldType::getConstants() as $type) {
             $config = [
                 'name' => $type,
-                'icon' => $iconFactory->getIcon('mask-fieldtype-' . $type)->getMarkup(),
+                'icon' => $this->iconFactory->getIcon('mask-fieldtype-' . $type)->getMarkup(),
                 'fields' => [],
                 'key' => '',
                 'label' => '',
@@ -97,7 +157,7 @@ class AjaxController extends ActionController
             'Hand' => ['hand-grab-o', 'hand-lizard-o', 'hand-o-down', 'hand-o-left', 'hand-o-right', 'hand-o-up', 'hand-paper-o', 'hand-peace-o', 'hand-pointer-o', 'hand-rock-o', 'hand-scissors-o', 'hand-spock-o', 'hand-stop-o', 'thumbs-down', 'thumbs-o-down', 'thumbs-o-up', 'thumbs-up'],
             'Transportation' => ['ambulance', 'automobile', 'bicycle', 'bus', 'cab', 'car', 'fighter-jet', 'motorcycle', 'plane', 'rocket', 'ship', 'space-shuttle', 'subway', 'taxi', 'train', 'truck', 'wheelchair', 'wheelchair-alt'],
             'Gender' => ['genderless', 'intersex', 'mars', 'mars-double', 'mars-stroke', 'mars-stroke-h', 'mars-stroke-v', 'mercury', 'neuter', 'transgender', 'transgender-alt', 'venus', 'venus-double', 'venus-mars'],
-            'File Type' =>  ['file', 'file-archive-o', 'file-audio-o', 'file-code-o', 'file-excel-o', 'file-image-o', 'file-movie-o', 'file-o', 'file-pdf-o', 'file-photo-o', 'file-picture-o', 'file-powerpoint-o', 'file-sound-o', 'file-text', 'file-text-o', 'file-video-o', 'file-word-o', 'file-zip-o'],
+            'File Type' => ['file', 'file-archive-o', 'file-audio-o', 'file-code-o', 'file-excel-o', 'file-image-o', 'file-movie-o', 'file-o', 'file-pdf-o', 'file-photo-o', 'file-picture-o', 'file-powerpoint-o', 'file-sound-o', 'file-text', 'file-text-o', 'file-video-o', 'file-word-o', 'file-zip-o'],
             'Spinner' => ['circle-o-notch', 'cog', 'gear', 'refresh', 'spinner'],
             'Form Control' => ['check-square', 'check-square-o', 'circle', 'circle-o', 'dot-circle-o', 'minus-square', 'minus-square-o', 'plus-square', 'plus-square-o', 'square', 'square-o'],
             'Payment' => ['cc-amex', 'cc-diners-club', 'cc-discover', 'cc-jcb', 'cc-mastercard', 'cc-paypal', 'cc-stripe', 'cc-visa', 'credit-card', 'credit-card-alt', 'google-wallet', 'paypal'],
@@ -172,9 +232,9 @@ class AjaxController extends ActionController
             if (empty($fields)) {
                 $fields = $emptyFields;
             }
-        } elseif (!\MASK\Mask\Utility\GeneralUtility::isMaskIrreTable($table)) {
+        } elseif (!MaskUtility::isMaskIrreTable($table)) {
             foreach ($GLOBALS['TCA'][$table]['columns'] as $tcaField => $tcaConfig) {
-                $isMaskField = \MASK\Mask\Utility\GeneralUtility::isMaskIrreTable($tcaField);
+                $isMaskField = MaskUtility::isMaskIrreTable($tcaField);
                 if (!$isMaskField && !in_array($tcaField, $allowedFields[$table] ?? [])) {
                     continue;
                 }
@@ -187,7 +247,6 @@ class AjaxController extends ActionController
                 if ($fieldType === $type) {
                     $key = $isMaskField ? 'mask' : 'core';
                     $label = $isMaskField ? (str_replace('tx_mask_', '', $tcaField)) : LocalizationUtility::translate($tcaConfig['label']);
-                    // todo add element argument and resolve mask label
                     $fields[$key][] = [
                         'field' => $tcaField,
                         'label' => $label,
@@ -274,5 +333,55 @@ class AjaxController extends ActionController
         $presets = array_combine($presets, $presets);
         $config = array_merge($config, $presets);
         return new JsonResponse($config);
+    }
+
+    protected function getFormType($elementKey, $fieldKey, $type)
+    {
+        if ($fieldKey === 'bodytext' && $type === 'tt_content') {
+            return FieldType::RICHTEXT;
+        }
+
+        return $this->storageRepository->getFormType($fieldKey, $elementKey, $type);
+    }
+
+    protected function getLabel($field, $table, $fieldKey, $elementKey)
+    {
+        // if we have the whole field configuration
+        if ($field) {
+            // check if this field is in an repeating field
+            if (isset($field['inlineParent']) && !is_array($field['inlineParent'])) {
+                // if yes, the label is in the configuration
+                $label = $field['label'];
+            } else {
+                // otherwise the type can only be tt_content or pages
+                if ($table) {
+                    // if we have table param, the type must be the table
+                    $type = $table;
+                } else {
+                    // otherwise try to get the label, set param $excludeInlineFields to true
+                    $type = $this->fieldHelper->getFieldType($fieldKey, $elementKey, true);
+                }
+                $label = $this->fieldHelper->getLabel($elementKey, $fieldKey, $type);
+            }
+        } else {
+            // if we don't have the field configuration, try the best to fetch the type and the correct label
+            $type = $this->fieldHelper->getFieldType($fieldKey, $elementKey, false);
+            $label = $this->fieldHelper->getLabel($elementKey, $fieldKey, $type);
+        }
+        return $label;
+    }
+
+    protected function translateLabel($key, $element)
+    {
+        if (is_array($key)) {
+            return $key[$element] ?? '';
+        }
+
+        if (empty($key) || strpos($key, 'LLL') !== 0) {
+            return $key;
+        }
+
+        $result = LocalizationUtility::translate($key);
+        return empty($result) ? $key : $result;
     }
 }

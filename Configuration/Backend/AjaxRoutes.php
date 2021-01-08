@@ -43,5 +43,13 @@ return [
     'mask_ctypes' => [
         'path' => '/mask/ctypes',
         'target' => AjaxController::class . '::cTypes'
+    ],
+    'mask_elements' => [
+        'path' => '/mask/elements',
+        'target' => AjaxController::class . '::elements'
+    ],
+    'mask_load_element' => [
+        'path' => '/mask/loadElement',
+        'target' => AjaxController::class . '::loadElement'
     ]
 ];

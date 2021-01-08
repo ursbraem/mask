@@ -19,21 +19,17 @@ define([
     },
     data: function () {
       return {
-        element: {
-          key: '',
-          label: '',
-          shortLabel: '',
-          description: '',
-          icon: '',
-          color: '#000000'
-        },
+        mode: 'list',
+        type: 'tt_content',
+        elements: [],
+        element: {},
         fieldTypes: [],
         tcaFields: {},
         tabs: {},
         fields: [],
         language: [],
         icons: {},
-        editMode: false,
+        faIcons: {},
         availableTca: {},
         global: {
           activeField: {},
@@ -50,8 +46,7 @@ define([
           async function (response) {
             mask.fieldTypes = await response.resolve();
             mask.fieldTypes.forEach(function (item) {
-              // TODO table tt_content or pages
-              new AjaxRequest(TYPO3.settings.ajaxUrls.mask_existing_tca).withQueryArguments({table: 'tt_content', type: item.name}).get()
+              new AjaxRequest(TYPO3.settings.ajaxUrls.mask_existing_tca).withQueryArguments({table: mask.type, type: item.name}).get()
                 .then(
                   async function (response) {
                     mask.availableTca[item.name] = await response.resolve();
@@ -101,6 +96,22 @@ define([
           }
         );
 
+      // fetch elements
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements).get()
+        .then(
+          async function (response) {
+            mask.elements = await response.resolve();
+          }
+        );
+
+      // fetch fontawesome icons
+      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons).get()
+        .then(
+          async function (response) {
+            mask.faIcons = await response.resolve();
+          }
+        );
+
       Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
         mask.icons.delete = icon;
       });
@@ -110,7 +121,6 @@ define([
       Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
         mask.icons.date = icon;
       });
-      require(['TYPO3/CMS/Mask/FontIconPicker']);
 
       // TODO in v11 this is a regular event (no jquery)
       // Trigger input change on TYPO3 datepicker change event.
@@ -120,11 +130,38 @@ define([
         });
       });
     },
+    watch: {
+      mode: function () {
+        if (this.mode === 'edit') {
+          // load element fields
+          new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+            .withQueryArguments({
+              type: mask.type,
+              key: mask.element.key
+            })
+            .get()
+            .then(
+              async function (response) {
+                mask.fields = await response.resolve();
+              }
+            );
+
+          // Boot font icon picker
+          require(['jquery', 'TYPO3/CMS/Mask/Contrib/FontIconPicker'], function ($) {
+            var iconPicker = $('#meta_icon').fontIconPicker({
+              source: mask.faIcons
+            });
+            iconPicker.setIcon(mask.element.icon);
+          });
+        }
+      }
+    },
     methods: {
       handleClone: function (item) {
         // Create a fresh copy of item
         let cloneMe = JSON.parse(JSON.stringify(item));
         this.$delete(cloneMe, 'uid');
+        cloneMe['newField'] = true;
         this.global.clonedField = cloneMe;
         return cloneMe;
       },
@@ -188,11 +225,24 @@ define([
         }
 
         return true;
+      },
+      getNewElement: function () {
+        return JSON.parse(JSON.stringify({
+          key: '',
+          label: '',
+          shortLabel: '',
+          description: '',
+          icon: '',
+          color: '#000000'
+        }));
+      },
+      isEmptyObject: function (obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
       }
     },
     computed: {
-      isExistingField: function () {
-        if (!this.global.activeField.name) {
+      isCoreField: function () {
+        if (this.isEmptyObject(this.global.activeField)) {
           return false;
         }
         var isExisting = false;
@@ -201,6 +251,13 @@ define([
             isExisting = true;
           }
         });
+        return isExisting;
+      },
+      isExistingMaskField: function () {
+        if (this.isEmptyObject(this.global.activeField)) {
+          return false;
+        }
+        var isExisting = false;
         this.availableTca[this.global.activeField.name].mask.forEach(function (item) {
           if (item.field === mask.global.activeField.key) {
             isExisting = true;
@@ -215,7 +272,10 @@ define([
         return this.tabs[this.global.activeField.name];
       },
       chooseFieldVisible: function () {
-        if (!this.global.activeField.name) {
+        if (this.isEmptyObject(this.global.activeField)) {
+          return false;
+        }
+        if (!this.global.activeField.newField && !this.isCoreField) {
           return false;
         }
         if (this.global.activeField.name === 'inline') {

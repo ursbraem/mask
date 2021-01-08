@@ -1,0 +1,8 @@
+<div id="mask">
+    <div v-if="mode == 'edit'" class="mask-edit">
+        <f:render partial="VueEdit" arguments="{_all}"/>
+    </div>
+    <div v-if="mode == 'list'" class="mask-list">
+        <f:render partial="VueList" arguments="{_all}"/>
+    </div>
+</div>

@@ -1,7 +1,7 @@
-<div v-if="global.activeField.name" :class="['tx_mask_field', editMode ? 'edit_field' : 'new_field']">
+<div v-if="global.activeField.name" class="tx_mask_field">
     <div v-if="global.activeField.name != 'linebreak'" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist" data-store-last-tab="1">
-            <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab}" v-if="key == 'general' || !isExistingField">
+            <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab}" v-if="key == 'general' || !isCoreField">
                 <a role="tab" href="#" @click.prevent="global.currentTab = key">
                     {{ language.tabs[key] }}
                 </a>
@@ -19,7 +19,7 @@
                             </label>
                             <div class="t3js-formengine-field-item">
                                 <div class="form-control-wrap">
-                                    <select id="form_choosefield" v-model="global.activeField.key" class="form-control tx_mask_fieldcontent_type">
+                                    <select v-model="global.activeField.key" :disabled="!global.activeField.newField" id="form_choosefield" class="form-control tx_mask_fieldcontent_type">
                                         <optgroup class="c-divider" label="New">
                                             <option value="">
                                                 <f:translate key="tx_mask.field.newfield"/>
@@ -47,7 +47,7 @@
                     </div>
 
                     <f:comment><!-- TYPO3 field overwrite label --></f:comment>
-                    <div v-if="global.currentTab == 'general' && isExistingField" class="row tx_mask_fieldcontent_existing">
+                    <div v-if="global.currentTab == 'general' && isCoreField" class="row tx_mask_fieldcontent_existing">
                         <div class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_overwritelabel">
                                 <f:translate key="tx_mask.field.overwritelabel"/>
@@ -65,8 +65,8 @@
                         </div>
                     </div>
                     <f:comment><!-- mask field key and label --></f:comment>
-                    <div v-if="!isExistingField && global.currentTab == 'general'" class="row">
-                        <div class="form-group col-sm-6" v-if="!editMode">
+                    <div v-if="!isCoreField && global.currentTab == 'general'" class="row">
+                        <div class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_key">
                                 <f:translate key="tx_mask.field.fieldkey"/>
                             </label>
@@ -79,6 +79,7 @@
                                         class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
                                         required="required"
                                         data-error="{f:translate(key: 'tx_mask.all.error.key')}"
+                                        :readOnly="!global.activeField.newField || isExistingMaskField"
                                     />
                                 </div>
                             </div>
@@ -118,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="!isExistingField" v-for="(row, tcaKey) in tabs[global.activeField.name][global.currentTab]" class="form-section">
+                <div v-if="!isCoreField" v-for="(row, tcaKey) in tabs[global.activeField.name][global.currentTab]" class="form-section">
                     <div class="row">
                         <form-field v-for="(column, tcaKey) in row" :key="global.activeField.uid + '.' + tcaKey" :global="global" :icons="icons" :tca-fields="tcaFields" :tca-key="tcaKey" :column="column"></form-field>
                     </div>

@@ -25,7 +25,6 @@ use MASK\Mask\Domain\Repository\BackendLayoutRepository;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Helper\FieldHelper;
-use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Http\JsonResponse;
@@ -141,39 +140,6 @@ class WizardController extends ActionController
         // Clear system cache to force new TCA caching
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         $cacheManager->flushCachesInGroup('system');
-    }
-
-    /**
-     * Prepares the storage array for fluid view
-     *
-     * @param array $storage
-     * @param $elementKey
-     * @throws \Exception
-     */
-    protected function prepareStorage(&$storage, $elementKey): void
-    {
-        // Fill storage with additional data before assigning to view
-        if ($storage['tca']) {
-            foreach ($storage['tca'] as $key => $field) {
-                if (is_array($field)) {
-                    if (in_array($field['config']['type'], ['inline', 'palette'])) {
-                        $storage['tca'][$key]['inlineFields'] = $this->storageRepository->loadInlineFields($key, $elementKey);
-                    }
-                }
-                // Convert old date format Y-m-d to d-m-Y
-                $dbType = $field['config']['dbType'] ?? false;
-                if ($dbType && in_array($dbType, ['date', 'datetime'])) {
-                    $lower = $field['config']['range']['lower'] ?? false;
-                    $upper = $field['config']['range']['upper'] ?? false;
-                    if ($lower && DateUtility::isOldDateFormat($lower)) {
-                        $storage['tca'][$key]['config']['range']['lower'] = DateUtility::convertOldToNewFormat($dbType, $lower);
-                    }
-                    if ($upper && DateUtility::isOldDateFormat($upper)) {
-                        $storage['tca'][$key]['config']['range']['upper'] = DateUtility::convertOldToNewFormat($dbType, $upper);
-                    }
-                }
-            }
-        }
     }
 
     /**

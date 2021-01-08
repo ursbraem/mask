@@ -25,21 +25,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class WizardContentController extends WizardController
 {
     /**
-     * IconRepository
-     *
-     * @var IconRepository
-     */
-    protected $iconRepository;
-
-    /**
-     * @param IconRepository $iconRepository
-     */
-    public function injectIconRepository(IconRepository $iconRepository)
-    {
-        $this->iconRepository = $iconRepository;
-    }
-
-    /**
      * action new
      */
     public function newAction(): void
@@ -61,22 +46,6 @@ class WizardContentController extends WizardController
         $this->saveHtml($storage['elements']['key'], $html);
         $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.newcontentelement', 'mask'));
         $this->redirectByAction();
-    }
-
-    /**
-     * action edit
-     *
-     * @param string $type
-     * @param string $key
-     */
-    public function editAction($type, $key): void
-    {
-        $storage = $this->storageRepository->loadElement($type, $key);
-        $icons = $this->iconRepository->findAll();
-        $this->prepareStorage($storage, $key);
-        $this->view->assign('storage', $storage);
-        $this->view->assign('icons', $icons);
-        $this->view->assign('editMode', 1);
     }
 
     /**

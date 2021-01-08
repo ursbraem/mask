@@ -61,6 +61,13 @@ define([
           },
           isParentField: function (field) {
             return ['inline', 'palette'].includes(field.name);
+          },
+          keyWithoutMask: function (key) {
+            if (key.substr(0, 8) === 'tx_mask_') {
+              return key.substr(8);
+            } else {
+              return key;
+            }
           }
         },
         template: `
@@ -81,7 +88,7 @@ define([
         <div class="tx_mask_btn_text">
           <span v-if="field.name == 'linebreak'" class="id_labeltext">Linebreak</span>
           <span v-else class="id_labeltext">{{ field.label }}</span>
-          <span class="id_keytext">{{ field.key }}</span>
+          <span class="id_keytext">{{ keyWithoutMask(field.key) }}</span>
         </div>
         <div class="tx_mask_btn_actions">
             <span @click.stop="removeField(index)" class="id_delete" title="Delete item" v-html="icons.delete"></span>
