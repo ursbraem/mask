@@ -135,44 +135,59 @@ define([
       addField: function (type) {
         var newField = this.handleClone(type);
         var fields = this.fields;
-        if (typeof this.global.activeField.parent.name !== 'undefined') {
-          fields = this.global.activeField.parent.fields;
-          newField.parent = this.global.activeField.parent;
+        var parent = this.global.activeField.parent;
+        var parentName = '';
+        if (typeof parent !== 'undefined') {
+          parentName = parent.name;
+          newField.parent = parent;
+          if (typeof parent.fields !== 'undefined') {
+            fields = parent.fields;
+          }
         }
-        var index = fields.indexOf(this.global.activeField) + 1;
-        fields.splice(index, 0, newField);
-        this.global.activeField = newField;
-        this.global.currentTab = 'general';
+        if (this.validateMove(parentName, newField)) {
+          var index = fields.indexOf(this.global.activeField) + 1;
+          fields.splice(index, 0, newField);
+          this.global.activeField = newField;
+          this.global.currentTab = 'general';
+        }
       },
       onMove: function (e) {
-        var draggedField = e.draggedContext.element.name;
-        var depth = e.relatedContext.component.$parent.depth;
-        var index = e.relatedContext.component.$parent.index;
+        var draggedField = e.draggedContext.element;
+        var parent = e.relatedContext.component.$parent;
+        var depth = parent.depth;
+        var index = parent.index;
         var parentName = '';
 
         if (depth > 0) {
-          parentName = e.relatedContext.component.$parent.$parent.list[index].name;
+          parentName = parent.$parent.list[index].name;
+        }
 
+        return this.validateMove(parentName, draggedField);
+      },
+      validateMove: function (parentName, draggedField) {
+        if (parentName !== '') {
           // Elements palette and tab are not allowed in palette
-          if (['palette', 'tab'].includes(draggedField) && parentName === 'palette') {
+          if (['palette', 'tab'].includes(draggedField.name) && parentName === 'palette') {
             return false;
           }
 
           // Existing fields are not allowed as new inline field
-          if (parentName === 'inline' && e.draggedContext.element.key !== '') {
+          if (parentName === 'inline' && draggedField.key !== '') {
             return false;
           }
 
           // Palettes or inline fields with elements are not allowed in inline fields
-          if (parentName === 'inline' && ['palette', 'inline'].includes(draggedField) && e.draggedContext.element.fields.length > 0) {
+          if (parentName === 'inline' && ['palette', 'inline'].includes(draggedField.name) && draggedField.fields.length > 0) {
             return false;
           }
         }
 
         // Linebreaks are only allowed in palette
-        if (draggedField === 'linebreak' && parentName !== 'palette') {
+        if (draggedField.name === 'linebreak' && parentName !== 'palette') {
           return false;
         }
+
+        return true;
       }
     },
     computed: {
