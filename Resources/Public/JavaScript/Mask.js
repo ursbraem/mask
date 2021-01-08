@@ -128,6 +128,22 @@ define([
         this.global.clonedField = cloneMe;
         return cloneMe;
       },
+      /**
+       * This adds a field by click on the field.
+       * @param type
+       */
+      addField: function (type) {
+        var newField = this.handleClone(type);
+        var fields = this.fields;
+        if (typeof this.global.activeField.parent.name !== 'undefined') {
+          fields = this.global.activeField.parent.fields;
+          newField.parent = this.global.activeField.parent;
+        }
+        var index = fields.indexOf(this.global.activeField) + 1;
+        fields.splice(index, 0, newField);
+        this.global.activeField = newField;
+        this.global.currentTab = 'general';
+      },
       onMove: function (e) {
         var draggedField = e.draggedContext.element.name;
         var depth = e.relatedContext.component.$parent.depth;
@@ -190,7 +206,7 @@ define([
         if (this.global.activeField.name === 'inline') {
           return false;
         }
-        if (this.global.activeField.parentName === 'inline') {
+        if (this.global.activeField.parent.name === 'inline') {
           return false;
         }
         return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0

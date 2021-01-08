@@ -34,9 +34,9 @@ define([
             this.global.activeField = this.global.clonedField;
             this.global.currentTab = 'general';
             if (this.depth > 0) {
-              this.global.activeField.parentName = this.$parent.list[this.index].name;
+              this.global.activeField.parent = this.$parent.list[this.index];
             } else {
-              this.global.activeField.parentName = '';
+              this.global.activeField.parent = {};
             }
           },
           removeField: function (index) {

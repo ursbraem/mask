@@ -24,7 +24,7 @@
                             :clone="handleClone"
                             :move="onMove"
                         >
-                            <li v-for="type in fieldTypes" class="tx_mask_btn mask_tooltip">
+                            <li v-for="type in fieldTypes" class="tx_mask_btn mask_tooltip" @click="addField(type)">
                                 <span class="tooltiptext">{{ type.name }}</span>
                                 <div class="tx_mask_btn_row">
                                     <div class="tx_mask_btn_img" v-html="type.icon"></div>

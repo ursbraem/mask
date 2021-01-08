@@ -71,7 +71,7 @@ class AjaxController extends ActionController
                 'fields' => [],
                 'key' => '',
                 'label' => '',
-                'parentName' => '',
+                'parent' => [],
                 'tca' => [
                     'l10n_mode' => ''
                 ]
