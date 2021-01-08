@@ -4,6 +4,9 @@ use MASK\Mask\DataStructure\FieldType;
 
 return [
     FieldType::STRING => [
+        'tca_in' => [
+            'config.eval.null' => 0
+        ],
         'tca_out' => [
             'config' => [
                 'type' => 'input'
@@ -11,15 +14,42 @@ return [
         ],
         'sql' => 'tinytext'
     ],
+    FieldType::FLOAT => [
+        'tca_in' => [
+            'config.eval.null' => 0
+        ]
+    ],
+    FieldType::INTEGER => [
+        'tca_in' => [
+            'config.eval.null' => 0
+        ]
+    ],
+    FieldType::LINK => [
+        'tca_in' => [
+            'config.eval.null' => 0
+        ]
+    ],
+    FieldType::DATE => [
+        'tca_in' => [
+            'config.eval.null' => 0
+        ]
+    ],
+    FieldType::DATETIME => [
+        'tca_in' => [
+            'config.eval.null' => 0
+        ]
+    ],
     FieldType::TIMESTAMP => [
         'tca_in' => [
-            'config.eval' => 'date'
+            'config.eval' => 'date',
+            'config.eval.null' => 0
         ]
     ],
     FieldType::TEXT => [
         'tca_in' => [
             'config.wrap' => 'virtual',
-            'config.format' => ''
+            'config.format' => '',
+            'config.eval.null' => 0
         ]
     ],
     FieldType::RICHTEXT => [

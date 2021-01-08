@@ -38,8 +38,8 @@ define([
         },
         methods: {
           switchDependsOn: function (tcaKey, dependsOn) {
-            if (dependsOn && this.global.activeField.tca[tcaKey] !== false) {
-              this.global.activeField.tca[dependsOn] = true;
+            if (!!dependsOn && this.global.activeField.tca[tcaKey] === this.valueOn) {
+              this.global.activeField.tca[dependsOn] = 1;
             }
           },
           checkPrefixLangTitle: function (key) {
@@ -55,6 +55,12 @@ define([
         computed: {
           field: function () {
             return this.tcaFields[this.tcaKey];
+          },
+          valueOn: function () {
+            return 'valueOn' in this.field ? this.field.valueOn : 1;
+          },
+          valueOff: function () {
+            return 'valueOff' in this.field ? this.field.valueOff : 0;
           },
           type: function () {
             if (this.field.type !== 'variable') {
@@ -111,7 +117,7 @@ define([
               </div>
               <div v-if="type == 'checkbox'" class="form-control-wrap">
                 <div :class="['checkbox', 'checkbox-type-toggle', {'checkbox-invert': field.invert}]">
-                    <input :id="tcaKey" v-model="global.activeField.tca[tcaKey]" type="checkbox" class="checkbox-input" :true-value="'valueOn' in field ? field.valueOn : 1" :false-value="'valueOff' in field ? field.valueOff : 0" @change="switchDependsOn(tcaKey, field.dependsOn)">
+                    <input :id="tcaKey" v-model="global.activeField.tca[tcaKey]" type="checkbox" class="checkbox-input" :true-value="valueOn" :false-value="valueOff" @change="switchDependsOn(tcaKey, field.dependsOn)">
                     <label class="checkbox-label" :for="tcaKey">
                         <span class="checkbox-label-text">[{{ global.activeField.tca[tcaKey] ? global.activeField.tca[tcaKey] : 0 }}]</span>
                     </label>
