@@ -12,7 +12,7 @@
                 <f:comment><!-- only when create field (not edit), used in content and pages --></f:comment>
                 <f:comment><!-- mask or TYPO3 field chooser --></f:comment>
                 <div v-if="global.currentTab == 'general'" class="form-section">
-                    <div class="row" v-if="availableTca[global.activeField.name].core.length > 0 || availableTca[global.activeField.name].mask.length > 0">
+                    <div class="row" v-if="chooseFieldVisible">
                         <div class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_choosefield">
                                 <f:translate key="tx_mask.field.choosefield"/>
@@ -30,7 +30,7 @@
                                                 {{ item.label }} ({{ item.field }})
                                             </option>
                                         </optgroup>
-                                        <optgroup v-if="availableTca[global.activeField.name].mask.length || global.activeField.key !== ''" class="c-divider" label="Mask fields">
+                                        <optgroup v-if="availableTca[global.activeField.name].mask.length" class="c-divider" label="Mask fields">
                                             <option v-for="item in availableTca[global.activeField.name].mask" :value="item.field">
                                                 {{ item.label }}
                                             </option>

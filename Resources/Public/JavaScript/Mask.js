@@ -121,13 +121,43 @@ define([
       });
     },
     methods: {
-      handleClone(item) {
+      handleClone: function (item) {
         // Create a fresh copy of item
         let cloneMe = JSON.parse(JSON.stringify(item));
         this.$delete(cloneMe, 'uid');
         this.global.clonedField = cloneMe;
         return cloneMe;
       },
+      onMove: function (e) {
+        var draggedField = e.draggedContext.element.name;
+        var depth = e.relatedContext.component.$parent.depth;
+        var index = e.relatedContext.component.$parent.index;
+        var parentName = '';
+
+        if (depth > 0) {
+          parentName = e.relatedContext.component.$parent.$parent.list[index].name;
+
+          // Elements palette and tab are not allowed in palette
+          if (['palette', 'tab'].includes(draggedField) && parentName === 'palette') {
+            return false;
+          }
+
+          // Existing fields are not allowed as new inline field
+          if (parentName === 'inline' && e.draggedContext.element.key !== '') {
+            return false;
+          }
+
+          // Palettes or inline fields with elements are not allowed in inline fields
+          if (parentName === 'inline' && ['palette', 'inline'].includes(draggedField) && e.draggedContext.element.fields.length > 0) {
+            return false;
+          }
+        }
+
+        // Linebreaks are only allowed in palette
+        if (draggedField === 'linebreak' && parentName !== 'palette') {
+          return false;
+        }
+      }
     },
     computed: {
       isExistingField: function () {
@@ -152,6 +182,18 @@ define([
           return [];
         }
         return this.tabs[this.global.activeField.name];
+      },
+      chooseFieldVisible: function () {
+        if (!this.global.activeField.name) {
+          return false;
+        }
+        if (this.global.activeField.name === 'inline') {
+          return false;
+        }
+        if (this.global.activeField.parentName === 'inline') {
+          return false;
+        }
+        return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0
       }
     }
   });

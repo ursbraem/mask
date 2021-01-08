@@ -22,6 +22,7 @@
                             :group="{name: 'fieldTypes', pull: 'clone', 'put': false}"
                             :sort="false"
                             :clone="handleClone"
+                            :move="onMove"
                         >
                             <li v-for="type in fieldTypes" class="tx_mask_btn mask_tooltip">
                                 <span class="tooltiptext">{{ type.name }}</span>
@@ -36,7 +37,7 @@
                     <f:translate key="tx_mask.all.fields_of_element"/>
                 </label>
                 <div class="form-group col-sm-12 tx_mask_borderright tx_mask_tabcell2">
-                    <nested-draggable :depth="0" :index="0" :fields="fields" :icons="icons" :global="global" />
+                    <nested-draggable :depth="0" :index="0" :fields="fields" :icons="icons" :global="global" :move="onMove"/>
                 </div>
             </div>
             <div class="form-group col-sm-6 tx_mask_tabcell3">

@@ -6,9 +6,6 @@ return [
     Tab::GENERAL => [
         [
             'config.placeholder' => 6,
-        ],
-        [
-            'config.size' => 6
         ]
     ],
     Tab::VALIDATION => [
@@ -36,6 +33,9 @@ return [
         ]
     ],
     Tab::EXTENDED => [
+        [
+            'config.size' => 6
+        ],
         [
             'config.eval.null' => 6,
             'config.mode' => 6,

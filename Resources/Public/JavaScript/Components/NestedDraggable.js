@@ -11,7 +11,8 @@ define([
           icons: Object,
           global: Object,
           depth: Number,
-          index: Number
+          index: Number,
+          move: Function
         },
         components: {
           draggable
@@ -28,6 +29,15 @@ define([
             this.$set(e, 'uid', key);
 
             return e.uid;
+          },
+          onAdd: function () {
+            this.global.activeField = this.global.clonedField;
+            this.global.currentTab = 'general';
+            if (this.depth > 0) {
+              this.global.activeField.parentName = this.$parent.list[this.index].name;
+            } else {
+              this.global.activeField.parentName = '';
+            }
           },
           removeField: function (index) {
             if (this.fields[index - 1]) {
@@ -60,7 +70,8 @@ define([
     :list="fields"
     group="fieldTypes"
     ghost-class="ghost"
-    @add="global.activeField = global.clonedField; global.currentTab = 'general';"
+    @add="onAdd"
+    :move="move"
   >
   <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field }, 'id_' + field.name]">
     <div class="tx_mask_btn_row" @click="global.activeField = field; global.currentTab = 'general'">
@@ -78,7 +89,7 @@ define([
         </div>
     </div>
     <div class="tx_mask_btn_caption" v-if="isParentField(field)">
-        <nested-draggable @set-parent-active="setParentActive($event)" :depth="depth + 1" :index="index" :fields="field.fields" :icons="icons" :global="global"/>
+        <nested-draggable @set-parent-active="setParentActive($event)" :depth="depth + 1" :index="index" :fields="field.fields" :icons="icons" :global="global" :move="move"/>
     </div>
   </li>
 </draggable>
