@@ -369,7 +369,7 @@
   @media screen and (min-width: 1200px) {
     .tx_mask_tabcell1 {
       height: 100%;
-      padding: 35px 25px !important; } }
+      padding: 15px; } }
   .tx_mask_tabcell1:after {
     content: '';
     display: block;
@@ -698,3 +698,9 @@ img.brand-logo {
 
 .icons-selector i {
   font-family: FontAwesome, sans-serif; }
+
+#meta_icon {
+  position: absolute !important; }
+
+#meta_color {
+  min-width: 0; }
