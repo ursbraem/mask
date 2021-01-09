@@ -17,15 +17,21 @@ declare(strict_types=1);
 
 namespace MASK\Mask\Controller;
 
+use MASK\Mask\CodeGenerator\HtmlCodeGenerator;
+use MASK\Mask\CodeGenerator\SqlCodeGenerator;
+use MASK\Mask\CodeGenerator\TcaCodeGenerator;
 use MASK\Mask\DataStructure\FieldType;
 use MASK\Mask\DataStructure\Tab;
 use MASK\Mask\Domain\Repository\StorageRepository;
+use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Helper\FieldHelper;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -43,18 +49,76 @@ class AjaxController extends ActionController
     protected $storageRepository;
 
     /**
+     * SqlCodeGenerator
+     *
+     * @var SqlCodeGenerator
+     */
+    protected $sqlCodeGenerator;
+
+    /**
+     * HtmlCodeGenerator
+     *
+     * @var HtmlCodeGenerator
+     */
+    protected $htmlCodeGenerator;
+
+    /**
      * @var IconFactory
      */
     protected $iconFactory;
 
+    /**
+     * SettingsService
+     *
+     * @var SettingsService
+     */
+    protected $settingsService;
+
+    /**
+     * settings
+     *
+     * @var array
+     */
+    protected $extSettings;
+
     public function __construct(
         StorageRepository $storageRepository,
         FieldHelper $fieldHelper,
-        IconFactory $iconFactory
+        IconFactory $iconFactory,
+        SqlCodeGenerator $sqlCodeGenerator,
+        HtmlCodeGenerator $htmlCodeGenerator,
+        SettingsService $settingsService
     ) {
         $this->storageRepository = $storageRepository;
         $this->fieldHelper = $fieldHelper;
         $this->iconFactory = $iconFactory;
+        $this->sqlCodeGenerator = $sqlCodeGenerator;
+        $this->htmlCodeGenerator = $htmlCodeGenerator;
+        $this->settingsService = $settingsService;
+        $this->extSettings = $this->settingsService->get();
+    }
+
+    public function save(ServerRequestInterface $request): Response
+    {
+        $params = $request->getQueryParams();
+        $storage = $this->convertElementToLegacyStorageFormat($params['element'], $params['fields'], $params['type'], $params['isNew']);
+        $this->storageRepository->update($storage);
+        $this->generateAction();
+        $html = $this->htmlCodeGenerator->generateHtml($storage['elements']['key'], 'tt_content');
+        $this->saveHtml($storage['elements']['key'], $html);
+        if ($storage['orgkey'] === '') {
+            $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.newcontentelement', 'mask'));
+        } else {
+            $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.updatedcontentelement', 'mask'));
+        }
+        return new JsonResponse(json_encode($this->controllerContext->getFlashMessageQueue()->getAllMessages()));
+    }
+
+    protected function convertElementToLegacyStorageFormat($element, $fields, $type, $isNew)
+    {
+        $storage = [];
+
+        return $storage;
     }
 
     public function elements(ServerRequestInterface $request): Response
@@ -433,5 +497,43 @@ class AjaxController extends ActionController
 
         $result = LocalizationUtility::translate($key);
         return empty($result) ? $key : $result;
+    }
+
+    /**
+     * Generates all the necessary files
+     */
+    protected function generateAction(): void
+    {
+        // Set tca to enable DefaultTcaSchema for new inline tables
+        $tcaCodeGenerator = GeneralUtility::makeInstance(TcaCodeGenerator::class);
+        $tcaCodeGenerator->setInlineTca();
+
+        // Update Database
+        $result = $this->sqlCodeGenerator->updateDatabase();
+        if (array_key_exists('error', $result)) {
+            $this->addFlashMessage($result['error'], '', FlashMessage::ERROR);
+        }
+
+        // Clear system cache to force new TCA caching
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        $cacheManager->flushCachesInGroup('system');
+    }
+
+    /**
+     * Saves Fluid HTML for Contentelements, if File not exists
+     *
+     * @param string $key
+     * @param string $html
+     * @return bool
+     */
+    protected function saveHtml($key, $html): bool
+    {
+        // fallback to prevent breaking change
+        $path = MaskUtility::getTemplatePath($this->extSettings, $key);
+        if (file_exists($path)) {
+            return false;
+        }
+        GeneralUtility::writeFile($path, $html);
+        return true;
     }
 }

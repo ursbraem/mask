@@ -547,8 +547,10 @@ class StorageRepository implements SingletonInterface
      */
     public function update($content): void
     {
-        $json = $this->remove($content['type'], $content['orgkey']);
-        $this->persist($json);
+        if ($content['orgkey'] !== '') {
+            $json = $this->remove($content['type'], $content['orgkey']);
+            $this->persist($json);
+        }
         $this->persist($this->add($content));
     }
 

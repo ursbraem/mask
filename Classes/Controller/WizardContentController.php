@@ -39,8 +39,7 @@ class WizardContentController extends WizardController
      */
     public function createAction($storage): void
     {
-        $json = $this->storageRepository->add($storage);
-        $this->storageRepository->persist($json);
+        $this->storageRepository->persist($this->storageRepository->add($storage));
         $this->generateAction();
         $html = $this->htmlCodeGenerator->generateHtml($storage['elements']['key'], 'tt_content');
         $this->saveHtml($storage['elements']['key'], $html);

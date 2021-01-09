@@ -155,24 +155,6 @@ class WizardController extends ActionController
     }
 
     /**
-     * Saves Fluid HTML for Contentelements, if File not exists
-     *
-     * @param string $key
-     * @param string $html
-     * @return bool
-     */
-    protected function saveHtml($key, $html): bool
-    {
-        // fallback to prevent breaking change
-        $path = MaskUtility::getTemplatePath($this->extSettings, $key);
-        if (file_exists($path)) {
-            return false;
-        }
-        GeneralUtility::writeFile($path, $html);
-        return true;
-    }
-
-    /**
      * Checks if a key for a field is available
      * @param ServerRequest $request
      * @return Response

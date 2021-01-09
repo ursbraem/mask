@@ -11,7 +11,8 @@ define([
           tcaFields: Object,
           tcaKey: String,
           global: Object,
-          icons: Object
+          icons: Object,
+          fieldErrors: Object,
         },
         data: function () {
           return {
@@ -102,10 +103,14 @@ define([
               return this.global.activeField.tca['config.eval'];
             }
             return 'date';
+          },
+          hasError: function () {
+            return (this.fieldErrors.emptyGroupAllowedField === this.global.activeField && this.tcaKey === 'config.allowed')
+              || (this.fieldErrors.emptyRadioItems === this.global.activeField && this.tcaKey === 'config.items')
           }
         },
         template: `
-          <div :class="['form-group', 'col-sm-' + column]">
+          <div :class="['form-group', 'col-sm-' + column, {'has-error': hasError}]">
             <label class="t3js-formengine-label" :for="tcaKey">
                 {{ field.label }}
             </label>

@@ -31,6 +31,13 @@ define([
         icons: {},
         faIcons: {},
         availableTca: {},
+        fieldErrors: {
+          elementKey: false,
+          elementLabel: false,
+          emptyFieldKey: {},
+          emptyGroupAllowedField: {},
+          emptyRadioItems: {}
+        },
         global: {
           activeField: {},
           clonedField: {},
@@ -161,6 +168,74 @@ define([
       }
     },
     methods: {
+      save: function () {
+        if (this.validate()) {
+          const payload = {
+            element: this.element,
+            fields: this.fields,
+            type: this.type,
+            isNew: this.mode === 'new'
+          };
+          new AjaxRequest(TYPO3.settings.ajaxUrls.mask_save).post(payload)
+            .then(
+              async function (response) {
+                const res = await response.resolve();
+              }
+            );
+        }
+      },
+      validate: function () {
+        this.fieldErrors.elementKey = this.element.key === '';
+        this.fieldErrors.elementLabel = this.element.label === '';
+
+        this.fieldErrors.emptyFieldKey = {};
+        this.fieldErrors.emptyGroupAllowedField = {};
+        this.fieldErrors.emptyRadioItems = {};
+        this.checkFieldKeyIsEmpty(this.fields);
+        this.checkEmptyGroupAllowed(this.fields);
+        this.checkEmptyRadioItems(this.fields);
+
+        return !this.hasErrors;
+      },
+      checkFieldKeyIsEmpty: function (fields) {
+        fields.every(function (item) {
+          if (item.key === '') {
+            mask.fieldErrors.emptyFieldKey = item;
+            mask.global.activeField = item;
+            return false;
+          }
+          if (item.fields.length > 0) {
+            return mask.checkFieldKeyIsEmpty(item.fields);
+          }
+          return true;
+        });
+      },
+      checkEmptyGroupAllowed: function (fields) {
+        fields.every(function (item) {
+          if (item.tca['config.internal_type'] === 'db' && item.tca['config.allowed'] === '') {
+            mask.fieldErrors.emptyGroupAllowedField = item;
+            mask.global.activeField = item;
+            return false;
+          }
+          if (item.fields.length > 0) {
+            return mask.checkEmptyGroupAllowed(item.fields);
+          }
+          return true;
+        });
+      },
+      checkEmptyRadioItems: function (fields) {
+        fields.every(function (item) {
+          if (item.name === 'radio' && item.tca['config.items'].split(',').length < 2) {
+            mask.fieldErrors.emptyRadioItems = item;
+            mask.global.activeField = item;
+            return false;
+          }
+          if (item.fields.length > 0) {
+            return mask.checkEmptyRadioItems(item.fields);
+          }
+          return true;
+        });
+      },
       handleClone: function (item) {
         // Create a fresh copy of item
         let cloneMe = JSON.parse(JSON.stringify(item));
@@ -245,6 +320,17 @@ define([
       }
     },
     computed: {
+      hasErrors: function () {
+        return this.hasElementErrors || this.hasFieldErrors;
+      },
+      hasElementErrors: function () {
+        return this.fieldErrors.elementKey || this.fieldErrors.elementLabel;
+      },
+      hasFieldErrors: function () {
+        return !this.isEmptyObject(this.fieldErrors.emptyFieldKey)
+          || !this.isEmptyObject(this.fieldErrors.emptyGroupAllowedField)
+          || !this.isEmptyObject(this.fieldErrors.emptyRadioItems);
+      },
       maskBuilderOpen: function () {
         return this.mode === 'edit' || this.mode === 'new';
       },

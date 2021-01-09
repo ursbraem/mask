@@ -64,17 +64,23 @@ return [
     ],
     FieldType::CHECK => [
         'tca_in' => [
-            'config.check.renderType' => ''
+            'config.renderType' => ''
         ]
     ],
     FieldType::SELECT => [
         'tca_in' => [
-            'config.select.renderType' => 'selectSingle'
+            'config.renderType' => 'selectSingle'
+        ]
+    ],
+    FieldType::RADIO => [
+        'tca_in' => [
+            'config.items' => ''
         ]
     ],
     FieldType::GROUP => [
         'tca_in' => [
             'config.internal_type' => 'db',
+            'config.allowed' => '',
             'config.fieldControl.editPopup' => 1,
             'config.fieldControl.addRecord' => 1,
             'config.fieldControl.listModule' => 1,
