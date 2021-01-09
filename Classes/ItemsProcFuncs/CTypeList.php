@@ -48,7 +48,6 @@ class CTypeList extends AbstractList
     /**
      * Render the allowed CTypes for nested content elements
      * @param array $params
-     * @noinspection PhpComposerExtensionStubsInspection
      */
     public function itemsProcFunc(&$params): void
     {

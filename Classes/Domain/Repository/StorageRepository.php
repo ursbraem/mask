@@ -68,7 +68,6 @@ class StorageRepository implements SingletonInterface
      * Load Storage
      *
      * @return array
-     * @noinspection PhpComposerExtensionStubsInspection
      */
     public function load(): array
     {
@@ -88,7 +87,6 @@ class StorageRepository implements SingletonInterface
      * Write Storage
      *
      * @param $json
-     * @noinspection PhpComposerExtensionStubsInspection
      */
     public function write($json): void
     {
@@ -235,8 +233,8 @@ class StorageRepository implements SingletonInterface
      * Adds new Content-Element
      *
      * @param array $content
-     * @noinspection NotOptimalIfConditionsInspection
      * @return array
+     * @throws \Exception
      */
     public function add($content): array
     {

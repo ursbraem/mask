@@ -83,7 +83,6 @@ class BackendLayout extends AbstractEntity
      * Sets the uid.
      *
      * @param int $uid the user name to set, must not be empty
-     * @noinspection PhpUnused
      */
     public function setUid($uid): void
     {

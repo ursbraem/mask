@@ -213,8 +213,6 @@ class WizardController extends ActionController
      * Checks if a key for an element is available
      * @param ServerRequest $request
      * @return Response
-     * @throws Exception
-     * @noinspection PhpUnused
      */
     public function checkElementKey(ServerRequest $request): Response
     {
