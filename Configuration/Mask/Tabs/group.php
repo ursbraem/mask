@@ -41,7 +41,7 @@ return [
     ],
     Tab::EXTENDED => [
         [
-            'config.group.size' => 6,
+            'config.size' => 6,
             'config.autoSizeMax' => 6
         ],
         [

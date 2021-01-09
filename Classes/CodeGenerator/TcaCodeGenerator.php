@@ -311,7 +311,8 @@ class TcaCodeGenerator
                 $customSettingOverride['appearance'] = $tcavalue['config']['appearance'] ?? [];
                 $customSettingOverride['appearance']['fileUploadAllowed'] = (bool)($customSettingOverride['appearance']['fileUploadAllowed'] ?? true);
                 $customSettingOverride['appearance']['useSortable'] = (bool)($customSettingOverride['appearance']['useSortable'] ?? false);
-                $allowedFileExtensions = $tcavalue['config']['filter']['0']['parameters']['allowedFileExtensions'] ?? '';
+                // Since mask v7.0.0 the path for allowedFileExtensions has changed to root level. Keep this as fallback.
+                $allowedFileExtensions = $tcavalue['allowedFileExtensions'] ?? $tcavalue['config']['filter']['0']['parameters']['allowedFileExtensions'] ?? '';
                 if ($allowedFileExtensions === '') {
                     $allowedFileExtensions = $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'];
                 }
@@ -392,7 +393,8 @@ class TcaCodeGenerator
                 $columns[$tcakey]['order'],
                 $columns[$tcakey]['inlineIcon'],
                 $columns[$tcakey]['imageoverlayPalette'],
-                $columns[$tcakey]['cTypes']
+                $columns[$tcakey]['cTypes'],
+                $columns[$tcakey]['allowedFileExtensions']
             );
 
             // Unset label if it is from palette fields

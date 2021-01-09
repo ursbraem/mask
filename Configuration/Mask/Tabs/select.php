@@ -5,10 +5,10 @@ use MASK\Mask\DataStructure\Tab;
 return [
     Tab::GENERAL => [
         [
-            'config.select.renderType' => 6
+            'config.renderType' => 6
         ],
         [
-            'config.select.items' => 12
+            'config.items' => 12
         ]
     ],
     Tab::VALIDATION => [
@@ -42,7 +42,7 @@ return [
     ],
     Tab::EXTENDED => [
         [
-            'config.select.size' => 6,
+            'config.size' => 6,
             'config.autoSizeMax' => 6
         ]
     ]

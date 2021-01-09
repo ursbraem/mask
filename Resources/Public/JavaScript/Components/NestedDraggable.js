@@ -88,7 +88,7 @@ define([
         <div class="tx_mask_btn_text">
           <span v-if="field.name == 'linebreak'" class="id_labeltext">Linebreak</span>
           <span v-else class="id_labeltext">{{ field.label }}</span>
-          <span class="id_keytext">{{ keyWithoutMask(field.key) }}</span>
+          <span class="id_keytext" v-if="field.name != 'linebreak'">{{ keyWithoutMask(field.key) }}</span>
         </div>
         <div class="tx_mask_btn_actions">
             <span @click.stop="removeField(index)" class="id_delete" title="Delete item" v-html="icons.delete"></span>

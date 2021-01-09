@@ -4,12 +4,24 @@ use MASK\Mask\DataStructure\FieldType;
 
 return [
     'config.default' => [
-        'type' => 'variable',
-        'rows' => 5,
-        'label' => 'tx_mask.field.string.default',
-        'description' => 'tx_mask.field.string.default.description',
-        'code' => 'default',
-        'documentation' => 'ColumnsConfig/Type/inputDefault.html#default',
+        'collision' => true,
+        'other' => [
+            'type' => 'variable',
+            'rows' => 5,
+            'label' => 'tx_mask.field.string.default',
+            'description' => 'tx_mask.field.string.default.description',
+            'code' => 'default',
+            'documentation' => 'ColumnsConfig/Type/inputDefault.html#default',
+        ],
+        'check' => [
+            'type' => 'number',
+            'min' => 0,
+            'max' => 31,
+            'code' => 'default',
+            'label' => 'tx_mask.field.string.default',
+            'description' => 'tx_mask.field.check.default.description',
+            'documentation' => 'ColumnsConfig/Type/checkDefault.html#default'
+        ]
     ],
     'config.placeholder' => [
         'type' => 'variable',
@@ -24,14 +36,33 @@ return [
         'documentation' => 'ColumnsConfig/Type/inputDefault.html#placeholder',
     ],
     'config.size' => [
-        'type' => 'number',
-        'label' => 'tx_mask.field.string.size',
-        'description' => 'tx_mask.field.string.size.description',
-        'code' => 'size',
-        'documentation' => 'ColumnsConfig/Type/inputDefault.html#size',
-        'min' => 10,
-        'max' => 50,
-        'step' => 5
+        'collision' => true,
+        'other' => [
+            'type' => 'number',
+            'label' => 'tx_mask.field.string.size',
+            'description' => 'tx_mask.field.string.size.description',
+            'code' => 'size',
+            'documentation' => 'ColumnsConfig/Type/inputDefault.html#size',
+            'min' => 10,
+            'max' => 50,
+            'step' => 5
+        ],
+        'select' => [
+            'type' => 'number',
+            'min' => 1,
+            'label' => 'tx_mask.field.select.size',
+            'description' => 'tx_mask.field.select.size.description',
+            'code' => 'size',
+            'documentation' => 'ColumnsConfig/Type/selectSingle.html#size'
+        ],
+        'group' => [
+            'type' => 'number',
+            'min' => 1,
+            'label' => 'tx_mask.field.select.size',
+            'description' => 'tx_mask.field.select.size.description',
+            'code' => 'size',
+            'documentation' => 'ColumnsConfig/Type/selectSingle.html#size'
+        ]
     ],
     'config.max' => [
         'type' => 'number',
@@ -191,17 +222,6 @@ return [
         'code' => 'autocomplete',
         'documentation' => 'ColumnsConfig/Type/inputDefault.html#autocomplete'
     ],
-    'l10n_mode' => [
-        'type' => 'radio',
-        'label' => 'tx_mask.field.inline.localization_mode',
-        'code' => 'l10n_mode',
-        'documentation' => 'Columns/Index.html#l10n-mode',
-        'items' => [
-            '' => 'tx_mask.field.inline.l10n_mode.default',
-            'exclude' => 'tx_mask.field.inline.l10n_mode.exclude',
-            'prefixLangTitle' => 'tx_mask.field.inline.l10n_mode.prefixLangTitle'
-        ],
-    ],
     'config.behaviour.allowLanguageSynchronization' => [
         'type' => 'checkbox',
         'label' => 'tx_mask.allowLanguageSynchronization',
@@ -287,14 +307,24 @@ return [
         'invert' => true
     ],
     'config.cols' => [
-        'type' => 'number',
-        'label' => 'tx_mask.field.text.cols',
-        'description' => 'tx_mask.field.text.cols.description',
-        'code' => 'cols',
-        'min' => 10,
-        'max' => 50,
-        'step' => 5,
-        'documentation' => 'ColumnsConfig/Type/textDefault.html#cols'
+        'collision' => true,
+        'check' => [
+            'type' => 'text',
+            'label' => 'tx_mask.content.check.columns',
+            'description' => 'tx_mask.content.check.columns.description',
+            'code' => 'cols',
+            'documentation' => 'ColumnsConfig/Type/checkDefault.html#cols'
+        ],
+        'other' => [
+            'type' => 'number',
+            'label' => 'tx_mask.field.text.cols',
+            'description' => 'tx_mask.field.text.cols.description',
+            'code' => 'cols',
+            'min' => 10,
+            'max' => 50,
+            'step' => 5,
+            'documentation' => 'ColumnsConfig/Type/textDefault.html#cols'
+        ]
     ],
     'config.rows' => [
         'type' => 'number',
@@ -349,80 +379,63 @@ return [
         'code' => 'richtextConfiguration',
         'documentation' => 'ColumnsConfig/Type/textDefault.html#richtextconfiguration'
     ],
-    'config.check.items' => [
-        'type' => 'textarea',
-        'target' => 'config.items',
-        'rows' => 10,
-        'label' => 'tx_mask.content.check.items',
-        'description' => 'tx_mask.content.check.items.description',
-        'placeholder' => 'tx_mask.content.check.items.placeholder',
-        'code' => 'items',
-        'documentation' => 'ColumnsConfig/Type/checkDefault.html#items'
-    ],
-    'config.check.cols' => [
-        'type' => 'text',
-        'target' => 'config.cols',
-        'label' => 'tx_mask.content.check.columns',
-        'description' => 'tx_mask.content.check.columns.description',
-        'code' => 'cols',
-        'documentation' => 'ColumnsConfig/Type/checkDefault.html#cols'
-    ],
-    'config.check.renderType' => [
-        'type' => 'radio',
-        'target' => 'config.renderType',
-        'label' => 'tx_mask.field.check.renderType',
-        'description' => 'tx_mask.field.check.renderType.description',
-        'code' => 'renderType',
-        'items' => [
-            '' => 'tx_mask.field.check',
-            'checkboxToggle' => 'tx_mask.field.check.renderType.checkboxToggle',
-            'checkboxLabeledToggle' => 'tx_mask.field.check.renderType.checkboxLabeledToggle'
+    'config.items' => [
+        'collision' => true,
+        'check' => [
+            'type' => 'textarea',
+            'rows' => 10,
+            'label' => 'tx_mask.content.check.items',
+            'description' => 'tx_mask.content.check.items.description',
+            'placeholder' => 'tx_mask.content.check.items.placeholder',
+            'code' => 'items',
+            'documentation' => 'ColumnsConfig/Type/checkDefault.html#items'
         ],
-        'documentation' => 'ColumnsConfig/Type/Check.html'
-    ],
-    'config.check.default' => [
-        'type' => 'number',
-        'target' => 'config.default',
-        'min' => 0,
-        'max' => 31,
-        'code' => 'default',
-        'label' => 'tx_mask.field.string.default',
-        'description' => 'tx_mask.field.check.default.description',
-        'documentation' => 'ColumnsConfig/Type/checkDefault.html#default'
-    ],
-    'config.radio.items' => [
-        'type' => 'textarea',
-        'target' => 'config.items',
-        'rows' => 10,
-        'code' => 'items',
-        'label' => 'tx_mask.content.check.items',
-        'description' => 'tx_mask.field.radio.items',
-        'placeholder' => 'tx_mask.content.radio.items.placeholder',
-        'documentation' => 'ColumnsConfig/Type/Radio.html#items'
-    ],
-    'config.select.renderType' => [
-        'type' => 'select',
-        'target' => 'config.renderType',
-        'label' => 'tx_mask.field.check.renderType',
-        'description' => 'tx_mask.field.check.renderType.description',
-        'code' => 'renderType',
-        'items' => [
-            'selectSingle' => 'tx_mask.field.select.renderType.selectSingle',
-            'selectSingleBox' => 'tx_mask.field.select.renderType.selectSingleBox',
-            'selectCheckBox' => 'tx_mask.field.select.renderType.selectCheckBox',
-            'selectMultipleSideBySide' => 'tx_mask.field.select.renderType.selectMultipleSideBySide',
+        'radio' => [
+            'type' => 'textarea',
+            'rows' => 10,
+            'code' => 'items',
+            'label' => 'tx_mask.content.check.items',
+            'description' => 'tx_mask.field.radio.items',
+            'placeholder' => 'tx_mask.content.radio.items.placeholder',
+            'documentation' => 'ColumnsConfig/Type/Radio.html#items'
         ],
-        'documentation' => 'ColumnsConfig/Type/Select.html'
+        'select' => [
+            'type' => 'textarea',
+            'rows' => 10,
+            'code' => 'items',
+            'label' => 'tx_mask.content.check.items',
+            'description' => 'tx_mask.field.select.items',
+            'placeholder' => 'tx_mask.content.select.items.placeholder',
+            'documentation' => 'ColumnsConfig/Type/selectSingle.html#items'
+        ]
     ],
-    'config.select.items' => [
-        'type' => 'textarea',
-        'target' => 'config.items',
-        'rows' => 10,
-        'code' => 'items',
-        'label' => 'tx_mask.content.check.items',
-        'description' => 'tx_mask.field.select.items',
-        'placeholder' => 'tx_mask.content.select.items.placeholder',
-        'documentation' => 'ColumnsConfig/Type/selectSingle.html#items'
+    'config.renderType' => [
+        'collision' => true,
+        'select' => [
+            'type' => 'select',
+            'label' => 'tx_mask.field.check.renderType',
+            'description' => 'tx_mask.field.check.renderType.description',
+            'code' => 'renderType',
+            'items' => [
+                'selectSingle' => 'tx_mask.field.select.renderType.selectSingle',
+                'selectSingleBox' => 'tx_mask.field.select.renderType.selectSingleBox',
+                'selectCheckBox' => 'tx_mask.field.select.renderType.selectCheckBox',
+                'selectMultipleSideBySide' => 'tx_mask.field.select.renderType.selectMultipleSideBySide',
+            ],
+            'documentation' => 'ColumnsConfig/Type/Select.html'
+        ],
+        'check' => [
+            'type' => 'radio',
+            'label' => 'tx_mask.field.check.renderType',
+            'description' => 'tx_mask.field.check.renderType.description',
+            'code' => 'renderType',
+            'items' => [
+                '' => 'tx_mask.field.check',
+                'checkboxToggle' => 'tx_mask.field.check.renderType.checkboxToggle',
+                'checkboxLabeledToggle' => 'tx_mask.field.check.renderType.checkboxLabeledToggle'
+            ],
+            'documentation' => 'ColumnsConfig/Type/Check.html'
+        ]
     ],
     'config.foreign_table' => [
         'type' => 'text',
@@ -460,14 +473,6 @@ return [
         'description' => 'tx_mask.field.select.file_folder_recursions.description',
         'code' => 'fileFolder_recursions',
         'documentation' => 'ColumnsConfig/Type/selectSingle.html#filefolder-recursions'
-    ],
-    'config.select.size' => [
-        'type' => 'number',
-        'min' => 1,
-        'label' => 'tx_mask.field.select.size',
-        'description' => 'tx_mask.field.select.size.description',
-        'code' => 'size',
-        'documentation' => 'ColumnsConfig/Type/selectSingle.html#size'
     ],
     'config.autoSizeMax' => [
         'type' => 'number',
@@ -567,35 +572,12 @@ return [
         'code' => 'tableList',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldwizard-tablelist'
     ],
-    'config.group.size' => [
-        'type' => 'number',
-        'min' => 1,
-        'label' => 'tx_mask.field.select.size',
-        'description' => 'tx_mask.field.select.size.description',
-        'code' => 'size',
-        'documentation' => 'ColumnsConfig/Type/selectSingle.html#size'
-    ],
     'config.multiple' => [
         'type' => 'checkbox',
         'label' => 'tx_mask.group.multiple',
         'description' => 'tx_mask.group.multiple.description',
         'code' => 'multiple',
         'documentation' => 'ColumnsConfig/Type/Group.html#multiple'
-    ],
-    'imageoverlayPalette' => [
-        'type' => 'checkbox',
-        'label' => 'tx_mask.field.imageoverlayPalette',
-        'description' => 'tx_mask.field.imageoverlayPalette.description',
-        'code' => 'imageoverlayPalette',
-        'documentation' => 'ColumnsConfig/Type/Inline.html#file-abstraction-layer'
-    ],
-    // todo remove before tca
-    'elementBrowserAllowed' => [
-        'type' => 'text',
-        'label' => 'tx_mask.field.inline.allowed_file_extensions',
-        'description' => 'tx_mask.field.inline.elementBrowserAllowed.description',
-        'code' => 'elementBrowserAllowed',
-        'documentation' => 'ColumnsConfig/Type/Inline.html?highlight=elementbrowserallowed#appearance'
     ],
     'config.appearance.collapseAll' => [
         'type' => 'checkbox',
@@ -653,22 +635,6 @@ return [
         'code' => 'showRemovedLocalizationRecords',
         'documentation' => 'ColumnsConfig/Type/Inline.html?highlight=showremovedlocalizationrecords#appearance'
     ],
-    'ctrl.label' => [
-        'type' => 'text',
-        'target' => 'inlineLabel',
-        'label' => 'tx_mask.all.label',
-        'description' => 'tx_mask.field.inline.inline_label',
-        'code' => 'label',
-        'documentation' => 'Ctrl/Index.html#label'
-    ],
-    'ctrl.iconfile' => [
-        'type' => 'text',
-        'target' => 'inlineIcon',
-        'label' => 'tx_mask.field.inline.inline_icon.label',
-        'description' => 'tx_mask.field.inline.inline_icon',
-        'code' => 'iconfile',
-        'documentation' => 'Ctrl/Index.html#iconfile'
-    ],
     'config.appearance.newRecordLinkTitle' => [
         'type' => 'text',
         'label' => 'tx_mask.field.inline.new_record_link_title.label',
@@ -689,10 +655,51 @@ return [
         'code' => 'levelLinksPosition',
         'documentation' => 'ColumnsConfig/Type/Inline.html?highlight=levellinksposition#appearance'
     ],
+    'ctrl.label' => [
+        'type' => 'text',
+        'target' => 'inlineLabel',
+        'label' => 'tx_mask.all.label',
+        'description' => 'tx_mask.field.inline.inline_label',
+        'code' => 'label',
+        'documentation' => 'Ctrl/Index.html#label'
+    ],
+    'ctrl.iconfile' => [
+        'type' => 'text',
+        'target' => 'inlineIcon',
+        'label' => 'tx_mask.field.inline.inline_icon.label',
+        'description' => 'tx_mask.field.inline.inline_icon',
+        'code' => 'iconfile',
+        'documentation' => 'Ctrl/Index.html#iconfile'
+    ],
     'cTypes' => [
         'type' => 'cTypes',
         'label' => 'tx_mask.allowed_content',
         'description' => 'tx_mask.allowed_content.description',
         'code' => 'cTypes'
-    ]
+    ],
+    'allowedFileExtensions' => [
+        'type' => 'text',
+        'label' => 'tx_mask.field.inline.allowed_file_extensions',
+        'description' => 'tx_mask.field.inline.elementBrowserAllowed.description',
+        'code' => 'allowedFileExtensions',
+        'documentation' => 'ColumnsConfig/Type/Inline.html?highlight=elementbrowserallowed#appearance'
+    ],
+    'imageoverlayPalette' => [
+        'type' => 'checkbox',
+        'label' => 'tx_mask.field.imageoverlayPalette',
+        'description' => 'tx_mask.field.imageoverlayPalette.description',
+        'code' => 'imageoverlayPalette',
+        'documentation' => 'ColumnsConfig/Type/Inline.html#file-abstraction-layer'
+    ],
+    'l10n_mode' => [
+        'type' => 'radio',
+        'label' => 'tx_mask.field.inline.localization_mode',
+        'code' => 'l10n_mode',
+        'documentation' => 'Columns/Index.html#l10n-mode',
+        'items' => [
+            '' => 'tx_mask.field.inline.l10n_mode.default',
+            'exclude' => 'tx_mask.field.inline.l10n_mode.exclude',
+            'prefixLangTitle' => 'tx_mask.field.inline.l10n_mode.prefixLangTitle'
+        ],
+    ],
 ];

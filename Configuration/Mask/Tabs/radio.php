@@ -5,7 +5,7 @@ use MASK\Mask\DataStructure\Tab;
 return [
     Tab::GENERAL => [
         [
-            'config.radio.items' => 12
+            'config.items' => 12
         ],
         [
             'config.default' => 6

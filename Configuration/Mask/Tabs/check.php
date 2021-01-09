@@ -5,7 +5,7 @@ use MASK\Mask\DataStructure\Tab;
 return [
     Tab::GENERAL => [
         [
-            'config.check.renderType' => 6
+            'config.renderType' => 6
         ]
     ],
     Tab::LOCALIZATION => [
@@ -18,13 +18,13 @@ return [
     ],
     Tab::EXTENDED => [
         [
-            'config.check.items' => 12
+            'config.items' => 12
         ],
         [
-            'config.check.default' => 6
+            'config.default' => 6
         ],
         [
-            'config.check.cols' => 6
+            'config.cols' => 6
         ]
     ]
 ];

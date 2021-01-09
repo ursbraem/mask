@@ -145,7 +145,11 @@ define([
                 mask.fields = await response.resolve();
               }
             );
+        } else {
+          mask.fields = [];
+        }
 
+        if (this.maskBuilderOpen) {
           // Boot font icon picker
           require(['jquery', 'TYPO3/CMS/Mask/Contrib/FontIconPicker'], function ($) {
             var iconPicker = $('#meta_icon').fontIconPicker({
@@ -241,6 +245,9 @@ define([
       }
     },
     computed: {
+      maskBuilderOpen: function () {
+        return this.mode === 'edit' || this.mode === 'new';
+      },
       isCoreField: function () {
         if (this.isEmptyObject(this.global.activeField)) {
           return false;
@@ -278,7 +285,7 @@ define([
         if (!this.global.activeField.newField && !this.isCoreField) {
           return false;
         }
-        if (this.global.activeField.name === 'inline') {
+        if (['inline', 'palette', 'linebreak', 'tab'].includes(this.global.activeField.name)) {
           return false;
         }
         if (this.global.activeField.parent.name === 'inline') {

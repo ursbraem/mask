@@ -54,7 +54,13 @@ define([
         },
         computed: {
           field: function () {
-            return this.tcaFields[this.tcaKey];
+            if (this.global.activeField.name in this.tcaFields[this.tcaKey]) {
+              return this.tcaFields[this.tcaKey][this.global.activeField.name];
+            } else if ('other' in this.tcaFields[this.tcaKey]) {
+              return this.tcaFields[this.tcaKey]['other'];
+            } else {
+              return this.tcaFields[this.tcaKey];
+            }
           },
           valueOn: function () {
             return 'valueOn' in this.field ? this.field.valueOn : 1;

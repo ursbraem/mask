@@ -16,7 +16,7 @@ return [
     ],
     TAB::APPEARANCE => [
         [
-            'elementBrowserAllowed' => 6
+            'allowedFileExtensions' => 6
         ],
         [
             'config.appearance.collapseAll' => 6,
