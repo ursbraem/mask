@@ -1,7 +1,7 @@
 <div v-if="global.activeField.name" class="tx_mask_field">
     <div v-if="global.activeField.name != 'linebreak'" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist" data-store-last-tab="1">
-            <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab, 'has-validation-error': global.activeField == fieldErrors.emptyFieldKey && key == 'general'}" v-if="key == 'general' || !isCoreField">
+            <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab, 'has-validation-error': fieldErrors.emptyKeyFields.includes(global.activeField) && key == 'general'}" v-if="key == 'general' || !isCoreField">
                 <a role="tab" href="#" @click.prevent="global.currentTab = key">
                     {{ language.tabs[key] }}
                 </a>
@@ -66,7 +66,7 @@
                     </div>
                     <f:comment><!-- mask field key and label --></f:comment>
                     <div v-if="!isCoreField && global.currentTab == 'general'" class="row">
-                        <div :class="['form-group', 'col-sm-6', {'has-error': fieldErrors.emptyFieldKey == global.activeField}]">
+                        <div :class="['form-group', 'col-sm-6', {'has-error': fieldErrors.emptyKeyFields.includes(global.activeField)}]">
                             <label class="t3js-formengine-label" for="form_key">
                                 <f:translate key="tx_mask.field.fieldkey"/>
                             </label>

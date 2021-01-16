@@ -35,7 +35,16 @@
             <f:translate key="tx_mask.all.fields_of_element"/>
         </label>
         <div class="form-group col-sm-12 tx_mask_borderright tx_mask_tabcell2">
-            <nested-draggable :depth="0" :index="0" :fields="fields" :icons="icons" :global="global" :move="onMove"/>
+            <nested-draggable
+                :depth="0"
+                :index="0"
+                :fields="fields"
+                :icons="icons"
+                :global="global"
+                :move="onMove"
+                :field-has-error="fieldHasError"
+            >
+            </nested-draggable>
         </div>
     </div>
     <div class="form-group col-sm-6 tx_mask_tabcell3">

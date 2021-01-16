@@ -45,9 +45,9 @@ define([
         fieldErrors: {
           elementKey: false,
           elementLabel: false,
-          emptyFieldKey: {},
-          emptyGroupAllowedField: {},
-          emptyRadioItems: {}
+          emptyKeyFields: [],
+          emptyGroupAllowedFields: [],
+          emptyRadioItems: []
         },
         global: {
           activeField: {},
@@ -149,6 +149,21 @@ define([
       });
     },
     watch: {
+      element: {
+        handler() {
+          this.validate();
+        },
+        deep: true
+      },
+      fields: {
+        handler() {
+          this.validate();
+        },
+        deep: true
+      },
+      'global.activeField': function () {
+        this.validate();
+      },
       mode: function () {
         if (this.mode === 'edit') {
           // load element fields
@@ -180,7 +195,8 @@ define([
     },
     methods: {
       save: function () {
-        if (this.validate()) {
+        this.validate(true);
+        if (!this.hasErrors) {
           const payload = {
             element: this.element,
             fields: this.fields,
@@ -206,34 +222,59 @@ define([
                 name: 'ok',
                 trigger: function () {
                   Modal.dismiss();
+                  mask.getErrorFields().every(function (errorFields) {
+                    if (errorFields.length > 0) {
+                      mask.global.activeField = errorFields[0];
+                      return false;
+                    }
+                    return true;
+                  });
                 }
               }
             ]
           )
         }
       },
-      validate: function () {
+      fieldHasError: function (field) {
+        if (!this.hasFieldErrors) {
+          return false;
+        }
+        if (this.fieldErrors.emptyKeyFields.includes(field)) {
+          return true;
+        }
+        if (this.fieldErrors.emptyGroupAllowedFields.includes(field)) {
+          return true;
+        }
+        if (this.fieldErrors.emptyRadioItems.includes(field)) {
+          return true;
+        }
+      },
+      validate: function (jumpToField) {
         this.fieldErrors.elementKey = this.element.key === '';
         this.fieldErrors.elementLabel = this.element.label === '';
 
-        this.fieldErrors.emptyFieldKey = {};
-        this.fieldErrors.emptyGroupAllowedField = {};
-        this.fieldErrors.emptyRadioItems = {};
-        this.checkFieldKeyIsEmpty(this.fields);
-        this.checkEmptyGroupAllowed(this.fields);
-        this.checkEmptyRadioItems(this.fields);
+        this.fieldErrors.emptyKeyFields = [];
+        this.fieldErrors.emptyGroupAllowedFields = [];
+        this.fieldErrors.emptyRadioItems = [];
 
-        return !this.hasErrors;
+        this.checkFieldKeyIsEmpty(this.fields, jumpToField);
+        this.checkEmptyGroupAllowed(this.fields, jumpToField);
+        this.checkEmptyRadioItems(this.fields, jumpToField);
+      },
+      getErrorFields: function () {
+        return [
+          this.fieldErrors.emptyKeyFields,
+          this.fieldErrors.emptyGroupAllowedFields,
+          this.fieldErrors.emptyRadioItems
+        ];
       },
       checkFieldKeyIsEmpty: function (fields) {
         fields.every(function (item) {
           if (item.key === '') {
-            mask.fieldErrors.emptyFieldKey = item;
-            mask.global.activeField = item;
-            return false;
+            mask.fieldErrors.emptyKeyFields.push(item);
           }
           if (item.fields.length > 0) {
-            return mask.checkFieldKeyIsEmpty(item.fields);
+            mask.checkFieldKeyIsEmpty(item.fields);
           }
           return true;
         });
@@ -241,12 +282,10 @@ define([
       checkEmptyGroupAllowed: function (fields) {
         fields.every(function (item) {
           if (item.tca['config.internal_type'] === 'db' && item.tca['config.allowed'] === '') {
-            mask.fieldErrors.emptyGroupAllowedField = item;
-            mask.global.activeField = item;
-            return false;
+            mask.fieldErrors.emptyGroupAllowedFields.push(item);
           }
           if (item.fields.length > 0) {
-            return mask.checkEmptyGroupAllowed(item.fields);
+            mask.checkEmptyGroupAllowed(item.fields);
           }
           return true;
         });
@@ -254,12 +293,10 @@ define([
       checkEmptyRadioItems: function (fields) {
         fields.every(function (item) {
           if (item.name === 'radio' && item.tca['config.items'].split(',').length < 2) {
-            mask.fieldErrors.emptyRadioItems = item;
-            mask.global.activeField = item;
-            return false;
+            mask.fieldErrors.emptyRadioItems.push(item);
           }
           if (item.fields.length > 0) {
-            return mask.checkEmptyRadioItems(item.fields);
+            mask.checkEmptyRadioItems(item.fields);
           }
           return true;
         });
@@ -355,9 +392,9 @@ define([
         return this.fieldErrors.elementKey || this.fieldErrors.elementLabel;
       },
       hasFieldErrors: function () {
-        return !this.isEmptyObject(this.fieldErrors.emptyFieldKey)
-          || !this.isEmptyObject(this.fieldErrors.emptyGroupAllowedField)
-          || !this.isEmptyObject(this.fieldErrors.emptyRadioItems);
+        return this.fieldErrors.emptyKeyFields.length > 0
+          || this.fieldErrors.emptyGroupAllowedFields.length > 0
+          || this.fieldErrors.emptyRadioItems.length > 0
       },
       maskBuilderOpen: function () {
         return this.mode === 'edit' || this.mode === 'new';

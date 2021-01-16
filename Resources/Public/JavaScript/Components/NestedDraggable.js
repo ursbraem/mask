@@ -12,7 +12,8 @@ define([
           global: Object,
           depth: Number,
           index: Number,
-          move: Function
+          move: Function,
+          fieldHasError: Function
         },
         components: {
           draggable
@@ -80,7 +81,7 @@ define([
     @add="onAdd"
     :move="move"
   >
-  <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field }, 'id_' + field.name]">
+  <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field}, 'id_' + field.name, {'has-error': fieldHasError(field)}]">
     <div class="tx_mask_btn_row" @click="global.activeField = field; global.currentTab = 'general'">
         <div class="tx_mask_btn_img">
             <div v-html="field.icon"></div>
@@ -96,7 +97,16 @@ define([
         </div>
     </div>
     <div class="tx_mask_btn_caption" v-if="isParentField(field)">
-        <nested-draggable @set-parent-active="setParentActive($event)" :depth="depth + 1" :index="index" :fields="field.fields" :icons="icons" :global="global" :move="move"/>
+        <nested-draggable
+            @set-parent-active="setParentActive($event)"
+            :depth="depth + 1"
+            :index="index"
+            :fields="field.fields"
+            :icons="icons"
+            :global="global"
+            :move="move"
+            :field-has-error="fieldHasError"
+          />
     </div>
   </li>
 </draggable>

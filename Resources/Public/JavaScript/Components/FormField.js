@@ -105,8 +105,8 @@ define([
             return 'date';
           },
           hasError: function () {
-            return (this.fieldErrors.emptyGroupAllowedField === this.global.activeField && this.tcaKey === 'config.allowed')
-              || (this.fieldErrors.emptyRadioItems === this.global.activeField && this.tcaKey === 'config.items')
+            return (this.fieldErrors.emptyGroupAllowedFields.includes(this.global.activeField) && this.tcaKey === 'config.allowed')
+              || (this.fieldErrors.emptyRadioItems.includes(this.global.activeField) && this.tcaKey === 'config.items')
           }
         },
         template: `
