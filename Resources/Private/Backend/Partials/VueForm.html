@@ -25,6 +25,9 @@
                                                 <f:translate key="tx_mask.field.newfield"/>
                                             </option>
                                         </optgroup>
+                                        <optgroup label="Current new key" v-if="global.activeField.key !== '' && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
+                                            <option :value="global.activeField.key">{{ global.activeField.key }}</option>
+                                        </optgroup>
                                         <optgroup v-if="availableTca[global.activeField.name].core.length" class="c-divider" label="Core fields">
                                             <option v-for="item in availableTca[global.activeField.name].core" :value="item.field">
                                                 {{ item.label }} ({{ item.field }})
@@ -34,7 +37,6 @@
                                             <option v-for="item in availableTca[global.activeField.name].mask" :value="item.field">
                                                 {{ item.label }}
                                             </option>
-                                            <option v-if="global.activeField.key !== ''" :value="global.activeField.key">{{ global.activeField.key }}</option>
                                         </optgroup>
                                     </select>
                                     <f:comment><!-- todo is this even needed?--></f:comment>

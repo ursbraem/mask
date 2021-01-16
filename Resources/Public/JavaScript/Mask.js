@@ -443,6 +443,19 @@ define([
           return false;
         }
         return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0
+      },
+      availableTcaKeys: function () {
+        var keys = {};
+        Object.keys(this.availableTca).forEach(function (key) {
+          keys[key] = [];
+          mask.availableTca[key].core.forEach(function (item) {
+            keys[key].push(item.field);
+          });
+          mask.availableTca[key].mask.forEach(function (item) {
+            keys[key].push(item.field);
+          });
+        });
+        return keys;
       }
     }
   });
