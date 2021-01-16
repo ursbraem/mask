@@ -437,6 +437,11 @@ class AjaxController extends ActionController
             $tabs[$key] = LocalizationUtility::translate($tab, 'mask');
         }
         $language['tabs'] = $tabs;
+
+        $language['ok'] = LocalizationUtility::translate('tx_mask.ok', 'mask');
+        $language['alert'] = LocalizationUtility::translate('tx_mask.alert', 'mask');
+        $language['fieldsMissing'] = LocalizationUtility::translate('tx_mask.fieldsMissing', 'mask');
+
         return new JsonResponse($language);
     }
 

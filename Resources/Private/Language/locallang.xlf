@@ -997,6 +997,15 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.config.richtextConfiguration.none">
 				<source>Use global default</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.ok">
+				<source>OK</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.alert">
+				<source>Alert</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.fieldsMissing">
+				<source>One or more fields are missing or are invalid. Please fill in the marked fields correctly and press save again.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

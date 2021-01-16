@@ -5,7 +5,18 @@ define([
   'TYPO3/CMS/Mask/Components/FormField',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
-], function (Vue, draggable, nestedDraggable, formField, AjaxRequest, Icons) {
+  'TYPO3/CMS/Backend/Modal',
+  'TYPO3/CMS/Backend/Severity'
+], function (
+  Vue,
+  draggable,
+  nestedDraggable,
+  formField,
+  AjaxRequest,
+  Icons,
+  Modal,
+  Severity
+) {
   if (!document.getElementById('mask')) {
     return;
   }
@@ -182,6 +193,23 @@ define([
                 const res = await response.resolve();
               }
             );
+        } else {
+          Modal.confirm(
+            this.language.alert || 'Alert',
+            this.language.fieldsMissing,
+            Severity.error,
+            [
+              {
+                text: this.language.ok || 'OK',
+                btnClass: 'btn-default',
+                active: true,
+                name: 'ok',
+                trigger: function () {
+                  Modal.dismiss();
+                }
+              }
+            ]
+          )
         }
       },
       validate: function () {
