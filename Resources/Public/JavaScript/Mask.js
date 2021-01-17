@@ -30,6 +30,7 @@ define([
     },
     data: function () {
       return {
+        maskPrefix: 'tx_mask_',
         mode: 'list',
         type: '',
         elements: [],
@@ -196,7 +197,7 @@ define([
     },
     methods: {
       save: function () {
-        this.validate(true);
+        this.validate();
         if (!this.hasErrors) {
           const payload = {
             element: this.element,
@@ -237,12 +238,19 @@ define([
         }
       },
       validateKeyExists: function (field) {
-        if (field.key === '') {
-          return;
-        }
         // Are we root?
         let root = this.isRoot(field);
         let fields = this.getFields(field);
+
+        // Force mask prefix on root level
+        if (root && !this.hasMaskPrefix(field.key)) {
+          field.key = this.maskPrefix;
+        }
+
+        // Skip empty fields (these are validated by empty validator)
+        if (root && field.key === this.maskPrefix || field.key === '') {
+          return;
+        }
 
         // Step 1: Check if key is in current fields array
         let error = this.checkIfKeyExistsInFields(fields, this.global.activeField);
@@ -268,8 +276,9 @@ define([
           return;
         }
 
+        // Check if key already exists in table
         let arguments = {
-          key: 'tx_mask_' + field.key,
+          key: field.key,
           table: this.type,
           type: field.name,
           elementKey: ''
@@ -290,6 +299,9 @@ define([
               }
             }
           );
+      },
+      hasMaskPrefix: function (key) {
+        return key.substr(0, this.maskPrefix.length) === this.maskPrefix;
       },
       isRoot: function (field) {
         return this.isEmptyObject(field.parent) || field.parent.name === 'palette' && this.isEmptyObject(field.parent.parent);
@@ -416,7 +428,7 @@ define([
           return true;
         }
       },
-      validate: function (jumpToField) {
+      validate: function () {
         this.fieldErrors.elementKey = this.element.key === '';
         this.fieldErrors.elementLabel = this.element.label === '';
 
@@ -424,9 +436,9 @@ define([
         this.fieldErrors.emptyGroupAllowedFields = [];
         this.fieldErrors.emptyRadioItems = [];
 
-        this.checkFieldKeyIsEmpty(this.fields, jumpToField);
-        this.checkEmptyGroupAllowed(this.fields, jumpToField);
-        this.checkEmptyRadioItems(this.fields, jumpToField);
+        this.checkFieldKeyIsEmpty(this.fields);
+        this.checkEmptyGroupAllowed(this.fields);
+        this.checkEmptyRadioItems(this.fields);
       },
       getErrorFields: function () {
         return [
@@ -437,7 +449,8 @@ define([
       },
       checkFieldKeyIsEmpty: function (fields) {
         fields.every(function (item) {
-          if (item.key === '') {
+          const isRoot = mask.isRoot(item);
+          if (isRoot && item.key === mask.maskPrefix || item.key === '') {
             mask.fieldErrors.emptyKeyFields.push(item);
           }
           if (item.fields.length > 0) {
@@ -472,7 +485,6 @@ define([
         // Create a fresh copy of item
         let cloneMe = JSON.parse(JSON.stringify(item));
         this.$delete(cloneMe, 'uid');
-        cloneMe['newField'] = true;
         this.global.clonedField = cloneMe;
         return cloneMe;
       },
@@ -499,14 +511,15 @@ define([
           fields.splice(index, 0, newField);
           this.global.activeField = newField;
           this.global.currentTab = 'general';
+          this.validateKeyExists(newField);
         }
       },
       onMove: function (e) {
-        var draggedField = e.draggedContext.element;
-        var parent = e.relatedContext.component.$parent;
-        var depth = parent.depth;
-        var index = parent.index;
-        var parentName = '';
+        const draggedField = e.draggedContext.element;
+        const parent = e.relatedContext.component.$parent;
+        const depth = parent.depth;
+        const index = parent.index;
+        let parentName = '';
 
         if (depth > 0) {
           parentName = parent.$parent.list[index].name;
@@ -522,7 +535,7 @@ define([
           }
 
           // Existing fields are not allowed as new inline field
-          if (parentName === 'inline' && draggedField.key !== '') {
+          if (parentName === 'inline' && !draggedField.newField) {
             return false;
           }
 

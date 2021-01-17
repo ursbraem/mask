@@ -13,7 +13,8 @@ define([
           depth: Number,
           index: Number,
           move: Function,
-          fieldHasError: Function
+          fieldHasError: Function,
+          validateKeyExists: Function
         },
         components: {
           draggable
@@ -39,6 +40,7 @@ define([
             } else {
               this.global.activeField.parent = {};
             }
+            this.validateKeyExists(this.global.activeField);
           },
           removeField: function (index) {
             if (this.fields[index - 1]) {
@@ -106,6 +108,7 @@ define([
             :global="global"
             :move="move"
             :field-has-error="fieldHasError"
+            :validate-key-exists="validateKeyExists"
           />
     </div>
   </li>
