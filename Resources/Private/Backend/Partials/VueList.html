@@ -1,2 +1,2 @@
-<div @click="mode = 'new'; type = 'tt_content'; element = getNewElement();">New element</div>
-<div v-for="(item, key) in elements" @click="mode = 'edit'; type = 'tt_content'; element = item;">{{ item.label }}</div>
+<div @click="openNew('tt_content')">New element</div>
+<div v-for="(item, key) in elements" @click="openEdit('tt_content', item)">{{ item.label }}</div>

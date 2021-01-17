@@ -31,7 +31,7 @@ define([
     data: function () {
       return {
         mode: 'list',
-        type: 'tt_content',
+        type: '',
         elements: [],
         element: {},
         fieldTypes: [],
@@ -185,23 +185,6 @@ define([
         this.validate();
       },
       mode: function () {
-        if (this.mode === 'edit') {
-          // load element fields
-          new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
-            .withQueryArguments({
-              type: mask.type,
-              key: mask.element.key
-            })
-            .get()
-            .then(
-              async function (response) {
-                mask.fields = await response.resolve();
-              }
-            );
-        } else {
-          mask.fields = [];
-        }
-
         if (this.maskBuilderOpen) {
           // Boot font icon picker
           require(['jquery', 'TYPO3/CMS/Mask/Contrib/FontIconPicker'], function ($) {
@@ -254,6 +237,47 @@ define([
             ]
           )
         }
+      },
+      openNew: function (type) {
+        this.resetState();
+        this.mode = 'new';
+        this.type = type;
+        if (this.type === 'tt_content') {
+          this.element = this.getNewElement();
+        }
+      },
+      openEdit: function (type, element) {
+        this.resetState();
+        this.mode = 'edit';
+        this.type = type;
+        this.element = element;
+
+        // load element fields
+        new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+          .withQueryArguments({
+            type: type,
+            key: element.key
+          })
+          .get()
+          .then(
+            async function (response) {
+              mask.fields = await response.resolve();
+            }
+          );
+      },
+      resetState: function () {
+        this.type = '';
+        this.element = {};
+        this.fields = [];
+        this.global.activeField = {};
+        this.global.clonedField = {};
+        this.fieldErrors = {
+          elementKey: false,
+          elementLabel: false,
+          emptyKeyFields: [],
+          emptyGroupAllowedFields: [],
+          emptyRadioItems: []
+        };
       },
       fieldHasError: function (field) {
         if (!this.hasFieldErrors) {
