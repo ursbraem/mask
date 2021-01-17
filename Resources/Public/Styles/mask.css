@@ -694,6 +694,32 @@ img.brand-logo {
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
   pointer-events: none; }
 
+.mask-splashscreen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background-color: #efefef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; }
+  .mask-splashscreen__logo {
+    margin-bottom: 5px; }
+  .mask-splashscreen__label {
+    font-size: 65px;
+    font-weight: 600; }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s; }
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0; }
+
 #mask {
   padding: 0 15px; }
   @media screen and (min-width: 1200px) {

@@ -55,11 +55,15 @@ define([
           richtextConfiguration: {},
           currentTab: 'general',
           ctypes: {}
-        }
+        },
+        loaded: false
       }
     },
     mounted: function () {
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_fieldtypes).get()
+      const promises = [];
+
+      // Fetch fieldtypes and available tca
+      const fieldTypeRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_fieldtypes)).get()
         .then(
           async function (response) {
             mask.fieldTypes = await response.resolve();
@@ -75,7 +79,7 @@ define([
         );
 
       // Fetch language
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_language).get()
+      const languageRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_language)).get()
         .then(
           async function (response) {
             mask.language = await response.resolve();
@@ -83,7 +87,7 @@ define([
         );
 
       // Fetch tcaFields for existing core and mask fields
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca_fields).get()
+      const tcaFieldsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca_fields)).get()
         .then(
           async function (response) {
             mask.tcaFields = await response.resolve();
@@ -91,7 +95,7 @@ define([
         );
 
       // fetch tab declaratuins
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tabs).get()
+      const tabsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tabs)).get()
         .then(
           async function (response) {
             mask.tabs = await response.resolve();
@@ -99,7 +103,7 @@ define([
         );
 
       // fetch richtext configuration
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_richtext_configuration).get()
+      const richtextConfigurationRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_richtext_configuration)).get()
         .then(
           async function (response) {
             mask.global.richtextConfiguration = await response.resolve();
@@ -107,7 +111,7 @@ define([
         );
 
       // fetch CTypes
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_ctypes).get()
+      const ctypesRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_ctypes)).get()
         .then(
           async function (response) {
             mask.global.ctypes = await response.resolve();
@@ -115,7 +119,7 @@ define([
         );
 
       // fetch elements
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements).get()
+      const elementsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements)).get()
         .then(
           async function (response) {
             mask.elements = await response.resolve();
@@ -123,21 +127,37 @@ define([
         );
 
       // fetch fontawesome icons
-      new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons).get()
+      const iconsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons)).get()
         .then(
           async function (response) {
             mask.faIcons = await response.resolve();
           }
         );
 
-      Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
+      const deleteIconRequest = Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
         mask.icons.delete = icon;
       });
-      Icons.getIcon('actions-move-move', Icons.sizes.small).done(function (icon) {
+      const moveIconRequest = Icons.getIcon('actions-move-move', Icons.sizes.small).done(function (icon) {
         mask.icons.move = icon;
       });
-      Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
+      const dateIconRequest = Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
         mask.icons.date = icon;
+      });
+
+      promises.push(fieldTypeRequest);
+      promises.push(languageRequest);
+      promises.push(tcaFieldsRequest);
+      promises.push(tabsRequest);
+      promises.push(richtextConfigurationRequest);
+      promises.push(ctypesRequest);
+      promises.push(elementsRequest);
+      promises.push(iconsRequest);
+      promises.push(deleteIconRequest);
+      promises.push(moveIconRequest);
+      promises.push(dateIconRequest);
+
+      Promise.all(promises).then(() => {
+        mask.loaded = true;
       });
 
       // TODO in v11 this is a regular event (no jquery)
