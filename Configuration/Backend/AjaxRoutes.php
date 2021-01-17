@@ -1,16 +1,15 @@
 <?php
 
 use MASK\Mask\Controller\AjaxController;
-use MASK\Mask\Controller\WizardController;
 
 return [
     'mask_check_field_key' => [
         'path' => '/mask/checkFieldKey',
-        'target' => WizardController::class . '::checkFieldKey'
+        'target' => AjaxController::class . '::checkFieldKey'
     ],
     'mask_check_element_key' => [
         'path' => '/mask/checkElementKey',
-        'target' => WizardController::class . '::checkElementKey'
+        'target' => AjaxController::class . '::checkElementKey'
     ],
     'mask_fieldtypes' => [
         'path' => '/mask/fieldTypes',

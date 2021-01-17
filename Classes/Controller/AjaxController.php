@@ -30,6 +30,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -542,5 +543,55 @@ class AjaxController extends ActionController
         }
         GeneralUtility::writeFile($path, $html);
         return true;
+    }
+
+    /**
+     * Checks if a key for an element is available
+     * @param ServerRequest $request
+     * @return Response
+     */
+    public function checkElementKey(ServerRequest $request): Response
+    {
+        $elementKey = $request->getQueryParams()['key'];
+        $isAvailable = !$this->storageRepository->loadElement('tt_content', $elementKey);
+
+        return new JsonResponse(['isAvailable' => $isAvailable]);
+    }
+
+    /**
+     * Checks if a key for a field is available
+     * @param ServerRequest $request
+     * @return Response
+     */
+    public function checkFieldKey(ServerRequest $request): Response
+    {
+        $queryParams = $request->getQueryParams();
+        $fieldKey = $queryParams['key'];
+        $table = $queryParams['table'];
+        if (!$table) {
+            $table = 'tt_content';
+        }
+        $type = $queryParams['type'];
+        $elementKey = $queryParams['elementKey'];
+
+        $keyExists = false;
+        $fieldExists = false;
+
+        if ($type == FieldType::INLINE) {
+            $keyExists = array_key_exists($fieldKey, $this->storageRepository->load());
+        }
+
+        if ($type == FieldType::CONTENT) {
+            $fieldExists = $this->fieldHelper->getFieldType($fieldKey, $elementKey);
+        } elseif ($elementKey) {
+            $elementsUse = $this->storageRepository->getElementsWhichUseField($fieldKey, $table);
+            if (count($elementsUse) > 0) {
+                $fieldExists = true;
+            }
+        } else {
+            $fieldExists = $this->storageRepository->loadField($table, $fieldKey);
+        }
+
+        return new JsonResponse(['isAvailable' => !$keyExists && !$fieldExists]);
     }
 }

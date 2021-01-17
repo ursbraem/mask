@@ -43,11 +43,13 @@ define([
         faIcons: {},
         availableTca: {},
         fieldErrors: {
+          elementKeyAvailable: true,
           elementKey: false,
           elementLabel: false,
           emptyKeyFields: [],
           emptyGroupAllowedFields: [],
-          emptyRadioItems: []
+          emptyRadioItems: [],
+          existingFieldKeyFields: []
         },
         global: {
           activeField: {},
@@ -166,8 +168,19 @@ define([
         },
         deep: true
       },
-      'global.activeField': function () {
+      'global.activeField.fields': function () {
         this.validate();
+      },
+      'element.key': function () {
+        new AjaxRequest(TYPO3.settings.ajaxUrls.mask_check_element_key)
+          .withQueryArguments({key: this.element.key})
+          .get()
+          .then(
+            async function (response) {
+              const result = await response.resolve();
+              mask.fieldErrors.elementKeyAvailable = result.isAvailable;
+            }
+          );
       },
       mode: function () {
         if (this.maskBuilderOpen) {
@@ -222,6 +235,97 @@ define([
             ]
           )
         }
+      },
+      validateKeyExists: function (field) {
+        if (field.key === '') {
+          return;
+        }
+        // Are we root?
+        let root = this.isRoot(field);
+        let fields = this.getFields(field);
+
+        // Step 1: Check if key is in current fields array
+        let error = this.checkIfKeyExistsInFields(fields, this.global.activeField);
+        if (error) {
+          this.fieldErrors.existingFieldKeyFields.push(this.global.activeField);
+        }
+
+        // Step 2: Check if another field is now valid due to the change
+        this.fieldErrors.existingFieldKeyFields.every(function (errorField) {
+          if (errorField !== field && !mask.checkIfKeyExistsInFields(mask.getFields(errorField), errorField)) {
+            mask.removeExistingKeyField(errorField);
+          }
+          return true;
+        });
+
+        // If there is no error on a nested field, remove it
+        if (!error && !root) {
+          mask.removeExistingKeyField(field);
+        }
+
+        // If there is an error already from step 1 or we are not on root, cancel tca ajax check
+        if (error || !root) {
+          return;
+        }
+
+        let arguments = {
+          key: 'tx_mask_' + field.key,
+          table: this.type,
+          type: field.name,
+          elementKey: ''
+        };
+        if (this.mode === 'edit') {
+          arguments.elementKey = this.element.key;
+        }
+        new AjaxRequest(TYPO3.settings.ajaxUrls.mask_check_field_key)
+          .withQueryArguments(arguments)
+          .get()
+          .then(
+            async function (response) {
+              const result = await response.resolve();
+              if (result.isAvailable) {
+                mask.removeExistingKeyField(mask.global.activeField);
+              } else {
+                mask.fieldErrors.existingFieldKeyFields.push(mask.global.activeField);
+              }
+            }
+          );
+      },
+      isRoot: function (field) {
+        return this.isEmptyObject(field.parent) || field.parent.name === 'palette' && this.isEmptyObject(field.parent.parent);
+      },
+      getFields: function (field) {
+        let fields = this.fields;
+        if (!this.isRoot(field)) {
+          if (field.parent.name !== 'palette' || !this.isEmptyObject(field.parent.parent)) {
+            fields = field.parent.fields;
+          } else {
+            fields = field.parent.parent.fields;
+          }
+        }
+        return fields;
+      },
+      checkIfKeyExistsInFields: function (fields, checkField) {
+        let error = false;
+        fields.every(function (field) {
+          if (field !== checkField) {
+            if (checkField.key === field.key) {
+              error = true;
+            } else {
+              if (!error && field.name === 'palette') {
+                error = mask.checkIfKeyExistsInFields(field.fields, checkField);
+              }
+            }
+            return !error;
+          }
+          return true;
+        });
+        return error;
+      },
+      removeExistingKeyField: function (removedField) {
+        mask.fieldErrors.existingFieldKeyFields = mask.fieldErrors.existingFieldKeyFields.filter(function (field) {
+          return field !== removedField;
+        });
       },
       openNew: function (type) {
         this.loaded = false;
@@ -286,11 +390,13 @@ define([
         this.global.activeField = {};
         this.global.clonedField = {};
         this.fieldErrors = {
+          elementKeyAvailable: true,
           elementKey: false,
           elementLabel: false,
           emptyKeyFields: [],
           emptyGroupAllowedFields: [],
-          emptyRadioItems: []
+          emptyRadioItems: [],
+          existingFieldKeyFields: []
         };
       },
       fieldHasError: function (field) {
@@ -298,6 +404,9 @@ define([
           return false;
         }
         if (this.fieldErrors.emptyKeyFields.includes(field)) {
+          return true;
+        }
+        if (this.fieldErrors.existingFieldKeyFields.includes(field)) {
           return true;
         }
         if (this.fieldErrors.emptyGroupAllowedFields.includes(field)) {
@@ -382,6 +491,8 @@ define([
           if (typeof parent.fields !== 'undefined') {
             fields = parent.fields;
           }
+        } else {
+          newField.parent = {};
         }
         if (this.validateMove(parentName, newField)) {
           var index = fields.indexOf(this.global.activeField) + 1;
@@ -447,12 +558,13 @@ define([
         return this.hasElementErrors || this.hasFieldErrors;
       },
       hasElementErrors: function () {
-        return this.fieldErrors.elementKey || this.fieldErrors.elementLabel;
+        return this.fieldErrors.elementKey || this.fieldErrors.elementLabel || !this.fieldErrors.elementKeyAvailable;
       },
       hasFieldErrors: function () {
         return this.fieldErrors.emptyKeyFields.length > 0
           || this.fieldErrors.emptyGroupAllowedFields.length > 0
           || this.fieldErrors.emptyRadioItems.length > 0
+          || this.fieldErrors.existingFieldKeyFields.length > 0
       },
       maskBuilderOpen: function () {
         return this.mode === 'edit' || this.mode === 'new';
@@ -514,6 +626,10 @@ define([
           });
         });
         return keys;
+      },
+      activeFieldHasKeyError: function () {
+          return this.fieldErrors.emptyKeyFields.includes(this.global.activeField)
+          || this.fieldErrors.existingFieldKeyFields.includes(this.global.activeField)
       }
     }
   });

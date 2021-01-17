@@ -1,4 +1,4 @@
-<div :class="['form-group', {'has-error': fieldErrors.elementKey}]">
+<div :class="['form-group', {'has-error': fieldErrors.elementKey || !fieldErrors.elementKeyAvailable}]">
     <label class="t3js-formengine-label" for="meta_key">
         <f:translate key="tx_mask.all.fieldkey"/>*
     </label>
