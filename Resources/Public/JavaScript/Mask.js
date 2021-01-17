@@ -62,22 +62,6 @@ define([
     mounted: function () {
       const promises = [];
 
-      // Fetch fieldtypes and available tca
-      const fieldTypeRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_fieldtypes)).get()
-        .then(
-          async function (response) {
-            mask.fieldTypes = await response.resolve();
-            mask.fieldTypes.forEach(function (item) {
-              new AjaxRequest(TYPO3.settings.ajaxUrls.mask_existing_tca).withQueryArguments({table: mask.type, type: item.name}).get()
-                .then(
-                  async function (response) {
-                    mask.availableTca[item.name] = await response.resolve();
-                  }
-                )
-            });
-          }
-        );
-
       // Fetch language
       const languageRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_language)).get()
         .then(
@@ -94,7 +78,7 @@ define([
           }
         );
 
-      // fetch tab declaratuins
+      // fetch tab declarations
       const tabsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tabs)).get()
         .then(
           async function (response) {
@@ -114,7 +98,8 @@ define([
       const ctypesRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_ctypes)).get()
         .then(
           async function (response) {
-            mask.global.ctypes = await response.resolve();
+            const result = await response.resolve();
+            mask.global.ctypes = result.ctypes;
           }
         );
 
@@ -122,7 +107,8 @@ define([
       const elementsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements)).get()
         .then(
           async function (response) {
-            mask.elements = await response.resolve();
+            const result = await response.resolve();
+            mask.elements = result.elements;
           }
         );
 
@@ -144,7 +130,6 @@ define([
         mask.icons.date = icon;
       });
 
-      promises.push(fieldTypeRequest);
       promises.push(languageRequest);
       promises.push(tcaFieldsRequest);
       promises.push(tabsRequest);
@@ -239,21 +224,28 @@ define([
         }
       },
       openNew: function (type) {
+        this.loaded = false;
         this.resetState();
         this.mode = 'new';
         this.type = type;
         if (this.type === 'tt_content') {
           this.element = this.getNewElement();
         }
+
+        Promise.resolve(this.loadTca()).then(() => {
+          mask.loaded = true;
+        });
       },
       openEdit: function (type, element) {
+        this.loaded = false;
         this.resetState();
         this.mode = 'edit';
         this.type = type;
         this.element = element;
+        const tcaRequest = this.loadTca();
 
         // load element fields
-        new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+        const elementRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element))
           .withQueryArguments({
             type: type,
             key: element.key
@@ -261,7 +253,29 @@ define([
           .get()
           .then(
             async function (response) {
-              mask.fields = await response.resolve();
+              const result = await response.resolve();
+              mask.fields = result.fields;
+            }
+          );
+
+        Promise.all([tcaRequest, elementRequest]).then(() => {
+          mask.loaded = true;
+        });
+      },
+      loadTca: function () {
+        // Fetch fieldtypes and available tca
+        return (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_fieldtypes)).get()
+          .then(
+            async function (response) {
+              mask.fieldTypes = await response.resolve();
+              mask.fieldTypes.forEach(function (item) {
+                new AjaxRequest(TYPO3.settings.ajaxUrls.mask_existing_tca).withQueryArguments({table: mask.type, type: item.name}).get()
+                  .then(
+                    async function (response) {
+                      mask.availableTca[item.name] = await response.resolve();
+                    }
+                  )
+              });
             }
           );
       },

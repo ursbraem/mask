@@ -135,7 +135,8 @@ class AjaxController extends ActionController
                 'shortLabel' => $element['shortLabel'],
             ];
         }
-        return new JsonResponse($elements);
+        $json['elements'] = $elements;
+        return new JsonResponse($json);
     }
 
     public function loadElement(ServerRequestInterface $request): Response
@@ -146,9 +147,9 @@ class AjaxController extends ActionController
         $storage = $this->storageRepository->loadElement($table, $elementKey);
         $storage = $this->storageRepository->prepareStorage($storage, $params['key']);
 
-        $fields = $this->addFields($elementKey, $table, $storage['tca'] ?? []);
+        $json['fields'] = $this->addFields($elementKey, $table, $storage['tca'] ?? []);
 
-        return new JsonResponse($fields);
+        return new JsonResponse($json);
     }
 
     protected function addFields($elementKey, $table, $fields, $parent = [])
@@ -406,7 +407,8 @@ class AjaxController extends ActionController
                 }
             }
         }
-        return new JsonResponse($items);
+        $json['ctypes'] = $items;
+        return new JsonResponse($json);
     }
 
     public function tabs(ServerRequestInterface $request): Response
