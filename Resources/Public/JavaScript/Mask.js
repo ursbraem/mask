@@ -42,6 +42,7 @@ define([
         icons: {},
         faIcons: {},
         availableTca: {},
+        multiUseElements: {},
         fieldErrors: {
           elementKeyAvailable: true,
           elementKey: false,
@@ -59,7 +60,7 @@ define([
           ctypes: {},
           sctructuralFields: ['linebreak', 'palette', 'tab'],
           maskPrefix: 'tx_mask_',
-          deletedFields: []
+          deletedFields: [],
         },
         loaded: false
       }
@@ -258,6 +259,17 @@ define([
                 mask.global.activeField.tca = result.field.tca;
               }
             );
+          if (!mask.multiUseElements[this.global.activeField.key]) {
+            new AjaxRequest(TYPO3.settings.ajaxUrls.mask_multiuse)
+              .withQueryArguments({key: this.global.activeField.key, elementKey: this.element.key, newField: this.global.activeField.newField})
+              .get()
+              .then(
+                async function (response) {
+                  const result = await response.resolve();
+                  mask.$set(mask.multiUseElements, mask.global.activeField.key, result.multiUseElements);
+                }
+              );
+          }
         } else {
           this.global.activeField.tca = Object.assign({}, this.defaultTca[this.global.activeField.name]);
         }
@@ -426,6 +438,7 @@ define([
         this.type = '';
         this.element = {};
         this.fields = [];
+        this.multiUseElements = {};
         this.global.deletedFields = [];
         this.global.activeField = {};
         this.global.clonedField = {};
@@ -742,6 +755,12 @@ define([
           defaults[item.name] = item.tca;
         });
         return defaults;
+      },
+      activeMultiUseElements: function () {
+        if (this.multiUseElements[this.global.activeField.key]) {
+          return this.multiUseElements[this.global.activeField.key]
+        }
+        return [];
       }
     }
   });

@@ -745,3 +745,7 @@ img.brand-logo {
 
 #meta_color {
   min-width: 0; }
+
+.tx_mask_field .callout {
+  margin-top: 0;
+  margin-bottom: 0; }

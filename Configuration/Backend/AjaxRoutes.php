@@ -58,5 +58,9 @@ return [
     'mask_save' => [
         'path' => '/mask/save',
         'target' => AjaxController::class . '::save'
+    ],
+    'mask_multiuse' => [
+        'path' => '/mask/multiuse',
+        'target' => AjaxController::class . '::multiuse'
     ]
 ];

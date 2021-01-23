@@ -271,6 +271,24 @@ class AjaxController extends ActionController
         return new JsonResponse($json);
     }
 
+    public function multiUse(ServerRequestInterface $request): Response
+    {
+        $params = $request->getQueryParams();
+        $key = $params['key'];
+        $newField = $params['newField'];
+        $elementKey = '';
+        if (!$newField) {
+            $elementKey = $params['elementKey'];
+        }
+        $type = $this->fieldHelper->getFieldType($key, $elementKey);
+        $multiUseElements = $this->fieldHelper->getStorageRepository()->getElementsWhichUseField($key, $type);
+        $json['multiUseElements'] = [];
+        foreach ($multiUseElements as $element) {
+            $json['multiUseElements'][] = $element['key'];
+        }
+        return new JsonResponse($json);
+    }
+
     public function icons(ServerRequestInterface $request): Response
     {
         $icons = [

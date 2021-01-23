@@ -1,4 +1,21 @@
 <div v-if="global.activeField.name" class="tx_mask_field">
+    <div v-if="['date', 'datetime'].includes(global.activeField.name)">
+        <f:be.infobox state="1">
+            <p>
+                This field might cause problems with timezone conversions.<br>
+                If you want to make sure your date is displayed as entered, we recommend using the <b>Timestamp</b> field.<br>
+                Read this for more technical insight: <a href="https://github.com/Gernott/mask/issues/234#issuecomment-653574022" target="_blank">Date and DateTime saves wrong date #234</a>
+            </p>
+        </f:be.infobox>
+    </div>
+    <div v-if="activeMultiUseElements.length">
+        <f:be.infobox title="{f:translate(key:'tx_mask.content.multiuse')}" state="-1">
+            <f:translate key="tx_mask.content.multiuse.description"/>
+            <ul>
+                <li v-for="element in activeMultiUseElements">{{ element }}</li>
+            </ul>
+        </f:be.infobox>
+    </div>
     <div v-if="global.activeField.name != 'linebreak'" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist" data-store-last-tab="1">
             <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab, 'has-validation-error': key == 'general' && activeFieldHasKeyError}" v-if="key == 'general' || !isActiveCoreField">
@@ -55,21 +72,5 @@
                 </div>
             </div>
         </div>
-        <div v-if="['date', 'datetime'].includes(global.activeField.name)">
-            <f:be.infobox state="1">
-                <p>
-                    This field might cause problems with timezone conversions.<br>
-                    If you want to make sure your date is displayed as entered, we recommend using the <b>Timestamp</b> field.<br>
-                    Read this for more technical insight: <a href="https://github.com/Gernott/mask/issues/234#issuecomment-653574022" target="_blank">Date and DateTime saves wrong date #234</a>
-                </p>
-            </f:be.infobox>
-        </div>
-        <f:comment>
-            <f:if condition="{isInlineField}">
-                <f:else>
-                    <f:render partial="WizardContent/Warnings" arguments="{storage: storage, editMode: editMode, key: key}"/>
-                </f:else>
-            </f:if>
-        </f:comment>
     </div>
 </div>
