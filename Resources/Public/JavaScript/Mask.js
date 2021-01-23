@@ -238,21 +238,19 @@ define([
         }
       },
       validateKeyExists: function (field) {
-        // Are we root?
-        let root = this.isRoot(field);
-        let fields = this.getFields(field);
-
-        // Force mask prefix on root level
-        if (root && !this.hasMaskPrefix(field.key)) {
+        // Force mask prefix
+        if (!this.hasMaskPrefix(field.key)) {
           field.key = this.maskPrefix;
+          return;
         }
 
         // Skip empty fields (these are validated by empty validator)
-        if (root && field.key === this.maskPrefix || field.key === '') {
+        if (field.key === this.maskPrefix) {
           return;
         }
 
         // Step 1: Check if key is in current fields array
+        let fields = this.getFields(field);
         let error = this.checkIfKeyExistsInFields(fields, this.global.activeField);
         if (error) {
           this.fieldErrors.existingFieldKeyFields.push(this.global.activeField);
@@ -267,6 +265,7 @@ define([
         });
 
         // If there is no error on a nested field, remove it
+        let root = this.isRoot(field);
         if (!error && !root) {
           mask.removeExistingKeyField(field);
         }
@@ -276,6 +275,7 @@ define([
           return;
         }
 
+        // todo if key is in possible tca array, skip ajax
         // Check if key already exists in table
         let arguments = {
           key: field.key,
@@ -449,8 +449,7 @@ define([
       },
       checkFieldKeyIsEmpty: function (fields) {
         fields.every(function (item) {
-          const isRoot = mask.isRoot(item);
-          if (isRoot && item.key === mask.maskPrefix || item.key === '') {
+          if (item.key === mask.maskPrefix) {
             mask.fieldErrors.emptyKeyFields.push(item);
           }
           if (item.fields.length > 0) {
