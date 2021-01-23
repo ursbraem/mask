@@ -58,7 +58,8 @@ define([
           currentTab: 'general',
           ctypes: {},
           sctructuralFields: ['linebreak', 'palette', 'tab'],
-          maskPrefix: 'tx_mask_'
+          maskPrefix: 'tx_mask_',
+          deletedFields: []
         },
         loaded: false
       }
@@ -410,6 +411,7 @@ define([
         this.type = '';
         this.element = {};
         this.fields = [];
+        this.global.deletedFields = [];
         this.global.activeField = {};
         this.global.clonedField = {};
         this.fieldErrors = {
@@ -600,9 +602,29 @@ define([
         return isExisting;
       },
       availableTcaForActiveField: function (type) {
+        if (this.isEmptyObject(this.availableTca)) {
+          return [];
+        }
         return this.availableTca[this.global.activeField.name][type].filter(function (item) {
-          return !mask.currentFieldKeys.includes(item.field) || mask.global.activeField.key === item.field;
+          return (!mask.currentFieldKeys.includes(item.field) && !mask.deletedFieldKeys.includes(item.field))
+            || mask.global.activeField.key === item.field;
         });
+      },
+      getFieldKeys: function (fields) {
+        const keys = [];
+        fields.forEach(function (item) {
+          if (item.name === 'palette') {
+            item.fields.forEach(function (item) {
+              if (!item.newField) {
+                keys.push(item.key);
+              }
+            });
+          }
+          if (!item.newField) {
+            keys.push(item.key);
+          }
+        });
+        return keys;
       }
     },
     computed: {
@@ -693,16 +715,10 @@ define([
           || this.fieldErrors.existingFieldKeyFields.includes(this.global.activeField);
       },
       currentFieldKeys: function () {
-        const fields = [];
-        this.fields.forEach(function (item) {
-          if (item.name === 'palette') {
-            item.fields.forEach(function (item) {
-              fields.push(item.key);
-            });
-          }
-          fields.push(item.key);
-        });
-        return fields;
+        return this.getFieldKeys(this.fields);
+      },
+      deletedFieldKeys: function () {
+        return this.getFieldKeys(this.global.deletedFields);
       }
     }
   });

@@ -51,6 +51,7 @@ define([
             } else if (this.fields[index + 1]) {
               this.global.activeField = this.fields[index + 1];
             }
+            this.global.deletedFields.push(this.fields[index]);
             this.fields.splice(index, 1);
             if (this.fields.length === 0) {
               if (this.depth > 0) {

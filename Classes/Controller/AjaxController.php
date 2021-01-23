@@ -159,7 +159,8 @@ class AjaxController extends ActionController
         foreach ($fields as $key => $field) {
             $newField = [
                 'fields' => [],
-                'parent' => $parent
+                'parent' => $parent,
+                'newField' => false,
             ];
             $newField['key'] = is_int($key) ? ($field['maskKey'] ?? $field['key']) : $key;
 
