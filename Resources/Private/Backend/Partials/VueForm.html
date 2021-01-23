@@ -22,7 +22,7 @@
                                     <select
                                         v-model="global.activeField.key"
                                         :disabled="!global.activeField.newField"
-                                        @change="validateKeyExists(global.activeField)"
+                                        @change="validateKey(global.activeField)"
                                         id="form_choosefield"
                                         class="form-control tx_mask_fieldcontent_type"
                                     >
@@ -87,7 +87,7 @@
                                         class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
                                         required="required"
                                         :readOnly="!global.activeField.newField && isExistingMaskField"
-                                        @input="validateKeyExists(global.activeField)"
+                                        @input="validateKey(global.activeField)"
                                     />
                                 </div>
                             </div>

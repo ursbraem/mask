@@ -173,6 +173,11 @@ define([
         this.validate();
       },
       'element.key': function () {
+        const validKey = this.checkAllowedCharacters(this.element.key);
+        if (this.element.key !== validKey) {
+          this.element.key = validKey;
+          return;
+        }
         new AjaxRequest(TYPO3.settings.ajaxUrls.mask_check_element_key)
           .withQueryArguments({key: this.element.key})
           .get()
@@ -237,12 +242,15 @@ define([
           )
         }
       },
-      validateKeyExists: function (field) {
+      validateKey: function (field) {
         // Force mask prefix if not a core field
         if (!this.isCoreField && !this.hasMaskPrefix(field.key)) {
           field.key = this.maskPrefix;
           return;
         }
+
+        // Force lowercase and remove special chars
+        field.key = this.checkAllowedCharacters(field.key);
 
         // Skip empty fields (these are validated by empty validator)
         if (field.key === this.maskPrefix) {
@@ -510,7 +518,7 @@ define([
           fields.splice(index, 0, newField);
           this.global.activeField = newField;
           this.global.currentTab = 'general';
-          this.validateKeyExists(newField);
+          this.validateKey(newField);
         }
       },
       onMove: function (e) {
@@ -563,6 +571,11 @@ define([
       },
       isEmptyObject: function (obj) {
         return Object.keys(obj).length === 0 && obj.constructor === Object;
+      },
+      checkAllowedCharacters: function (key) {
+        key = key.toLowerCase();
+        key = key.replace(/[^a-z0-9_]/g, '');
+        return key;
       }
     },
     computed: {
