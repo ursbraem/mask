@@ -245,7 +245,7 @@ define([
       },
       validateKey: function (field) {
         // Force mask prefix if not a core field
-        if (!this.isCoreField && !this.hasMaskPrefix(field.key)) {
+        if (!this.isActiveCoreField && !this.hasMaskPrefix(field.key)) {
           field.key = this.global.maskPrefix;
           return;
         }
@@ -469,6 +469,9 @@ define([
       },
       checkEmptyGroupAllowed: function (fields) {
         fields.every(function (item) {
+          if (mask.isCoreField(item)) {
+            return true;
+          }
           if (item.tca['config.internal_type'] === 'db' && item.tca['config.allowed'] === '') {
             mask.fieldErrors.emptyGroupAllowedFields.push(item);
           }
@@ -480,6 +483,9 @@ define([
       },
       checkEmptyRadioItems: function (fields) {
         fields.every(function (item) {
+          if (mask.isCoreField(item)) {
+            return true;
+          }
           if (item.name === 'radio' && item.tca['config.items'].split(',').length < 2) {
             mask.fieldErrors.emptyRadioItems.push(item);
           }
@@ -577,7 +583,19 @@ define([
         key = key.toLowerCase();
         key = key.replace(/[^a-z0-9_]/g, '');
         return key;
-      }
+      },
+      isCoreField: function (field) {
+        if (this.isEmptyObject(field)) {
+          return false;
+        }
+        var isExisting = false;
+        this.availableTca[field.name].core.forEach(function (item) {
+          if (item.field === field.key) {
+            isExisting = true;
+          }
+        });
+        return isExisting;
+      },
     },
     computed: {
       hasErrors: function () {
@@ -595,17 +613,8 @@ define([
       maskBuilderOpen: function () {
         return this.mode === 'edit' || this.mode === 'new';
       },
-      isCoreField: function () {
-        if (this.isEmptyObject(this.global.activeField)) {
-          return false;
-        }
-        var isExisting = false;
-        this.availableTca[this.global.activeField.name].core.forEach(function (item) {
-          if (item.field === mask.global.activeField.key) {
-            isExisting = true;
-          }
-        });
-        return isExisting;
+      isActiveCoreField: function () {
+        return this.isCoreField(this.global.activeField);
       },
       isExistingMaskField: function () {
         if (this.isEmptyObject(this.global.activeField)) {
@@ -629,7 +638,7 @@ define([
         if (this.isEmptyObject(this.global.activeField)) {
           return false;
         }
-        if (!this.global.activeField.newField && !this.isCoreField) {
+        if (!this.global.activeField.newField && !this.isActiveCoreField) {
           return false;
         }
         if (['inline', 'palette', 'linebreak', 'tab'].includes(this.global.activeField.name)) {
@@ -641,10 +650,16 @@ define([
         return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0
       },
       keyFieldVisible: function () {
-        return !this.global.sctructuralFields.includes(this.global.activeField.name) && this.labelFieldVisible;
+        return !this.global.sctructuralFields.includes(this.global.activeField.name) && this.maskFieldGeneralTabOpen;
       },
-      labelFieldVisible: function () {
-        return !this.isCoreField && this.global.currentTab === 'general';
+      maskFieldGeneralTabOpen: function () {
+        return this.isGeneralTabOpen && !this.isActiveCoreField;
+      },
+      overrideLabelVisible: function () {
+        return this.isGeneralTabOpen && this.isActiveCoreField;
+      },
+      isGeneralTabOpen: function () {
+        return this.global.currentTab === 'general';
       },
       availableTcaKeys: function () {
         var keys = {};

@@ -1,7 +1,7 @@
 <div v-if="global.activeField.name" class="tx_mask_field">
     <div v-if="global.activeField.name != 'linebreak'" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist" data-store-last-tab="1">
-            <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab, 'has-validation-error': key == 'general' && activeFieldHasKeyError}" v-if="key == 'general' || !isCoreField">
+            <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab, 'has-validation-error': key == 'general' && activeFieldHasKeyError}" v-if="key == 'general' || !isActiveCoreField">
                 <a role="tab" href="#" @click.prevent="global.currentTab = key">
                     {{ language.tabs[key] }}
                 </a>
@@ -55,7 +55,7 @@
                     </div>
 
                     <f:comment><!-- TYPO3 field overwrite label --></f:comment>
-                    <div v-if="global.currentTab == 'general' && isCoreField" class="row tx_mask_fieldcontent_existing">
+                    <div v-if="overrideLabelVisible" class="row tx_mask_fieldcontent_existing">
                         <div class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_overwritelabel">
                                 <f:translate key="tx_mask.field.overwritelabel"/>
@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="labelFieldVisible" class="form-group col-sm-6">
+                        <div v-if="maskFieldGeneralTabOpen" class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_label">
                                 <f:translate key="tx_mask.field.label"/>
                             </label>
@@ -109,7 +109,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="!isCoreField && global.currentTab == 'general'" class="row">
+                    <div v-if="maskFieldGeneralTabOpen" class="row">
                         <div class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_description">
                                 <f:translate key="tx_mask.field.description"/>
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="!isCoreField" v-for="(row, tcaKey) in tabs[global.activeField.name][global.currentTab]" class="form-section">
+                <div v-if="!isActiveCoreField" v-for="(row, tcaKey) in tabs[global.activeField.name][global.currentTab]" class="form-section">
                     <div class="row">
                         <form-field v-for="(column, tcaKey) in row" :key="global.activeField.uid + '.' + tcaKey" :global="global" :icons="icons" :tca-fields="tcaFields" :tca-key="tcaKey" :column="column" :field-errors="fieldErrors"></form-field>
                     </div>
