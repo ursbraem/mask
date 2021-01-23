@@ -1,0 +1,16 @@
+<label class="t3js-formengine-label" for="form_key">
+    <f:translate key="tx_mask.field.fieldkey"/>
+</label>
+<div class="t3js-formengine-field-item">
+    <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.field.fieldkey.description')}</span>
+    <div class="form-control-wrap">
+        <input
+            v-model="global.activeField.key"
+            id="form_key"
+            class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
+            required="required"
+            :readOnly="!global.activeField.newField && isExistingMaskField"
+            @input="validateKey(global.activeField)"
+        />
+    </div>
+</div>

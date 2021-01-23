@@ -1,0 +1,39 @@
+<label class="t3js-formengine-label" for="form_choosefield">
+    <f:translate key="tx_mask.field.choosefield"/>
+</label>
+<div class="t3js-formengine-field-item">
+    <div class="form-control-wrap">
+        <select
+            v-model="global.activeField.key"
+            :disabled="!global.activeField.newField"
+            @change="validateKey(global.activeField)"
+            id="form_choosefield"
+            class="form-control tx_mask_fieldcontent_type"
+        >
+            <optgroup class="c-divider" label="New">
+                <option :value="global.maskPrefix">
+                    <f:translate key="tx_mask.field.newfield"/>
+                </option>
+            </optgroup>
+            <optgroup label="Current new key" v-if="global.activeField.key !== global.maskPrefix && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
+                <option :value="global.activeField.key">{{ global.activeField.key }}</option>
+            </optgroup>
+            <optgroup v-if="availableTca[global.activeField.name].core.length" class="c-divider" label="Core fields">
+                <option v-for="item in availableTca[global.activeField.name].core" :value="item.field">
+                    {{ item.label }} ({{ item.field }})
+                </option>
+            </optgroup>
+            <optgroup v-if="availableTca[global.activeField.name].mask.length" class="c-divider" label="Mask fields">
+                <option v-for="item in availableTca[global.activeField.name].mask" :value="item.field">
+                    {{ item.label }}
+                </option>
+            </optgroup>
+        </select>
+        <f:comment><!-- todo is this even needed?--></f:comment>
+        <f:comment>
+            <f:if condition="{form} == 'richtext'">
+                <input type="hidden" name="tx_mask_tools_maskmask[storage][elements][options][--index--]" value="rte"/>
+            </f:if>
+        </f:comment>
+    </div>
+</div>

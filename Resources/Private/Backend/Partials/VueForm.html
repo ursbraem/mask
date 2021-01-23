@@ -9,129 +9,48 @@
         </ul>
         <div class="tx_mask_fieldcontent tab-content">
             <div role="tabpanel" class="tab-pane active" id="default_{key}">
-                <f:comment><!-- only when create field (not edit), used in content and pages --></f:comment>
-                <f:comment><!-- mask or TYPO3 field chooser --></f:comment>
                 <div v-if="global.currentTab == 'general'" class="form-section">
+
                     <div class="row" v-if="chooseFieldVisible">
                         <div class="form-group col-sm-6">
-                            <label class="t3js-formengine-label" for="form_choosefield">
-                                <f:translate key="tx_mask.field.choosefield"/>
-                            </label>
-                            <div class="t3js-formengine-field-item">
-                                <div class="form-control-wrap">
-                                    <select
-                                        v-model="global.activeField.key"
-                                        :disabled="!global.activeField.newField"
-                                        @change="validateKey(global.activeField)"
-                                        id="form_choosefield"
-                                        class="form-control tx_mask_fieldcontent_type"
-                                    >
-                                        <optgroup class="c-divider" label="New">
-                                            <option :value="global.maskPrefix">
-                                                <f:translate key="tx_mask.field.newfield"/>
-                                            </option>
-                                        </optgroup>
-                                        <optgroup label="Current new key" v-if="global.activeField.key !== global.maskPrefix && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
-                                            <option :value="global.activeField.key">{{ global.activeField.key }}</option>
-                                        </optgroup>
-                                        <optgroup v-if="availableTca[global.activeField.name].core.length" class="c-divider" label="Core fields">
-                                            <option v-for="item in availableTca[global.activeField.name].core" :value="item.field">
-                                                {{ item.label }} ({{ item.field }})
-                                            </option>
-                                        </optgroup>
-                                        <optgroup v-if="availableTca[global.activeField.name].mask.length" class="c-divider" label="Mask fields">
-                                            <option v-for="item in availableTca[global.activeField.name].mask" :value="item.field">
-                                                {{ item.label }}
-                                            </option>
-                                        </optgroup>
-                                    </select>
-                                    <f:comment><!-- todo is this even needed?--></f:comment>
-                                    <f:if condition="{form} == 'richtext'">
-                                        <input type="hidden" name="tx_mask_tools_maskmask[storage][elements][options][--index--]" value="rte"/>
-                                    </f:if>
-                                </div>
-                            </div>
+                            <f:render partial="General/VueKeySelect"/>
                         </div>
                     </div>
 
-                    <f:comment><!-- TYPO3 field overwrite label --></f:comment>
                     <div v-if="overrideLabelVisible" class="row tx_mask_fieldcontent_existing">
                         <div class="form-group col-sm-6">
-                            <label class="t3js-formengine-label" for="form_overwritelabel">
-                                <f:translate key="tx_mask.field.overwritelabel"/>
-                            </label>
-                            <div class="t3js-formengine-field-item">
-                                <div class="form-control-wrap">
-                                    <input
-                                        v-model="global.activeField.label"
-                                        class="form-control"
-                                        id="form_overwritelabel"
-                                        title="{f:translate(key: 'tx_mask.all.label')}"
-                                    />
-                                </div>
-                            </div>
+                            <f:render partial="General/VueOverrideLabel"/>
                         </div>
                     </div>
-                    <f:comment><!-- mask field key and label --></f:comment>
-                    <div class="row">
+
+                    <div class="row" v-if="keyFieldVisible || maskFieldGeneralTabOpen">
                         <div v-if="keyFieldVisible" :class="['form-group', 'col-sm-6', {'has-error': activeFieldHasKeyError}]">
-                            <label class="t3js-formengine-label" for="form_key">
-                                <f:translate key="tx_mask.field.fieldkey"/>
-                            </label>
-                            <div class="t3js-formengine-field-item">
-                                <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.field.fieldkey.description')}</span>
-                                <div class="form-control-wrap">
-                                    <input
-                                        v-model="global.activeField.key"
-                                        id="form_key"
-                                        class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
-                                        required="required"
-                                        :readOnly="!global.activeField.newField && isExistingMaskField"
-                                        @input="validateKey(global.activeField)"
-                                    />
-                                </div>
-                            </div>
+                            <f:render partial="General/VueKey"/>
                         </div>
                         <div v-if="maskFieldGeneralTabOpen" class="form-group col-sm-6">
-                            <label class="t3js-formengine-label" for="form_label">
-                                <f:translate key="tx_mask.field.label"/>
-                            </label>
-                            <div class="t3js-formengine-field-item">
-                                <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.placeholder.label')}</span>
-                                <div class="form-control-wrap">
-                                    <input
-                                        v-model="global.activeField.label"
-                                        id="form_label"
-                                        class="form-control"
-                                        title="{f:translate(key: 'tx_mask.content.label')}"
-                                    />
-                                </div>
-                            </div>
+                            <f:render partial="General/VueLabel"/>
                         </div>
                     </div>
+
                     <div v-if="maskFieldGeneralTabOpen" class="row">
                         <div class="form-group col-sm-6">
-                            <label class="t3js-formengine-label" for="form_description">
-                                <f:translate key="tx_mask.field.description"/>
-                            </label>
-                            <div class="t3js-formengine-field-item">
-                                <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.placeholder.description')}</span>
-                                <div class="form-control-wrap">
-                                <textarea
-                                    v-model="global.activeField.description"
-                                    id="form_description"
-                                    class="form-control"
-                                    rows="3"
-                                    title="{f:translate(key: 'tx_mask.content.description')}">
-                                </textarea>
-                                </div>
-                            </div>
+                            <f:render partial="General/VueDescription"/>
                         </div>
                     </div>
+
                 </div>
                 <div v-if="!isActiveCoreField" v-for="(row, tcaKey) in tabs[global.activeField.name][global.currentTab]" class="form-section">
                     <div class="row">
-                        <form-field v-for="(column, tcaKey) in row" :key="global.activeField.uid + '.' + tcaKey" :global="global" :icons="icons" :tca-fields="tcaFields" :tca-key="tcaKey" :column="column" :field-errors="fieldErrors"></form-field>
+                        <form-field
+                            v-for="(column, tcaKey) in row"
+                            :key="global.activeField.uid + '.' + tcaKey"
+                            :global="global"
+                            :icons="icons"
+                            :tca-fields="tcaFields"
+                            :tca-key="tcaKey"
+                            :column="column"
+                            :field-errors="fieldErrors"
+                        ></form-field>
                     </div>
                 </div>
             </div>
