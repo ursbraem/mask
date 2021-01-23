@@ -30,7 +30,6 @@ define([
     },
     data: function () {
       return {
-        maskPrefix: 'tx_mask_',
         mode: 'list',
         type: '',
         elements: [],
@@ -57,7 +56,9 @@ define([
           clonedField: {},
           richtextConfiguration: {},
           currentTab: 'general',
-          ctypes: {}
+          ctypes: {},
+          sctructuralFields: ['linebreak', 'palette', 'tab'],
+          maskPrefix: 'tx_mask_'
         },
         loaded: false
       }
@@ -245,7 +246,7 @@ define([
       validateKey: function (field) {
         // Force mask prefix if not a core field
         if (!this.isCoreField && !this.hasMaskPrefix(field.key)) {
-          field.key = this.maskPrefix;
+          field.key = this.global.maskPrefix;
           return;
         }
 
@@ -253,7 +254,7 @@ define([
         field.key = this.checkAllowedCharacters(field.key);
 
         // Skip empty fields (these are validated by empty validator)
-        if (field.key === this.maskPrefix) {
+        if (field.key === this.global.maskPrefix) {
           return;
         }
 
@@ -309,7 +310,7 @@ define([
           );
       },
       hasMaskPrefix: function (key) {
-        return key.substr(0, this.maskPrefix.length) === this.maskPrefix;
+        return key.substr(0, this.global.maskPrefix.length) === this.global.maskPrefix;
       },
       isRoot: function (field) {
         return this.isEmptyObject(field.parent) || field.parent.name === 'palette' && this.isEmptyObject(field.parent.parent);
@@ -457,7 +458,7 @@ define([
       },
       checkFieldKeyIsEmpty: function (fields) {
         fields.every(function (item) {
-          if (item.key === mask.maskPrefix) {
+          if (item.key === mask.global.maskPrefix) {
             mask.fieldErrors.emptyKeyFields.push(item);
           }
           if (item.fields.length > 0) {
@@ -640,7 +641,7 @@ define([
         return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0
       },
       keyFieldVisible: function () {
-        return !['linebreak', 'palette', 'tab'].includes(this.global.activeField.name) && this.labelFieldVisible;
+        return !this.global.sctructuralFields.includes(this.global.activeField.name) && this.labelFieldVisible;
       },
       labelFieldVisible: function () {
         return !this.isCoreField && this.global.currentTab === 'general';

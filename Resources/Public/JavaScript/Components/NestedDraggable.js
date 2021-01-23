@@ -30,8 +30,8 @@ define([
 
             this.$set(e, 'uid', key);
             // Auto set key on structural fields
-            if (['linebreak', 'palette', 'tab'].includes(e.name)) {
-              this.$set(e, 'key', 'tx_mask_' + key);
+            if ((e.key === this.global.maskPrefix || e.key === '') && this.global.sctructuralFields.includes(e.name)) {
+              this.$set(e, 'key', this.global.maskPrefix + key);
             }
             return e.uid;
           },
@@ -69,7 +69,7 @@ define([
             return ['inline', 'palette'].includes(field.name);
           },
           keyWithoutMask: function (key) {
-            if (key.substr(0, 8) === 'tx_mask_') {
+            if (key.substr(0, 8) === this.global.maskPrefix) {
               return key.substr(8);
             } else {
               return key;
@@ -94,7 +94,7 @@ define([
         <div class="tx_mask_btn_text">
           <span v-if="field.name == 'linebreak'" class="id_labeltext">Linebreak</span>
           <span v-else class="id_labeltext">{{ field.label }}</span>
-          <span class="id_keytext" v-if="field.name != 'linebreak'">{{ keyWithoutMask(field.key) }}</span>
+          <span class="id_keytext" v-if="!global.sctructuralFields.includes(field.name)">{{ keyWithoutMask(field.key) }}</span>
         </div>
         <div class="tx_mask_btn_actions">
             <span @click.stop="removeField(index)" class="id_delete" title="Delete item" v-html="icons.delete"></span>

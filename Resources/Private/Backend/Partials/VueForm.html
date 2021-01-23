@@ -27,11 +27,11 @@
                                         class="form-control tx_mask_fieldcontent_type"
                                     >
                                         <optgroup class="c-divider" label="New">
-                                            <option :value="maskPrefix">
+                                            <option :value="global.maskPrefix">
                                                 <f:translate key="tx_mask.field.newfield"/>
                                             </option>
                                         </optgroup>
-                                        <optgroup label="Current new key" v-if="global.activeField.key !== maskPrefix && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
+                                        <optgroup label="Current new key" v-if="global.activeField.key !== global.maskPrefix && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
                                             <option :value="global.activeField.key">{{ global.activeField.key }}</option>
                                         </optgroup>
                                         <optgroup v-if="availableTca[global.activeField.name].core.length" class="c-divider" label="Core fields">
