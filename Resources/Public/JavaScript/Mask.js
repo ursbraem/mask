@@ -599,6 +599,11 @@ define([
         });
         return isExisting;
       },
+      availableTcaForActiveField: function (type) {
+        return this.availableTca[this.global.activeField.name][type].filter(function (item) {
+          return !mask.currentFieldKeys.includes(item.field) || mask.global.activeField.key === item.field;
+        });
+      }
     },
     computed: {
       hasErrors: function () {
@@ -650,7 +655,7 @@ define([
         if (this.global.activeField.parent.name === 'inline') {
           return false;
         }
-        return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0;
+        return this.availableCoreTcaForActiveField.length > 0 || this.availableMaskTcaForActiveField.length > 0;
       },
       keyFieldVisible: function () {
         return !this.global.sctructuralFields.includes(this.global.activeField.name) && this.maskFieldGeneralTabOpen;
@@ -677,9 +682,27 @@ define([
         });
         return keys;
       },
+      availableCoreTcaForActiveField: function () {
+        return this.availableTcaForActiveField('core');
+      },
+      availableMaskTcaForActiveField: function () {
+        return this.availableTcaForActiveField('mask');
+      },
       activeFieldHasKeyError: function () {
           return this.fieldErrors.emptyKeyFields.includes(this.global.activeField)
           || this.fieldErrors.existingFieldKeyFields.includes(this.global.activeField);
+      },
+      currentFieldKeys: function () {
+        const fields = [];
+        this.fields.forEach(function (item) {
+          if (item.name === 'palette') {
+            item.fields.forEach(function (item) {
+              fields.push(item.key);
+            });
+          }
+          fields.push(item.key);
+        });
+        return fields;
       }
     }
   });

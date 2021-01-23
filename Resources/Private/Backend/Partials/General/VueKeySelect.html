@@ -18,13 +18,13 @@
             <optgroup label="Current new key" v-if="global.activeField.key !== global.maskPrefix && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
                 <option :value="global.activeField.key">{{ global.activeField.key }}</option>
             </optgroup>
-            <optgroup v-if="availableTca[global.activeField.name].core.length" class="c-divider" label="Core fields">
-                <option v-for="item in availableTca[global.activeField.name].core" :value="item.field">
+            <optgroup v-if="availableCoreTcaForActiveField.length" class="c-divider" label="Core fields">
+                <option v-for="item in availableCoreTcaForActiveField" :value="item.field">
                     {{ item.label }} ({{ item.field }})
                 </option>
             </optgroup>
-            <optgroup v-if="availableTca[global.activeField.name].mask.length" class="c-divider" label="Mask fields">
-                <option v-for="item in availableTca[global.activeField.name].mask" :value="item.field">
+            <optgroup v-if="availableMaskTcaForActiveField.length" class="c-divider" label="Mask fields">
+                <option v-for="item in availableMaskTcaForActiveField" :value="item.field">
                     {{ item.label }}
                 </option>
             </optgroup>
