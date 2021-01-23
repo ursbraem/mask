@@ -372,22 +372,21 @@ define([
         this.element = element;
         const tcaRequest = this.loadTca();
 
-        // load element fields
-        const elementRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element))
-          .withQueryArguments({
-            type: type,
-            key: element.key
-          })
-          .get()
-          .then(
-            async function (response) {
-              const result = await response.resolve();
-              mask.fields = result.fields;
-            }
-          );
-
-        Promise.all([tcaRequest, elementRequest]).then(() => {
-          mask.loaded = true;
+        Promise.resolve(tcaRequest).then(() => {
+          // load element fields
+          new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+            .withQueryArguments({
+              type: type,
+              key: element.key
+            })
+            .get()
+            .then(
+              async function (response) {
+                const result = await response.resolve();
+                mask.fields = result.fields;
+                mask.loaded = true;
+              }
+            );
         });
       },
       loadTca: function () {
