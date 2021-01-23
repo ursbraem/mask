@@ -608,7 +608,7 @@ define([
         return this.fieldErrors.emptyKeyFields.length > 0
           || this.fieldErrors.emptyGroupAllowedFields.length > 0
           || this.fieldErrors.emptyRadioItems.length > 0
-          || this.fieldErrors.existingFieldKeyFields.length > 0
+          || this.fieldErrors.existingFieldKeyFields.length > 0;
       },
       maskBuilderOpen: function () {
         return this.mode === 'edit' || this.mode === 'new';
@@ -647,7 +647,7 @@ define([
         if (this.global.activeField.parent.name === 'inline') {
           return false;
         }
-        return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0
+        return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0;
       },
       keyFieldVisible: function () {
         return !this.global.sctructuralFields.includes(this.global.activeField.name) && this.maskFieldGeneralTabOpen;
@@ -676,7 +676,7 @@ define([
       },
       activeFieldHasKeyError: function () {
           return this.fieldErrors.emptyKeyFields.includes(this.global.activeField)
-          || this.fieldErrors.existingFieldKeyFields.includes(this.global.activeField)
+          || this.fieldErrors.existingFieldKeyFields.includes(this.global.activeField);
       }
     }
   });
