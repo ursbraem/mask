@@ -73,8 +73,8 @@
                         </div>
                     </div>
                     <f:comment><!-- mask field key and label --></f:comment>
-                    <div v-if="!isCoreField && global.currentTab == 'general'" class="row">
-                        <div :class="['form-group', 'col-sm-6', {'has-error': activeFieldHasKeyError}]">
+                    <div class="row">
+                        <div v-if="keyFieldVisible" :class="['form-group', 'col-sm-6', {'has-error': activeFieldHasKeyError}]">
                             <label class="t3js-formengine-label" for="form_key">
                                 <f:translate key="tx_mask.field.fieldkey"/>
                             </label>
@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div v-if="labelFieldVisible" class="form-group col-sm-6">
                             <label class="t3js-formengine-label" for="form_label">
                                 <f:translate key="tx_mask.field.label"/>
                             </label>

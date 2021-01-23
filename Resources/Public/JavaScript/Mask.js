@@ -626,6 +626,12 @@ define([
         }
         return this.availableTca[this.global.activeField.name].core.length > 0 || this.availableTca[this.global.activeField.name].mask.length > 0
       },
+      keyFieldVisible: function () {
+        return !['linebreak', 'palette', 'tab'].includes(this.global.activeField.name) && this.labelFieldVisible;
+      },
+      labelFieldVisible: function () {
+        return !this.isCoreField && this.global.currentTab === 'general';
+      },
       availableTcaKeys: function () {
         var keys = {};
         Object.keys(this.availableTca).forEach(function (key) {

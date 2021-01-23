@@ -29,7 +29,10 @@ define([
               .slice(2);
 
             this.$set(e, 'uid', key);
-
+            // Auto set key on structural fields
+            if (['linebreak', 'palette', 'tab'].includes(e.name)) {
+              this.$set(e, 'key', 'tx_mask_' + key);
+            }
             return e.uid;
           },
           onAdd: function () {
