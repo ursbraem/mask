@@ -174,6 +174,9 @@ define([
         this.validate();
       },
       'element.key': function () {
+        if (this.mode === 'edit') {
+          return;
+        }
         const validKey = this.checkAllowedCharacters(this.element.key);
         if (this.element.key !== validKey) {
           this.element.key = validKey;
