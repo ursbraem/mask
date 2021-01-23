@@ -535,8 +535,10 @@ define([
       },
       handleClone: function (item) {
         // Create a fresh copy of item
-        this.global.clonedField = Object.assign({}, item);
-        return this.global.clonedField;
+        let cloneMe = JSON.parse(JSON.stringify(item));
+        this.$delete(cloneMe, 'uid');
+        this.global.clonedField = cloneMe;
+        return cloneMe;
       },
       /**
        * This adds a field by click on the field.
