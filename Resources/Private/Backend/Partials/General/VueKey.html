@@ -11,6 +11,7 @@
             required="required"
             :readOnly="!global.activeField.newField"
             @input="validateKey(global.activeField); loadField();"
+            ref="fieldKey"
         />
     </div>
 </div>

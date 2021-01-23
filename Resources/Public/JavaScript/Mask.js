@@ -159,6 +159,11 @@ define([
         });
       });
     },
+    updated: function () {
+      if ((typeof this.$refs['fieldKey'] !== 'undefined') && (this.global.activeField.key === this.global.maskPrefix)) {
+        this.$refs['fieldKey'].focus();
+      }
+    },
     watch: {
       element: {
         handler() {
