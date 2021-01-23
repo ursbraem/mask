@@ -247,6 +247,21 @@ define([
           )
         }
       },
+      loadField: function () {
+        if (this.isExistingMaskField) {
+          new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_field)
+            .withQueryArguments({key: this.global.activeField.key, type: this.type})
+            .get()
+            .then(
+              async function (response) {
+                const result = await response.resolve();
+                mask.global.activeField.tca = result.field.tca;
+              }
+            );
+        } else {
+          this.global.activeField.tca = Object.assign({}, this.defaultTca[this.global.activeField.name]);
+        }
+      },
       validateKey: function (field) {
         // Force mask prefix if not a core field
         if (!this.isActiveCoreField && !this.hasMaskPrefix(field.key)) {
@@ -502,10 +517,8 @@ define([
       },
       handleClone: function (item) {
         // Create a fresh copy of item
-        let cloneMe = JSON.parse(JSON.stringify(item));
-        this.$delete(cloneMe, 'uid');
-        this.global.clonedField = cloneMe;
-        return cloneMe;
+        this.global.clonedField = Object.assign({}, item);
+        return this.global.clonedField;
       },
       /**
        * This adds a field by click on the field.
@@ -651,7 +664,7 @@ define([
           return false;
         }
         let isExisting = false;
-        this.availableTca[this.global.activeField.name].mask.forEach(function (item) {
+        this.availableMaskTcaForActiveField.forEach(function (item) {
           if (item.field === mask.global.activeField.key) {
             isExisting = true;
           }
@@ -719,6 +732,16 @@ define([
       },
       deletedFieldKeys: function () {
         return this.getFieldKeys(this.global.deletedFields);
+      },
+      defaultTca: function () {
+        if (this.isEmptyObject(this.fieldTypes)) {
+          return [];
+        }
+        const defaults = {};
+        this.fieldTypes.forEach(function (item) {
+          defaults[item.name] = item.tca;
+        });
+        return defaults;
       }
     }
   });

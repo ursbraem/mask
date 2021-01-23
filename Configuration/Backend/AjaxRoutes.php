@@ -51,6 +51,10 @@ return [
         'path' => '/mask/loadElement',
         'target' => AjaxController::class . '::loadElement'
     ],
+    'mask_load_field' => [
+        'path' => '/mask/loadField',
+        'target' => AjaxController::class . '::loadField'
+    ],
     'mask_save' => [
         'path' => '/mask/save',
         'target' => AjaxController::class . '::save'

@@ -148,12 +148,23 @@ class AjaxController extends ActionController
         $storage = $this->storageRepository->loadElement($table, $elementKey);
         $storage = $this->storageRepository->prepareStorage($storage, $params['key']);
 
-        $json['fields'] = $this->addFields($elementKey, $table, $storage['tca'] ?? []);
+        $json['fields'] = $this->addFields($table, $storage['tca'] ?? [], $elementKey);
 
         return new JsonResponse($json);
     }
 
-    protected function addFields($elementKey, $table, $fields, $parent = [])
+    public function loadField(ServerRequestInterface $request): Response
+    {
+        $params = $request->getQueryParams();
+        $table = $params['type'];
+        $key = $params['key'];
+        $field = $this->storageRepository->loadField($table, $key);
+        $json['field'] = $this->addFields($table, [$key => $field])[0];
+
+        return new JsonResponse($json);
+    }
+
+    protected function addFields($table, $fields, $elementKey = '', $parent = [])
     {
         $nestedFields = [];
         foreach ($fields as $key => $field) {
@@ -165,16 +176,18 @@ class AjaxController extends ActionController
             $newField['key'] = is_int($key) ? ($field['maskKey'] ?? $field['key']) : $key;
 
             if ($field['inPalette'] || !$field['inlineParent']) {
-                $formType = $this->getFormType($elementKey, $newField['key'], $table);
+                $formType = $this->getFormType($newField['key'], $table, $elementKey);
             } else {
-                $formType = $this->getFormType($elementKey, $newField['key'], $field['inlineParent']);
+                $formType = $this->getFormType($newField['key'], $field['inlineParent'], $elementKey);
             }
 
             $newField['isMaskField'] = MaskUtility::isMaskIrreTable($newField['key']);
             $newField['name'] = $formType;
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $formType)->getMarkup();
-            $newField['label'] = $this->getLabel($field, $table, $newField['key'], $elementKey);
-            $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
+            if ($elementKey !== '') {
+                $newField['label'] = $this->getLabel($field, $table, $newField['key'], $elementKey);
+                $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
+            }
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = $this->convertTcaArrayToFlat($field['config'] ?? []);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
@@ -191,7 +204,7 @@ class AjaxController extends ActionController
             }
 
             if (FieldType::cast($formType)->isParentField()) {
-                $newField['fields'] = $this->addFields($elementKey, $table, $field['inlineFields'], $newField);
+                $newField['fields'] = $this->addFields($table, $field['inlineFields'], $elementKey, $newField);
             }
             $nestedFields[] = $newField;
         }
@@ -459,7 +472,7 @@ class AjaxController extends ActionController
         return new JsonResponse($config);
     }
 
-    protected function getFormType($elementKey, $fieldKey, $type)
+    protected function getFormType($fieldKey, $type, $elementKey = '')
     {
         if ($fieldKey === 'bodytext' && $type === 'tt_content') {
             return FieldType::RICHTEXT;
