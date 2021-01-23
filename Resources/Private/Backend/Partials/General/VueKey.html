@@ -9,7 +9,7 @@
             id="form_key"
             class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
             required="required"
-            :readOnly="!global.activeField.newField && isExistingMaskField"
+            :readOnly="!global.activeField.newField"
             @input="validateKey(global.activeField)"
         />
     </div>
