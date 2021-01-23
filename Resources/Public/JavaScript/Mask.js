@@ -238,8 +238,8 @@ define([
         }
       },
       validateKeyExists: function (field) {
-        // Force mask prefix
-        if (!this.hasMaskPrefix(field.key)) {
+        // Force mask prefix if not a core field
+        if (!this.isCoreField && !this.hasMaskPrefix(field.key)) {
           field.key = this.maskPrefix;
           return;
         }
@@ -254,6 +254,8 @@ define([
         let error = this.checkIfKeyExistsInFields(fields, this.global.activeField);
         if (error) {
           this.fieldErrors.existingFieldKeyFields.push(this.global.activeField);
+        } else {
+          mask.removeExistingKeyField(this.global.activeField);
         }
 
         // Step 2: Check if another field is now valid due to the change
@@ -264,18 +266,16 @@ define([
           return true;
         });
 
-        // If there is no error on a nested field, remove it
-        let root = this.isRoot(field);
-        if (!error && !root) {
-          mask.removeExistingKeyField(field);
-        }
-
-        // If there is an error already from step 1 or we are not on root, cancel tca ajax check
-        if (error || !root) {
+        // Step 3: Check if key is in possible tca array and avoid ajax check if so
+        if (this.availableTcaKeys[field.name].includes(field.key)) {
           return;
         }
 
-        // todo if key is in possible tca array, skip ajax
+        // If there is an error already from step 1 or we are not on root, cancel tca ajax check
+        if (error || !this.isRoot(field)) {
+          return;
+        }
+
         // Check if key already exists in table
         let arguments = {
           key: field.key,

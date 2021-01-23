@@ -19,7 +19,13 @@
                             </label>
                             <div class="t3js-formengine-field-item">
                                 <div class="form-control-wrap">
-                                    <select v-model="global.activeField.key" :disabled="!global.activeField.newField" id="form_choosefield" class="form-control tx_mask_fieldcontent_type">
+                                    <select
+                                        v-model="global.activeField.key"
+                                        :disabled="!global.activeField.newField"
+                                        @change="validateKeyExists(global.activeField)"
+                                        id="form_choosefield"
+                                        class="form-control tx_mask_fieldcontent_type"
+                                    >
                                         <optgroup class="c-divider" label="New">
                                             <option :value="maskPrefix">
                                                 <f:translate key="tx_mask.field.newfield"/>
