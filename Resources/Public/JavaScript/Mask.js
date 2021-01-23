@@ -436,6 +436,7 @@ define([
         if (this.fieldErrors.emptyRadioItems.includes(field)) {
           return true;
         }
+        return false;
       },
       validate: function () {
         this.fieldErrors.elementKey = this.element.key === '';
