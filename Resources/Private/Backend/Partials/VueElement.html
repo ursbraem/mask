@@ -5,13 +5,7 @@
     <div class="t3js-formengine-field-item">
         <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.all.fieldkey.description')}</span>
         <div class="form-control-wrap">
-            <input
-                v-model="element.key"
-                id="meta_key"
-                class="form-control"
-                required="required"
-                :readonly="mode == 'edit'"
-            />
+            <element-key :element="element" :mode="mode"></element-key>
         </div>
     </div>
 </div>

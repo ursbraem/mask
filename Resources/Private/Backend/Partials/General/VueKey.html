@@ -4,14 +4,6 @@
 <div class="t3js-formengine-field-item">
     <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.field.fieldkey.description')}</span>
     <div class="form-control-wrap">
-        <input
-            v-model="global.activeField.key"
-            id="form_key"
-            class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
-            required="required"
-            :readOnly="!global.activeField.newField"
-            @input="validateKey(global.activeField); loadField();"
-            ref="fieldKey"
-        />
+        <field-key :global="global" :validate-key="validateKey" :load-field="loadField"></field-key>
     </div>
 </div>

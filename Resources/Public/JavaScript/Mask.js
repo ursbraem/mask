@@ -3,6 +3,8 @@ define([
   'TYPO3/CMS/Mask/Contrib/vuedraggable',
   'TYPO3/CMS/Mask/Components/NestedDraggable',
   'TYPO3/CMS/Mask/Components/FormField',
+  'TYPO3/CMS/Mask/Components/FieldKey',
+  'TYPO3/CMS/Mask/Components/ElementKey',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
@@ -12,6 +14,8 @@ define([
   draggable,
   nestedDraggable,
   formField,
+  fieldKey,
+  elementKey,
   AjaxRequest,
   Icons,
   Modal,
@@ -27,6 +31,8 @@ define([
       draggable,
       nestedDraggable,
       formField,
+      elementKey,
+      fieldKey,
     },
     data: function () {
       return {
@@ -158,11 +164,6 @@ define([
           input.dispatchEvent((new Event('input')));
         });
       });
-    },
-    updated: function () {
-      if ((typeof this.$refs['fieldKey'] !== 'undefined') && (this.global.activeField.key === this.global.maskPrefix)) {
-        this.$refs['fieldKey'].focus();
-      }
     },
     watch: {
       element: {
