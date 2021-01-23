@@ -81,7 +81,7 @@ define([
               return 'text';
             }
 
-            var formFieldMap = {
+            const formFieldMap = {
               'integer': 'number',
               'float': 'number',
               'date': 'date',

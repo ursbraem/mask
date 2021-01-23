@@ -21,7 +21,7 @@ define([
     return;
   }
 
-  var mask = new Vue({
+  const mask = new Vue({
     el: '#mask',
     components: {
       draggable,
@@ -193,7 +193,7 @@ define([
         if (this.maskBuilderOpen) {
           // Boot font icon picker
           require(['jquery', 'TYPO3/CMS/Mask/Contrib/FontIconPicker'], function ($) {
-            var iconPicker = $('#meta_icon').fontIconPicker({
+            const iconPicker = $('#meta_icon').fontIconPicker({
               source: mask.faIcons
             });
             iconPicker.setIcon(mask.element.icon);
@@ -508,10 +508,10 @@ define([
        * @param type
        */
       addField: function (type) {
-        var newField = this.handleClone(type);
-        var fields = this.fields;
-        var parent = this.global.activeField.parent;
-        var parentName = '';
+        const newField = this.handleClone(type);
+        const parent = this.global.activeField.parent;
+        let fields = this.fields;
+        let parentName = '';
         if (typeof parent !== 'undefined') {
           parentName = parent.name;
           newField.parent = parent;
@@ -522,7 +522,7 @@ define([
           newField.parent = {};
         }
         if (this.validateMove(parentName, newField)) {
-          var index = fields.indexOf(this.global.activeField) + 1;
+          const index = fields.indexOf(this.global.activeField) + 1;
           fields.splice(index, 0, newField);
           this.global.activeField = newField;
           this.global.currentTab = 'general';
@@ -589,7 +589,7 @@ define([
         if (this.isEmptyObject(field)) {
           return false;
         }
-        var isExisting = false;
+        let isExisting = false;
         this.availableTca[field.name].core.forEach(function (item) {
           if (item.field === field.key) {
             isExisting = true;
@@ -621,7 +621,7 @@ define([
         if (this.isEmptyObject(this.global.activeField)) {
           return false;
         }
-        var isExisting = false;
+        let isExisting = false;
         this.availableTca[this.global.activeField.name].mask.forEach(function (item) {
           if (item.field === mask.global.activeField.key) {
             isExisting = true;
@@ -663,7 +663,7 @@ define([
         return this.global.currentTab === 'general';
       },
       availableTcaKeys: function () {
-        var keys = {};
+        const keys = {};
         Object.keys(this.availableTca).forEach(function (key) {
           keys[key] = [];
           mask.availableTca[key].core.forEach(function (item) {
