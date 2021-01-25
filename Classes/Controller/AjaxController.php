@@ -239,9 +239,11 @@ class AjaxController extends ActionController
                 $tca = array_merge($tca, $this->convertTcaArrayToFlat($value, $path));
             } else {
                 if ($key === 'eval') {
-                    $keys = explode(',', $value);
-                    $evalArray = array_combine($keys, array_fill(0, count($keys), 1));
-                    $tca = array_merge($tca, $this->convertTcaArrayToFlat($evalArray, $path));
+                    if ($value !== '') {
+                        $keys = explode(',', $value);
+                        $evalArray = array_combine($keys, array_fill(0, count($keys), 1));
+                        $tca = array_merge($tca, $this->convertTcaArrayToFlat($evalArray, $path));
+                    }
                 } else {
                     $fullPath = implode('.', $path);
                     $tca[$fullPath] = $value;
