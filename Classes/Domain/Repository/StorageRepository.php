@@ -289,7 +289,7 @@ class StorageRepository implements SingletonInterface
         $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($tca as $key => $value) {
             // This is for timestamps as it has a fake tca property for eval date, datetime, ...
-            if ($key === 'config.eval' && in_array(['date', 'datetime', 'time', 'timesec'], $value)) {
+            if ($key === 'config.eval' && in_array($value, ['date', 'datetime', 'time', 'timesec'])) {
                 $key = 'config.eval.' . $value;
                 $value = 1;
             }
