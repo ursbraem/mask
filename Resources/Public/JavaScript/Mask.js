@@ -8,7 +8,8 @@ define([
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
-  'TYPO3/CMS/Backend/Severity'
+  'TYPO3/CMS/Backend/Severity',
+  'TYPO3/CMS/Backend/Notification'
 ], function (
   Vue,
   draggable,
@@ -19,7 +20,8 @@ define([
   AjaxRequest,
   Icons,
   Modal,
-  Severity
+  Severity,
+  Notification
 ) {
   if (!document.getElementById('mask')) {
     return;
@@ -218,14 +220,22 @@ define([
         if (!this.hasErrors) {
           const payload = {
             element: this.element,
-            fields: this.fields,
+            fields: JSON.stringify(this.getPostFields(this.fields)),
             type: this.type,
-            isNew: this.mode === 'new'
+            isNew: this.mode === 'new' ? 1 : 0
           };
           new AjaxRequest(TYPO3.settings.ajaxUrls.mask_save).post(payload)
             .then(
               async function (response) {
                 const res = await response.resolve();
+                Object.keys(res).forEach(function (key) {
+                  const item = res[key];
+                  if (item.severity === 0) {
+                    Notification.success(item.title, item.message);
+                  } else {
+                    Notification.error(item.title, item.message);
+                  }
+                });
               }
             );
         } else {
@@ -253,6 +263,20 @@ define([
             ]
           )
         }
+      },
+      getPostFields: function (fields) {
+        const postFields = [];
+        fields.forEach(function (item) {
+          postFields.push({
+            key: item.key,
+            label: item.label,
+            description: item.description,
+            name: item.name,
+            tca: Object.assign({}, item.tca),
+            fields: mask.getPostFields(item.fields)
+          });
+        });
+        return postFields;
       },
       loadField: function () {
         if (this.isExistingMaskField) {

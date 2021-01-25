@@ -32,7 +32,9 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -82,6 +84,11 @@ class AjaxController extends ActionController
      */
     protected $extSettings;
 
+    /**
+     * @var FlashMessageQueue
+     */
+    protected $flashMessageQueue;
+
     public function __construct(
         StorageRepository $storageRepository,
         FieldHelper $fieldHelper,
@@ -96,30 +103,26 @@ class AjaxController extends ActionController
         $this->sqlCodeGenerator = $sqlCodeGenerator;
         $this->htmlCodeGenerator = $htmlCodeGenerator;
         $this->settingsService = $settingsService;
+        $this->flashMessageQueue = new FlashMessageQueue('mask');
         $this->extSettings = $this->settingsService->get();
     }
 
     public function save(ServerRequestInterface $request): Response
     {
-        $params = $request->getQueryParams();
-        $storage = $this->convertElementToLegacyStorageFormat($params['element'], $params['fields'], $params['type'], $params['isNew']);
-        $this->storageRepository->update($storage);
+        $params = $request->getParsedBody();
+        $isNew = (bool)$params['isNew'];
+        $elementKey = $params['element']['key'];
+        $fields = json_decode($params['fields'], true);
+        $this->storageRepository->update($params['element'], $fields, $params['type'], $isNew);
         $this->generateAction();
-        $html = $this->htmlCodeGenerator->generateHtml($storage['elements']['key'], 'tt_content');
-        $this->saveHtml($storage['elements']['key'], $html);
-        if ($storage['orgkey'] === '') {
+        $html = $this->htmlCodeGenerator->generateHtml($elementKey, $params['type']);
+        $this->saveHtml($elementKey, $html);
+        if ($isNew) {
             $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.newcontentelement', 'mask'));
         } else {
             $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.updatedcontentelement', 'mask'));
         }
-        return new JsonResponse(json_encode($this->controllerContext->getFlashMessageQueue()->getAllMessages()));
-    }
-
-    protected function convertElementToLegacyStorageFormat($element, $fields, $type, $isNew)
-    {
-        $storage = [];
-
-        return $storage;
+        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     public function elements(ServerRequestInterface $request): Response
@@ -174,6 +177,10 @@ class AjaxController extends ActionController
                 'newField' => false,
             ];
             $newField['key'] = is_int($key) ? ($field['maskKey'] ?? $field['key']) : $key;
+            if ($elementKey !== '') {
+                $newField['label'] = $this->getLabel($field, $table, $newField['key'], $elementKey);
+                $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
+            }
 
             if ($field['inPalette'] || !$field['inlineParent']) {
                 $formType = $this->getFormType($newField['key'], $table, $elementKey);
@@ -184,28 +191,33 @@ class AjaxController extends ActionController
             $newField['isMaskField'] = MaskUtility::isMaskIrreTable($newField['key']);
             $newField['name'] = $formType;
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $formType)->getMarkup();
-            if ($elementKey !== '') {
-                $newField['label'] = $this->getLabel($field, $table, $newField['key'], $elementKey);
-                $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
-            }
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = $this->convertTcaArrayToFlat($field['config'] ?? []);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
-            $newField['tca']['imageoverlayPalette'] = $field['imageoverlayPalette'] ?? 1;
-            $newField['tca']['cTypes'] = $field['cTypes'] ?? [];
-            $newField['tca']['ctrl.iconfile'] = $field['inlineIcon'] ?? '';
-            $newField['tca']['ctrl.label'] = $field['inlineLabel'] ?? '';
 
-            // Since mask v7.0.0 the path for allowedFileExtensions has changed to root level.
-            $allowedFileExtensionsPath = 'config.filter.0.parameters.allowedFileExtensions';
-            if (isset($newField['tca'][$allowedFileExtensionsPath])) {
-                $newField['tca']['allowedFileExtensions'] = $newField['tca'][$allowedFileExtensionsPath];
-                unset($newField['tca'][$allowedFileExtensionsPath]);
+            if ($formType === FieldType::FILE) {
+                $newField['tca']['imageoverlayPalette'] = $field['imageoverlayPalette'] ?? 1;
+                // Since mask v7.0.0 the path for allowedFileExtensions has changed to root level.
+                $allowedFileExtensionsPath = 'config.filter.0.parameters.allowedFileExtensions';
+                if (isset($newField['tca'][$allowedFileExtensionsPath])) {
+                    $newField['tca']['allowedFileExtensions'] = $newField['tca'][$allowedFileExtensionsPath];
+                    unset($newField['tca'][$allowedFileExtensionsPath]);
+                }
+            }
+
+            if ($formType === FieldType::CONTENT) {
+                $newField['tca']['cTypes'] = $field['cTypes'] ?? [];
+            }
+
+            if ($formType === FieldType::INLINE) {
+                $newField['tca']['ctrl.iconfile'] = $field['inlineIcon'] ?? '';
+                $newField['tca']['ctrl.label'] = $field['inlineLabel'] ?? '';
             }
 
             if (FieldType::cast($formType)->isParentField()) {
                 $newField['fields'] = $this->addFields($table, $field['inlineFields'], $elementKey, $newField);
             }
+
             $nestedFields[] = $newField;
         }
         return $nestedFields;
@@ -626,5 +638,36 @@ class AjaxController extends ActionController
         }
 
         return new JsonResponse(['isAvailable' => !$keyExists && !$fieldExists]);
+    }
+
+    /**
+     * Creates a Message object and adds it to the FlashMessageQueue.
+     *
+     * @param string $messageBody The message
+     * @param string $messageTitle Optional message title
+     * @param int $severity Optional severity, must be one of \TYPO3\CMS\Core\Messaging\FlashMessage constants
+     * @param bool $storeInSession Optional, defines whether the message should be stored in the session (default) or not
+     * @throws \InvalidArgumentException if the message body is no string
+     * @see \TYPO3\CMS\Core\Messaging\FlashMessage
+     */
+    public function addFlashMessage($messageBody, $messageTitle = '', $severity = AbstractMessage::OK, $storeInSession = true)
+    {
+        if (!is_string($messageBody)) {
+            throw new \InvalidArgumentException('The message body must be of type string, "' . gettype($messageBody) . '" given.', 1243258395);
+        }
+        /* @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
+        $flashMessage = GeneralUtility::makeInstance(
+            FlashMessage::class,
+            (string)$messageBody,
+            (string)$messageTitle,
+            $severity,
+            $storeInSession
+        );
+        $this->getFlashMessageQueue()->enqueue($flashMessage);
+    }
+
+    protected function getFlashMessageQueue()
+    {
+        return $this->flashMessageQueue;
     }
 }
