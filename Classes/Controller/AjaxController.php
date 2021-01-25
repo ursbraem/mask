@@ -151,7 +151,7 @@ class AjaxController extends ActionController
         $storage = $this->storageRepository->loadElement($table, $elementKey);
         $storage = $this->storageRepository->prepareStorage($storage, $params['key']);
 
-        $json['fields'] = $this->addFields($table, $storage['tca'] ?? [], $elementKey);
+        $json['fields'] = $this->addFields($storage['tca'] ?? [], $table, $elementKey);
 
         return new JsonResponse($json);
     }
@@ -162,31 +162,29 @@ class AjaxController extends ActionController
         $table = $params['type'];
         $key = $params['key'];
         $field = $this->storageRepository->loadField($table, $key);
-        $json['field'] = $this->addFields($table, [$key => $field])[0];
+        $json['field'] = $this->addFields([$key => $field], $table)[0];
 
         return new JsonResponse($json);
     }
 
-    protected function addFields($table, $fields, $elementKey = '', $parent = [])
+    protected function addFields($fields, $table, $elementKey = '', $parent = null)
     {
         $nestedFields = [];
         foreach ($fields as $key => $field) {
             $newField = [
                 'fields' => [],
-                'parent' => $parent,
+                'parent' => $parent ?? [],
                 'newField' => false,
             ];
-            $newField['key'] = is_int($key) ? ($field['maskKey'] ?? $field['key']) : $key;
+
+            $newField['key'] = $parent ? ($field['coreField'] ? $field['key'] : $field['maskKey']) : $key;
+
             if ($elementKey !== '') {
                 $newField['label'] = $this->getLabel($field, $table, $newField['key'], $elementKey);
                 $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
             }
 
-            if ($field['inPalette'] || !$field['inlineParent']) {
-                $formType = $this->getFormType($newField['key'], $table, $elementKey);
-            } else {
-                $formType = $this->getFormType($newField['key'], $field['inlineParent'], $elementKey);
-            }
+            $formType = $this->getFormType($newField['key'], $table, $elementKey);
 
             $newField['isMaskField'] = MaskUtility::isMaskIrreTable($newField['key']);
             $newField['name'] = $formType;
@@ -215,7 +213,8 @@ class AjaxController extends ActionController
             }
 
             if (FieldType::cast($formType)->isParentField()) {
-                $newField['fields'] = $this->addFields($table, $field['inlineFields'], $elementKey, $newField);
+                $inlineTable = $formType === FieldType::INLINE ? $key : $table;
+                $newField['fields'] = $this->addFields($field['inlineFields'], $inlineTable , $elementKey, $newField);
             }
 
             $nestedFields[] = $newField;
