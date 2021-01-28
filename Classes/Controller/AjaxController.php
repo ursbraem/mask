@@ -148,9 +148,8 @@ class AjaxController extends ActionController
         $params = $request->getQueryParams();
         $table = $params['type'];
         $elementKey = $params['key'];
-        $storage = $this->storageRepository->loadElement($table, $elementKey);
-        $storage = $this->storageRepository->prepareStorage($storage, $params['key']);
 
+        $storage = $this->storageRepository->loadElement($table, $elementKey);
         $json['fields'] = $this->addFields($storage['tca'] ?? [], $table, $elementKey);
 
         return new JsonResponse($json);
@@ -184,16 +183,35 @@ class AjaxController extends ActionController
                 $newField['label'] = $this->translateLabel($newField['label'], $elementKey);
             }
 
-            $formType = $this->getFormType($newField['key'], $table, $elementKey);
+            $fieldType = FieldType::cast($this->getFormType($newField['key'], $table, $elementKey));
+
+            if ($fieldType->isParentField()) {
+                $field['inlineFields'] = $this->storageRepository->loadInlineFields($newField['key'], $elementKey);
+            }
+
+            // Convert old date format Y-m-d to d-m-Y
+            $dbType = $field['config']['dbType'] ?? false;
+            if ($dbType && in_array($dbType, ['date', 'datetime'], true)) {
+                $format = ($dbType === 'date') ? 'd-m-Y' : 'H:i d-m-Y';
+                $lower = $field['config']['range']['lower'] ?? false;
+                $upper = $field['config']['range']['upper'] ?? false;
+                $pattern = '/^[0-9]{4}]/';
+                if ($lower && (bool)preg_match($pattern, $lower)) {
+                    $field['config']['range']['lower'] = (new \DateTime($lower))->format($format);
+                }
+                if ($upper && (bool)preg_match($pattern, $upper)) {
+                    $field['config']['range']['upper'] = (new \DateTime($upper))->format($format);
+                }
+            }
 
             $newField['isMaskField'] = MaskUtility::isMaskIrreTable($newField['key']);
-            $newField['name'] = $formType;
-            $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $formType)->getMarkup();
+            $newField['name'] = (string)$fieldType;
+            $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = $this->convertTcaArrayToFlat($field['config'] ?? []);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
 
-            if ($formType === FieldType::FILE) {
+            if ($fieldType->equals(FieldType::FILE)) {
                 $newField['tca']['imageoverlayPalette'] = $field['imageoverlayPalette'] ?? 1;
                 // Since mask v7.0.0 the path for allowedFileExtensions has changed to root level.
                 $allowedFileExtensionsPath = 'config.filter.0.parameters.allowedFileExtensions';
@@ -203,17 +221,17 @@ class AjaxController extends ActionController
                 }
             }
 
-            if ($formType === FieldType::CONTENT) {
+            if ($fieldType->equals(FieldType::CONTENT)) {
                 $newField['tca']['cTypes'] = $field['cTypes'] ?? [];
             }
 
-            if ($formType === FieldType::INLINE) {
+            if ($fieldType->equals(FieldType::INLINE)) {
                 $newField['tca']['ctrl.iconfile'] = $field['inlineIcon'] ?? '';
                 $newField['tca']['ctrl.label'] = $field['inlineLabel'] ?? '';
             }
 
-            if (FieldType::cast($formType)->isParentField()) {
-                $inlineTable = $formType === FieldType::INLINE ? $field['maskKey'] : $table;
+            if ($fieldType->isParentField()) {
+                $inlineTable = $fieldType->equals(FieldType::INLINE) ? $field['maskKey'] : $table;
                 $newField['fields'] = $this->addFields($field['inlineFields'], $inlineTable , $elementKey, $newField);
             }
 
