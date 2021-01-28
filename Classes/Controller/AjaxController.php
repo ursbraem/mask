@@ -190,6 +190,7 @@ class AjaxController extends ActionController
             }
 
             // Convert old date format Y-m-d to d-m-Y
+            // TODO convert timestamp to appropriate format
             $dbType = $field['config']['dbType'] ?? false;
             if ($dbType && in_array($dbType, ['date', 'datetime'], true)) {
                 $format = ($dbType === 'date') ? 'd-m-Y' : 'H:i d-m-Y';
@@ -256,6 +257,7 @@ class AjaxController extends ActionController
             } elseif (is_array($value)) {
                 $tca = array_merge($tca, $this->convertTcaArrayToFlat($value, $path));
             } else {
+                // TODO if timestamp, extract date, datetime...
                 if ($key === 'eval') {
                     if ($value !== '') {
                         $keys = explode(',', $value);
