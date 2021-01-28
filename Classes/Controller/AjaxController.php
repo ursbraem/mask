@@ -213,7 +213,7 @@ class AjaxController extends ActionController
             }
 
             if (FieldType::cast($formType)->isParentField()) {
-                $inlineTable = $formType === FieldType::INLINE ? $key : $table;
+                $inlineTable = $formType === FieldType::INLINE ? $field['maskKey'] : $table;
                 $newField['fields'] = $this->addFields($field['inlineFields'], $inlineTable , $elementKey, $newField);
             }
 
