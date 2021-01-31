@@ -296,6 +296,10 @@ class AjaxController extends ActionController
                         if (count($dateTypesInKeys) > 0) {
                             $fullPath = implode('.', $path);
                             $tca[$fullPath] = $dateTypesInKeys[0];
+                            // Remove dateType from normal eval array
+                            $keys = array_filter($keys, function ($a) use ($dateTypesInKeys) {
+                                return $a !== $dateTypesInKeys[0];
+                            });
                         }
 
                         $evalArray = array_combine($keys, array_fill(0, count($keys), 1));
