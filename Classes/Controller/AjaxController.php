@@ -257,10 +257,17 @@ class AjaxController extends ActionController
             } elseif (is_array($value)) {
                 $tca = array_merge($tca, $this->convertTcaArrayToFlat($value, $path));
             } else {
-                // TODO if timestamp, extract date, datetime...
                 if ($key === 'eval') {
                     if ($value !== '') {
                         $keys = explode(',', $value);
+
+                        // Special handling for timestamp field, as the dateType is in the key "config.eval"
+                        $dateTypesInKeys = array_intersect($keys, ['date', 'datetime', 'time', 'timesec']);
+                        if (count($dateTypesInKeys) > 0) {
+                            $fullPath = implode('.', $path);
+                            $tca[$fullPath] = $dateTypesInKeys[0];
+                        }
+
                         $evalArray = array_combine($keys, array_fill(0, count($keys), 1));
                         $tca = array_merge($tca, $this->convertTcaArrayToFlat($evalArray, $path));
                     }
