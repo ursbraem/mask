@@ -174,6 +174,7 @@ return [
             'config.appearance.levelLinksPosition' => 'top'
         ],
         'tca_out' => [
+            'config.type' => 'inline',
             'config.foreign_table' => 'tt_content',
             'config.overrideChildTca.columns.colPos.config.default' => 999,
             'config.foreign_sortby' => 'sorting',
