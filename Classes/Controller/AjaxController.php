@@ -190,7 +190,6 @@ class AjaxController extends ActionController
             }
 
             // Convert old date format Y-m-d to d-m-Y
-            // TODO convert timestamp to appropriate format
             $dbType = $field['config']['dbType'] ?? false;
             if ($dbType && in_array($dbType, ['date', 'datetime'], true)) {
                 $format = ($dbType === 'date') ? 'd-m-Y' : 'H:i d-m-Y';
@@ -211,6 +210,37 @@ class AjaxController extends ActionController
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = $this->convertTcaArrayToFlat($field['config'] ?? []);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
+
+            if ($fieldType->equals(FieldType::TIMESTAMP)) {
+                $format = '';
+                switch ($newField['tca']['config.eval']) {
+                    case 'date':
+                        $format = 'd-m-Y';
+                        break;
+                    case 'datetime':
+                        $format = 'H:i d-m-Y';
+                        break;
+                    case 'time':
+                        $format = 'H:i';
+                        break;
+                    case 'timesec':
+                        $format = 'H:i:s';
+                        break;
+                }
+
+                $lower = $newField['tca']['config.range.lower'] ?? false;
+                if ($lower) {
+                    $date = new \DateTime();
+                    $date->setTimestamp($lower);
+                    $newField['tca']['config.range.lower'] = $date->format($format);
+                }
+                $upper = $newField['tca']['config.range.upper'] ?? false;
+                if ($upper) {
+                    $date = new \DateTime();
+                    $date->setTimestamp($newField['tca']['config.range.upper']);
+                    $newField['tca']['config.range.upper'] = $date->format($format);
+                }
+            }
 
             if ($fieldType->equals(FieldType::FILE)) {
                 $newField['tca']['imageoverlayPalette'] = $field['imageoverlayPalette'] ?? 1;
