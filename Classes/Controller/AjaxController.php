@@ -282,7 +282,7 @@ class AjaxController extends ActionController
                     $itemText .= implode(',', $item) . "\n";
                 }
                 $fullPath = implode('.', $path);
-                $tca[$fullPath] = $itemText;
+                $tca[$fullPath] = trim($itemText);
             } elseif (is_array($value)) {
                 $tca = array_merge($tca, $this->convertTcaArrayToFlat($value, $path));
             } else {
