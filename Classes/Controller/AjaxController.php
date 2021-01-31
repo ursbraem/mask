@@ -25,6 +25,7 @@ use MASK\Mask\DataStructure\Tab;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Helper\FieldHelper;
+use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -192,15 +193,13 @@ class AjaxController extends ActionController
             // Convert old date format Y-m-d to d-m-Y
             $dbType = $field['config']['dbType'] ?? false;
             if ($dbType && in_array($dbType, ['date', 'datetime'], true)) {
-                $format = ($dbType === 'date') ? 'd-m-Y' : 'H:i d-m-Y';
                 $lower = $field['config']['range']['lower'] ?? false;
                 $upper = $field['config']['range']['upper'] ?? false;
-                $pattern = '/^[0-9]{4}]/';
-                if ($lower && (bool)preg_match($pattern, $lower)) {
-                    $field['config']['range']['lower'] = (new \DateTime($lower))->format($format);
+                if ($lower && DateUtility::isOldDateFormat($lower)) {
+                    $field['config']['range']['lower'] = DateUtility::convertOldToNewFormat($dbType, $lower);
                 }
-                if ($upper && (bool)preg_match($pattern, $upper)) {
-                    $field['config']['range']['upper'] = (new \DateTime($upper))->format($format);
+                if ($upper && DateUtility::isOldDateFormat($upper)) {
+                    $field['config']['range']['upper'] = DateUtility::convertOldToNewFormat($dbType, $upper);
                 }
             }
 
