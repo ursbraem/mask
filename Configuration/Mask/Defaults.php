@@ -98,7 +98,7 @@ return [
         'tca_out' => [
             'config.type' => 'text',
             'config.enableRichtext' => 1,
-            'config.softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url'
+            'config.softref' => 'typolink_tag,images,email[subst],url'
         ],
         'sql' => 'mediumtext'
     ],
