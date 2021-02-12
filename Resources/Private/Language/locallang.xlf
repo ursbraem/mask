@@ -25,7 +25,7 @@
 				<source>Timestamp</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.timestamp_eval">
-				<source>Date or Datetime</source>
+				<source>Date type</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.text">
 				<source>Text</source>
@@ -162,17 +162,20 @@
 			<trans-unit id="tx_mask.field.timesec">
 				<source>Time field (h:m:s)</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.field.timestamp.eval">
+				<source>Attention: Influences default value and ranges</source>
+			</trans-unit>
 			<trans-unit id="tx_mask.field.date_selection">
-				<source>Show date selection</source>
+				<source>Date</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.datetime_selection">
-				<source>Show date and time selection</source>
+				<source>Date and time</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.time_selection">
-				<source>Show time selection</source>
+				<source>Time</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.timesec_selection">
-				<source>Show time and second selection</source>
+				<source>Time and seconds</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.unique.label">
 				<source>Unique</source>

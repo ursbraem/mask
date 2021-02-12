@@ -28,16 +28,33 @@ define([
         mounted: function () {
           // Initialize datepicker.
           if ((this.tcaKey in this.$refs) && this.$refs[this.tcaKey].classList.contains('t3js-datetimepicker')) {
-            // This is for dev mode only.
+            this.bootDateTimePicker();
+          }
+
+          if (this.global.activeField.name === 'timestamp' && this.tcaKey === 'config.default') {
+            this.$watch(
+                function () {
+                  return this.global.activeField.tca['config.eval'];
+                },
+                function () {
+                  // Destroy bootstrap datepicker and remove data attributes added by TYPO3 DateTimePicker
+                  $(this.$refs[this.tcaKey]).datetimepicker('destroy');
+                  $(this.$refs[this.tcaKey]).removeData(['dateType', 'DateTimePicker']);
+                  this.bootDateTimePicker();
+                }
+            );
+          }
+        },
+        methods: {
+          bootDateTimePicker: function () {
+            // This is for dev mode, when opening iframe directly
             if (!TYPO3.settings.DateTimePicker) {
               TYPO3.settings.DateTimePicker = JSON.parse('{"DateFormat":["DD-MM-YYYY","HH:mm DD-MM-YYYY"]}');
             }
             require(['TYPO3/CMS/Backend/DateTimePicker'], function (DateTimePicker) {
               DateTimePicker.initialize(this.$refs[this.tcaKey]);
             }.bind(this));
-          }
-        },
-        methods: {
+          },
           switchDependsOn: function (tcaKey, dependsOn) {
             if (!!dependsOn && this.global.activeField.tca[tcaKey] === this.valueOn) {
               this.global.activeField.tca[dependsOn] = 1;

@@ -5,11 +5,11 @@ use MASK\Mask\DataStructure\Tab;
 return [
     Tab::GENERAL => [
         [
-            'config.default' => 6,
-            'config.placeholder' => 6,
+            'config.eval' => 6,
         ],
         [
-            'config.eval' => 6,
+            'config.default' => 6,
+            'config.placeholder' => 6,
         ]
     ],
     Tab::VALIDATION => [

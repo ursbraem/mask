@@ -85,6 +85,7 @@ return [
     'config.eval' => [
         'type' => 'radio',
         'label' => 'tx_mask.field.timestamp_eval',
+        'description' => 'tx_mask.field.timestamp.eval',
         'code' => 'eval',
         'items' => [
             'date' => 'tx_mask.field.date_selection',
