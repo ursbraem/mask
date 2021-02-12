@@ -27,6 +27,7 @@ use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Helper\FieldHelper;
 use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
+use MASK\Mask\Utility\TcaConverterUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Http\JsonResponse;
@@ -207,7 +208,7 @@ class AjaxController extends ActionController
             $newField['name'] = (string)$fieldType;
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
-            $newField['tca'] = $this->convertTcaArrayToFlat($field['config'] ?? []);
+            $newField['tca'] = TcaConverterUtility::convertTcaArrayToFlat($field['config'] ?? []);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
 
             if ($fieldType->equals(FieldType::TIMESTAMP)) {
@@ -268,50 +269,6 @@ class AjaxController extends ActionController
             $nestedFields[] = $newField;
         }
         return $nestedFields;
-    }
-
-    protected function convertTcaArrayToFlat(array $config, $path = ['config']): array
-    {
-        $tca = [];
-        foreach ($config as $key => $value) {
-            $path[] = $key;
-            if ($key === 'items') {
-                $items = $value;
-                $itemText = '';
-                foreach ($items as $item) {
-                    $itemText .= implode(',', $item) . "\n";
-                }
-                $fullPath = implode('.', $path);
-                $tca[$fullPath] = trim($itemText);
-            } elseif (is_array($value)) {
-                $tca = array_merge($tca, $this->convertTcaArrayToFlat($value, $path));
-            } else {
-                if ($key === 'eval') {
-                    if ($value !== '') {
-                        $keys = explode(',', $value);
-
-                        // Special handling for timestamp field, as the dateType is in the key "config.eval"
-                        $dateTypesInKeys = array_intersect($keys, ['date', 'datetime', 'time', 'timesec']);
-                        if (count($dateTypesInKeys) > 0) {
-                            $fullPath = implode('.', $path);
-                            $tca[$fullPath] = $dateTypesInKeys[0];
-                            // Remove dateType from normal eval array
-                            $keys = array_filter($keys, function ($a) use ($dateTypesInKeys) {
-                                return $a !== $dateTypesInKeys[0];
-                            });
-                        }
-
-                        $evalArray = array_combine($keys, array_fill(0, count($keys), 1));
-                        $tca = array_merge($tca, $this->convertTcaArrayToFlat($evalArray, $path));
-                    }
-                } else {
-                    $fullPath = implode('.', $path);
-                    $tca[$fullPath] = $value;
-                }
-            }
-            array_pop($path);
-        }
-        return $tca;
     }
 
     public function fieldTypes(ServerRequestInterface $request): Response

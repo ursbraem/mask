@@ -20,7 +20,7 @@ namespace MASK\Mask\Domain\Repository;
 use MASK\Mask\DataStructure\FieldType;
 use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use MASK\Mask\Utility\TcaConverterUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -279,51 +279,6 @@ class StorageRepository implements SingletonInterface
         return $json;
     }
 
-    /**
-     * @param $tca
-     * @return array
-     */
-    protected function flatTcaToArray($tca): array
-    {
-        $tcaArray = [];
-        $accessor = PropertyAccess::createPropertyAccessor();
-        foreach ($tca as $key => $value) {
-            if ($key === 'config.items') {
-                $items = [];
-                foreach (explode("\n", $value) as $line) {
-                    $items[] = explode(',', $line);
-                }
-                $value = $items;
-            }
-            // This is for timestamps as it has a fake tca property for eval date, datetime, ...
-            if ($key === 'config.eval' && in_array($value, ['date', 'datetime', 'time', 'timesec'])) {
-                $key = 'config.eval.' . $value;
-                $value = 1;
-            }
-            $explodedKey = explode('.', $key);
-            $propertyPath = array_reduce($explodedKey, function ($carry, $property) {
-                return $carry . "[$property]";
-            });
-            $accessor->setValue($tcaArray, $propertyPath, $value);
-        }
-        return $this->mergeEvalValues($tcaArray);
-    }
-
-    protected function mergeEvalValues($tcaArray): array
-    {
-        if (!isset($tcaArray['config']['eval'])) {
-            return $tcaArray;
-        }
-        $mergedTca = [];
-        foreach($tcaArray['config']['eval'] as $key => $evalValue) {
-            if ($evalValue) {
-                $mergedTca[] = $key;
-            }
-        }
-        $tcaArray['config']['eval'] = implode(',', $mergedTca);
-        return $tcaArray;
-    }
-
     protected function addFieldsToJson($jsonAdd, $fields, $elementKey, $table, $defaultTable, $parent = null): array
     {
         $order = 0;
@@ -344,7 +299,7 @@ class StorageRepository implements SingletonInterface
                 $defaults = $this->getDefaults();
                 $field['tca'] = $field['tca'] ?? [];
                 ArrayUtility::mergeRecursiveWithOverrule($field['tca'], $defaults[$field['name']]['tca_out'] ?? []);
-                $fieldAdd = $this->flatTcaToArray($field['tca']);
+                $fieldAdd = TcaConverterUtility::convertFlatTcaToArray($field['tca']);
                 $fieldAdd['key'] = MaskUtility::removeMaskPrefix($field['key']);
                 $fieldAdd['description'] = $field['description'] ?? '';
                 $fieldAdd['exclude'] = 1; // TODO Can this be moved to TcaCodeGenerator, as it's always 1?

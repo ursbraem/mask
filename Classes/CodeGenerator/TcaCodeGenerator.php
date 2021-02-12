@@ -23,6 +23,7 @@ use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Helper\FieldHelper;
 use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
+use MASK\Mask\Utility\TcaConverterUtility;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -325,31 +326,38 @@ class TcaCodeGenerator
                 $tcavalue['config']['foreign_table'] = $tcakey;
             }
 
-            // Date / DateTime: Set date ranges
+            // Convert Date and Datetime default and ranges to timestamp
             $dbType = $tcavalue['config']['dbType'] ?? '';
-            if (($dbType === 'date' || $dbType === 'datetime')) {
-                $format = ($dbType == 'date') ? 'd-m-Y' : 'H:i d-m-Y';
+            if (in_array($dbType, ['date', 'datetime'])) {
                 $upper = $tcavalue['config']['range']['upper'] ?? false;
+                $default = $tcavalue['config']['default'] ?? false;
+                if ($default) {
+                    $tcavalue['config']['default'] = DateUtility::convertStringToTimestampByDbType($dbType, $default);
+                }
                 if ($upper) {
-                    if (DateUtility::isOldDateFormat($upper)) {
-                        $upper = DateUtility::convertOldToNewFormat($dbType, $upper);
-                    }
-                    $date = \DateTime::createFromFormat($format, $upper);
-                    if ($dbType == 'date') {
-                        $date->setTime(0, 0);
-                    }
-                    $tcavalue['config']['range']['upper'] = $date->getTimestamp();
+                    $tcavalue['config']['range']['upper'] = DateUtility::convertStringToTimestampByDbType($dbType, $upper);
                 }
                 $lower = $tcavalue['config']['range']['lower'] ?? false;
                 if ($lower) {
-                    if (DateUtility::isOldDateFormat($lower)) {
-                        $lower = DateUtility::convertOldToNewFormat($dbType, $lower);
-                    }
-                    $date = \DateTime::createFromFormat($format, $lower);
-                    if ($dbType == 'date') {
-                        $date->setTime(0, 0);
-                    }
-                    $tcavalue['config']['range']['lower'] = $date->getTimestamp();
+                    $tcavalue['config']['range']['lower'] = DateUtility::convertStringToTimestampByDbType($dbType, $lower);
+                }
+            }
+
+            // Convert Timestamp default and ranges to timestamp
+            if (FieldType::cast($formType)->equals('timestamp')) {
+                $config = TcaConverterUtility::convertTcaArrayToFlat($tcavalue['config']);
+                $evalDate = $config['config.eval'];
+                $default = $tcavalue['config']['default'] ?? false;
+                if ($default) {
+                    $tcavalue['config']['default'] = DateUtility::convertStringToTimestampByEvalDate($evalDate, $default);
+                }
+                $upper = $tcavalue['config']['range']['upper'] ?? false;
+                if ($upper) {
+                    $tcavalue['config']['range']['upper'] = DateUtility::convertStringToTimestampByEvalDate($evalDate, $upper);
+                }
+                $lower = $tcavalue['config']['range']['lower'] ?? false;
+                if ($lower) {
+                    $tcavalue['config']['range']['lower'] = DateUtility::convertStringToTimestampByEvalDate($evalDate, $lower);
                 }
             }
 
