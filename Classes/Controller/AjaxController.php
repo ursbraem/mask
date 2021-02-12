@@ -212,33 +212,17 @@ class AjaxController extends ActionController
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
 
             if ($fieldType->equals(FieldType::TIMESTAMP)) {
-                $format = '';
-                switch ($newField['tca']['config.eval']) {
-                    case 'date':
-                        $format = 'd-m-Y';
-                        break;
-                    case 'datetime':
-                        $format = 'H:i d-m-Y';
-                        break;
-                    case 'time':
-                        $format = 'H:i';
-                        break;
-                    case 'timesec':
-                        $format = 'H:i:s';
-                        break;
+                $default = $newField['tca']['config.default'] ?? false;
+                if ($default) {
+                    $newField['tca']['config.default'] = DateUtility::convertTimestampToDate($newField['tca']['config.eval'], $default);
                 }
-
                 $lower = $newField['tca']['config.range.lower'] ?? false;
                 if ($lower) {
-                    $date = new \DateTime();
-                    $date->setTimestamp($lower);
-                    $newField['tca']['config.range.lower'] = $date->format($format);
+                    $newField['tca']['config.range.lower'] = DateUtility::convertTimestampToDate($newField['tca']['config.eval'], $lower);
                 }
                 $upper = $newField['tca']['config.range.upper'] ?? false;
                 if ($upper) {
-                    $date = new \DateTime();
-                    $date->setTimestamp($newField['tca']['config.range.upper']);
-                    $newField['tca']['config.range.upper'] = $date->format($format);
+                    $newField['tca']['config.range.upper'] = DateUtility::convertTimestampToDate($newField['tca']['config.eval'], $upper);
                 }
             }
 

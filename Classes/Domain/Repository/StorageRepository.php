@@ -313,12 +313,17 @@ class StorageRepository implements SingletonInterface
 
             // Convert range values of timestamp to integers
             if ($isMaskField && $field['name'] === FieldType::TIMESTAMP) {
-                $rangeLower = $fieldAdd['config']['range']['lower'] ?? 0;
+                $default = $fieldAdd['config']['default'] ?? false;
+                if ($default) {
+                    $date = new \DateTime($default);
+                    $fieldAdd['config']['default'] = $date->getTimestamp();
+                }
+                $rangeLower = $fieldAdd['config']['range']['lower'] ?? false;
                 if ($rangeLower) {
                     $date = new \DateTime($rangeLower);
                     $fieldAdd['config']['range']['lower'] = $date->getTimestamp();
                 }
-                $rangeUpper = $fieldAdd['config']['range']['upper'] ?? 0;
+                $rangeUpper = $fieldAdd['config']['range']['upper'] ?? false;
                 if ($rangeUpper) {
                     $date = new \DateTime($rangeUpper);
                     $fieldAdd['config']['range']['upper'] = $date->getTimestamp();

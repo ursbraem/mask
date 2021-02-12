@@ -329,35 +329,17 @@ class TcaCodeGenerator
             // Convert Date and Datetime default and ranges to timestamp
             $dbType = $tcavalue['config']['dbType'] ?? '';
             if (in_array($dbType, ['date', 'datetime'])) {
-                $upper = $tcavalue['config']['range']['upper'] ?? false;
                 $default = $tcavalue['config']['default'] ?? false;
                 if ($default) {
                     $tcavalue['config']['default'] = DateUtility::convertStringToTimestampByDbType($dbType, $default);
                 }
+                $upper = $tcavalue['config']['range']['upper'] ?? false;
                 if ($upper) {
                     $tcavalue['config']['range']['upper'] = DateUtility::convertStringToTimestampByDbType($dbType, $upper);
                 }
                 $lower = $tcavalue['config']['range']['lower'] ?? false;
                 if ($lower) {
                     $tcavalue['config']['range']['lower'] = DateUtility::convertStringToTimestampByDbType($dbType, $lower);
-                }
-            }
-
-            // Convert Timestamp default and ranges to timestamp
-            if (FieldType::cast($formType)->equals('timestamp')) {
-                $config = TcaConverterUtility::convertTcaArrayToFlat($tcavalue['config']);
-                $evalDate = $config['config.eval'];
-                $default = $tcavalue['config']['default'] ?? false;
-                if ($default) {
-                    $tcavalue['config']['default'] = DateUtility::convertStringToTimestampByEvalDate($evalDate, $default);
-                }
-                $upper = $tcavalue['config']['range']['upper'] ?? false;
-                if ($upper) {
-                    $tcavalue['config']['range']['upper'] = DateUtility::convertStringToTimestampByEvalDate($evalDate, $upper);
-                }
-                $lower = $tcavalue['config']['range']['lower'] ?? false;
-                if ($lower) {
-                    $tcavalue['config']['range']['lower'] = DateUtility::convertStringToTimestampByEvalDate($evalDate, $lower);
                 }
             }
 

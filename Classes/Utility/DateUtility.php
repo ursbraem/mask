@@ -49,7 +49,7 @@ class DateUtility
      * @param $dbType
      * @return string
      */
-    protected static function getFormatByDbType($dbType): string
+    protected static function getFormatByDbType(string $dbType): string
     {
         return ($dbType === 'date') ? 'd-m-Y' : 'H:i d-m-Y';
     }
@@ -59,7 +59,7 @@ class DateUtility
      * @param $dateString
      * @return int
      */
-    public static function convertStringToTimestampByDbType($dbType, $dateString): int
+    public static function convertStringToTimestampByDbType(string $dbType, string $dateString): int
     {
         $format = self::getFormatByDbType($dbType);
         if (DateUtility::isOldDateFormat($dateString)) {
@@ -72,23 +72,23 @@ class DateUtility
         return $date->getTimestamp();
     }
 
-    /**
-     * @param $evalDate
-     * @param $dateString
-     * @return int
-     */
-    public static function convertStringToTimestampByEvalDate($evalDate, $dateString): int
+    public static function convertTimestampToDate(string $evalDate, int $timestamp): string
     {
-        if ($evalDate == 'datetime') {
-            $format = 'H:i d-m-Y';
-        } elseif ($evalDate == 'time') {
-            $format = 'H:i';
-        } elseif ($evalDate == 'timesec') {
-            $format = 'H:i:s';
-        } else {
-            $format = 'd-m-Y';
+        $format = 'd-m-Y';
+        switch ($evalDate) {
+            case 'datetime':
+                $format = 'H:i d-m-Y';
+                break;
+            case 'time':
+                $format = 'H:i';
+                break;
+            case 'timesec':
+                $format = 'H:i:s';
+                break;
         }
-        $date = \DateTime::createFromFormat($format, $dateString);
-        return $date->getTimestamp();
+
+        $date = new \DateTime();
+        $date->setTimestamp($timestamp);
+        return $date->format($format);
     }
 }
