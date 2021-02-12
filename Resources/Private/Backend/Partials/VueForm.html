@@ -4,7 +4,7 @@
             <p>
                 This field might cause problems with timezone conversions.<br>
                 If you want to make sure your date is displayed as entered, we recommend using the <b>Timestamp</b> field.<br>
-                Read this for more technical insight: <a href="https://github.com/Gernott/mask/issues/234#issuecomment-653574022" target="_blank">Date and DateTime saves wrong date #234</a>
+                Read this for more technical insight: <a href="https://github.com/gernott/mask/issues/234#issuecomment-653574022" target="_blank">Date and DateTime saves wrong date #234</a>
             </p>
         </f:be.infobox>
     </div>
@@ -44,7 +44,7 @@
                         <div v-if="keyFieldVisible" :class="['form-group', 'col-sm-6', {'has-error': activeFieldHasKeyError}]">
                             <f:render partial="General/VueKey"/>
                         </div>
-                        <div v-if="maskFieldGeneralTabOpen" class="form-group col-sm-6">
+                        <div v-if="maskFieldGeneralTabOpen" :class="['form-group', 'col-sm-6', {'has-error': activeTabHasEmptyLabel}]">
                             <f:render partial="General/VueLabel"/>
                         </div>
                     </div>

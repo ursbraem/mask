@@ -56,6 +56,7 @@ define([
           elementKey: false,
           elementLabel: false,
           emptyKeyFields: [],
+          emptyTabLabels: [],
           emptyGroupAllowedFields: [],
           emptyRadioItems: [],
           existingFieldKeyFields: []
@@ -477,6 +478,7 @@ define([
           elementKey: false,
           elementLabel: false,
           emptyKeyFields: [],
+          emptyTabLabels: [],
           emptyGroupAllowedFields: [],
           emptyRadioItems: [],
           existingFieldKeyFields: []
@@ -487,6 +489,9 @@ define([
           return false;
         }
         if (this.fieldErrors.emptyKeyFields.includes(field)) {
+          return true;
+        }
+        if (this.fieldErrors.emptyTabLabels.includes(field)) {
           return true;
         }
         if (this.fieldErrors.existingFieldKeyFields.includes(field)) {
@@ -505,16 +510,19 @@ define([
         this.fieldErrors.elementLabel = this.element.label === '';
 
         this.fieldErrors.emptyKeyFields = [];
+        this.fieldErrors.emptyTabLabels = [];
         this.fieldErrors.emptyGroupAllowedFields = [];
         this.fieldErrors.emptyRadioItems = [];
 
         this.checkFieldKeyIsEmpty(this.fields);
+        this.checkTabLabelIsEmpty(this.fields);
         this.checkEmptyGroupAllowed(this.fields);
         this.checkEmptyRadioItems(this.fields);
       },
       getErrorFields: function () {
         return [
           this.fieldErrors.emptyKeyFields,
+          this.fieldErrors.emptyTabLabels,
           this.fieldErrors.emptyGroupAllowedFields,
           this.fieldErrors.emptyRadioItems
         ];
@@ -526,6 +534,17 @@ define([
           }
           if (item.fields.length > 0) {
             mask.checkFieldKeyIsEmpty(item.fields);
+          }
+          return true;
+        });
+      },
+      checkTabLabelIsEmpty: function (fields) {
+        fields.every(function (item) {
+          if (item.name === 'tab' && item.label === '') {
+            mask.fieldErrors.emptyTabLabels.push(item);
+          }
+          if (item.fields.length > 0) {
+            mask.checkTabLabelIsEmpty(item.fields);
           }
           return true;
         });
@@ -694,6 +713,7 @@ define([
       },
       hasFieldErrors: function () {
         return this.fieldErrors.emptyKeyFields.length > 0
+          || this.fieldErrors.emptyTabLabels.length > 0
           || this.fieldErrors.emptyGroupAllowedFields.length > 0
           || this.fieldErrors.emptyRadioItems.length > 0
           || this.fieldErrors.existingFieldKeyFields.length > 0;
@@ -771,6 +791,9 @@ define([
       activeFieldHasKeyError: function () {
           return this.fieldErrors.emptyKeyFields.includes(this.global.activeField)
           || this.fieldErrors.existingFieldKeyFields.includes(this.global.activeField);
+      },
+      activeTabHasEmptyLabel: function () {
+        return this.fieldErrors.emptyTabLabels.includes(this.global.activeField);
       },
       currentFieldKeys: function () {
         return this.getFieldKeys(this.fields);
