@@ -593,14 +593,14 @@ define([
         const parent = this.global.activeField.parent;
         let fields = this.fields;
         let parentName = '';
-        if (typeof parent !== 'undefined') {
+        if (typeof parent === 'undefined' || parent.length === 0) {
+          newField.parent = {};
+        } else {
           parentName = parent.name;
           newField.parent = parent;
           if (typeof parent.fields !== 'undefined') {
             fields = parent.fields;
           }
-        } else {
-          newField.parent = {};
         }
         if (this.validateMove(parentName, newField)) {
           const index = fields.indexOf(this.global.activeField) + 1;
