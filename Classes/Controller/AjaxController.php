@@ -289,15 +289,18 @@ class AjaxController extends ActionController
     {
         $params = $request->getQueryParams();
         $key = $params['key'];
-        $newField = $params['newField'];
+        $newField = (int)$params['newField'];
         $elementKey = '';
-        if (!$newField) {
+        if ($newField === 0) {
             $elementKey = $params['elementKey'];
         }
         $type = $this->fieldHelper->getFieldType($key, $elementKey);
         $multiUseElements = $this->fieldHelper->getStorageRepository()->getElementsWhichUseField($key, $type);
         $json['multiUseElements'] = [];
         foreach ($multiUseElements as $element) {
+            if ($element['key'] === $params['elementKey']) {
+                continue;
+            }
             $json['multiUseElements'][] = $element['key'];
         }
         return new JsonResponse($json);

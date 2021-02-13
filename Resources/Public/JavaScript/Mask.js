@@ -292,7 +292,7 @@ define([
             );
           if (!mask.multiUseElements[this.global.activeField.key]) {
             new AjaxRequest(TYPO3.settings.ajaxUrls.mask_multiuse)
-              .withQueryArguments({key: this.global.activeField.key, elementKey: this.element.key, newField: this.global.activeField.newField})
+              .withQueryArguments({key: this.global.activeField.key, elementKey: this.element.key, newField: this.global.activeField.newField ? 1 : 0})
               .get()
               .then(
                 async function (response) {
