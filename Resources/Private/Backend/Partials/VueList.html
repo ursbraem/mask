@@ -1,2 +1,86 @@
-<div @click="openNew('tt_content')">New element</div>
-<div v-for="(item, key) in elements" @click="openEdit('tt_content', item)">{{ item.label }}</div>
+<div class="mask-list__header">
+    <div class="mask-list__logo-wrap">
+        <f:image src="EXT:mask/Resources/Public/Icons/Extension.svg" class="mask-list__logo"/> <span class="mask-list__label">Mask</span>
+    </div>
+    <div class="mask-list__docs">
+        <a href="https://docs.typo3.org/p/mask/mask/master/en-us/" target="_blank">Documentation <i class="fa fa-book"></i></a>
+    </div>
+    <div class="mask-list__settings-wrap">
+        <mask:configureExtension>
+            <div class="mask-list__settings-label">Settings</div>
+            <core:icon identifier="actions-system-extension-configure" size="default"/>
+        </mask:configureExtension>
+    </div>
+</div>
+<div class="mask-elements">
+    <div class="mask-elements__column mask-elements__column--elements">
+        <div class="mask-elements__header">
+            <div class="mask-elements__header-icon-wrap">
+                <core:icon identifier="mimetypes-x-content-text" size="default"/>
+                <div class="mask-elements__header-icon-label">
+                    <f:translate key="tx_mask.all.contentelements"/>
+                </div>
+            </div>
+            <div @click="openNew('tt_content')" class="mask-elements__header-new btn btn-success"><i class="fa fa-plus"></i> <f:translate key="tx_mask.all.create_content_element"/></div>
+        </div>
+        <div class="mask-elements__table-wrap">
+            <table class="table mask-elements__table">
+                <tr v-for="(item, key) in elements">
+                    <td>
+                        <div class="mask-elements__element-name">
+                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon"></div> {{ item.label }}
+                        </div>
+                    </td>
+                    <td><code>[{{ key }}]</code></td>
+                    <td>
+                        <div class="mask-elements__description">{{ item.description }}</div>
+                    </td>
+                    <td>
+                        <a class="btn btn-default" @click="openEdit('tt_content', item)">
+                            <core:icon identifier="actions-open"/>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="mask-elements__column mask-elements__column--templates">
+        <div class="mask-elements__header">
+            <div class="mask-elements__header-icon-wrap">
+                <core:icon identifier="mimetypes-x-backend_layout" size="default"/>
+                <div class="mask-elements__header-icon-label">
+                    <f:translate key="tx_mask.all.pagetemplates"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="mask-footer">
+    <div class="mask-footer__item mask-footer__item--first">Mask v7.0.0</div>
+    <div class="mask-footer__separator"></div>
+    <div class="mask-footer__item"><a href="https://github.com/gernott/mask/issues/" target="_blank"><i class="fa fa-bug"></i> Report a bug</a></div>
+    <div class="mask-footer__separator"></div>
+    <div class="mask-footer__item"><a href="https://typo3.org/community/meet/chat-slack/" target="_blank"><i class="fa fa-slack"></i> Get help on slack <code>#ext-mask</code></a></div>
+    <div class="mask-footer__separator"></div>
+    <div class="mask-footer__item"><a href="https://mask.webprofil.at/featurelist/overview/" target="_blank"><i class="fa fa-lightbulb-o"></i> Suggest a new feature</a></div>
+    <div class="mask-footer__separator"></div>
+    <div class="mask-footer__item">
+        <a href="https://mask.webprofil.at/mask/sponsoring/" class="btn btn-mask" target="_blank"><i class="fa fa-dollar"></i> Become a sponsor of mask</a>
+    </div>
+    <div class="mask-footer__separator"></div>
+    <div class="mask-footer__item">
+        <a href="https://tvconverter.webprofil.at/" target="_blank" class="templa">
+            <div class="templa__wrap">
+                <f:image src="EXT:mask/Resources/Public/Images/Logo_TVconverter.png" width="85" class="templa__image"/>
+                <div>
+                    <div class="templa__header">TemplaVoila to Mask</div>
+                    <p class="templa__text">Convert the entire content of your old project to Mask.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="mask-footer__separator"></div>
+    <div class="mask-footer__item mask-footer__item--last">
+        developed with <i class="fa fa-heart mask-heart"></i> by <a href="https://www.webprofil.at/" target="_blank">Webprofil</a> & <a href="https://www.nikita-hovratov.de" target="_blank">Nikita Hovratov</a>
+    </div>
+</footer>

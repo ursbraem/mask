@@ -1,6 +1,7 @@
 @import "libs/font-icon-picker";
 @import "libs/font-icon-picker-theme";
 
+@import 'variables';
 @import "button";
 @import "tabcell1";
 @import "tabcell2";
@@ -14,47 +15,54 @@
 @import "footer";
 @import "tooltip";
 @import "splashscreen";
+@import "list";
+@import "elements";
+@import "templa";
 
 #mask {
-    padding: 0 15px;
+  padding: 0 15px;
 
-    @media screen and (min-width: 1200px) {
-        padding: 0;
-    }
+  @media screen and (min-width: 1200px) {
+    padding: 0;
+  }
 }
 
 @media screen and (min-width: 1200px) {
-    .bench {
-        height: calc(100vh);
-        margin: 0;
-        overflow: hidden;
-    }
+  .bench {
+    height: calc(100vh);
+    margin: 0;
+    overflow: hidden;
+  }
 }
 
 .fa.fa-plus-circle {
-    color: #4c7e3a;
+  color: #4c7e3a;
 }
 
 .field-description {
-    display: flex;
-    align-items: flex-end;
+  display: flex;
+  align-items: flex-end;
 }
 
 .icons-selector i {
-    font-family: FontAwesome, sans-serif;
+  font-family: FontAwesome, sans-serif;
 }
 
 #meta_icon {
-    position: absolute !important;
+  position: absolute !important;
 }
 
 #meta_color {
-    min-width: 0;
+  min-width: 0;
 }
 
 .tx_mask_field {
-    .callout {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
+  .callout {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.mask-heart {
+  color: $mask;
 }

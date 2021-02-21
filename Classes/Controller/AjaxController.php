@@ -139,6 +139,7 @@ class AjaxController extends ActionController
                 'key' => $element['key'],
                 'label' => $element['label'],
                 'shortLabel' => $element['shortLabel'],
+                'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'])->render() : ''
             ];
         }
         $json['elements'] = $elements;

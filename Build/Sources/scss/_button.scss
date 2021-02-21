@@ -1,102 +1,113 @@
 .tx_mask_btn,
 .tx_mask_fieldtypes {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .tx_mask_btn {
-    position: relative;
-    background: #f2f2f2;
-    cursor: move;
-    min-height: 37px;
-    margin-bottom: 4px;
+  position: relative;
+  background: #f2f2f2;
+  cursor: move;
+  min-height: 37px;
+  margin-bottom: 4px;
+  width: 100%;
+
+  &.has-error:before {
+    font-family: FontAwesome;
+    font-size: 15px;
+    text-align: center;
+    content: "\f06a";
+    color: #c83c3c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -2px;
+    left: -3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
+  &.ghost {
+    opacity: 0.5;
+  }
+
+  &_row {
+    display: flex;
+    align-items: center;
+
+    img {
+      vertical-align: bottom;
+    }
+
+    .tx_mask_btn_img img {
+      width: 37px;
+      height: auto;
+    }
+
+    .tx_mask_btn_text {
+      padding-left: 13px;
+    }
+
+    .tx_mask_btn_actions {
+      padding-right: 10px;
+      text-align: right;
+      width: 69px;
+      margin-left: auto;
+    }
+  }
+
+  .dragtarget {
+    display: block;
+    margin: 0;
+    padding: 0;
     width: 100%;
-
-    &.has-error:before {
-        font-family: FontAwesome;
-        font-size: 15px;
-        text-align: center;
-        content: "\f06a";
-        color: #c83c3c;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: -2px;
-        left: -3px;
-        width: 13px;
-        height: 13px;
-        border-radius: 50%;
-        background-color: #fff;
-    }
-
-    &.ghost {
-        opacity: 0.5;
-    }
-
-    &_row {
-        display: flex;
-        align-items: center;
-
-        img {
-            vertical-align: bottom;
-        }
-
-        .tx_mask_btn_img img {
-            width: 37px;
-            height: auto;
-        }
-
-        .tx_mask_btn_text {
-            padding-left: 13px;
-        }
-
-        .tx_mask_btn_actions {
-            padding-right: 10px;
-            text-align: right;
-            width: 69px;
-            margin-left: auto;
-        }
-    }
-
-    .dragtarget {
-        display: block;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        background-color: #fff;
-    }
+    background-color: #fff;
+  }
 }
 
 .tx_mask_btn_row .tx_mask_btn_img img,
 .tx_mask_fieldheader img,
 .icon-module-tools_MaskMask img {
-    border-radius: 2px;
+  border-radius: 2px;
 }
 
 .id_inline {
-    border-bottom: 0 !important;
+  border-bottom: 0 !important;
 
-    > .tx_mask_btn_caption {
-        border-left: 4px solid #9e97d1;
-    }
+  > .tx_mask_btn_caption {
+    border-left: 4px solid #9e97d1;
+  }
 }
 
 .id_palette {
-    border-bottom: 0 !important;
+  border-bottom: 0 !important;
 
-    > .tx_mask_btn_caption {
-        border-left: 4px solid #4e4e4e;
-    }
+  > .tx_mask_btn_caption {
+    border-left: 4px solid #4e4e4e;
+  }
 }
 
 .tx_mask_field_templates li .tx_mask_btn_actions {
-    cursor: pointer;
-    display: none;
+  cursor: pointer;
+  display: none;
 }
 
 .tx_mask_field_templates .tx_mask_btn_row .tx_mask_btn_text {
-    background: #ffffffba;
-    display: none;
+  background: #ffffffba;
+  display: none;
+}
+
+.btn-mask {
+  background-color: $webprofil;
+  border-color: darken($webprofil, 10);
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+    background-color: lighten($webprofil, 5);
+  }
 }

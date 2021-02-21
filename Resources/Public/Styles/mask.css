@@ -380,6 +380,14 @@
   background: #ffffffba;
   display: none; }
 
+.btn-mask {
+  background-color: #cb002d;
+  border-color: #980022;
+  color: #fff; }
+  .btn-mask:hover {
+    color: #fff;
+    background-color: #e50033; }
+
 .tx_mask_tabcell1 {
   background: #f2f2f2;
   padding-bottom: 20px; }
@@ -527,153 +535,36 @@
 .tx_mask_field_templates .mask_tooltip:hover .tooltiptext {
   visibility: visible; }
 
-.imprint {
-  color: #797979;
-  filter: saturate(0);
-  font-family: 'Source Sans Pro', sans-serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  line-height: 11px;
-  text-align: right;
-  margin-bottom: 50px; }
-
-.card-container.sponsor-card-container {
-  margin-top: 70px; }
-
-.list-headline {
-  margin-top: 30px; }
-
-img.brand-logo {
-  width: 100px; }
-
-.mask_issues_container {
-  float: right !important; }
-
-.mask_issues {
-  background: #DDD; }
-
-.mask_issues_img {
-  height: 30px;
-  padding: 1px 10px 1px 1px;
-  width: 30px; }
-
-.mask_issues_text {
-  font-weight: 700;
-  margin-left: 10px; }
-
-.mask_issues_link {
-  padding: 0 !important; }
-
-.mask_footer_img_0,
-.mask_footer_img_1 {
-  max-width: 280px; }
-
-.mask_footer_h_spacer {
-  height: 0;
-  max-width: 2%; }
-
-.mask_footer_h_spacer_2 {
-  max-width: 14%; }
-
-.mask_footer_spacer {
-  margin-top: 1%; }
-
-.mask_footer_spacer_2 {
-  margin-right: 20px; }
-
-.mask_footer_spacer_top {
-  width: auto; }
-
-.mask_footer_spacer_3 {
-  margin-left: -6%; }
-
-.mask_footer_container {
+.mask-footer {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
   display: flex;
-  flex-direction: row;
-  padding-bottom: 1%; }
-
-.mask_footer_heading {
-  color: #CB0036;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 10px;
-  margin-top: 0; }
-
-.mask_footer_btn {
-  background: #CB0036;
-  border: none;
-  color: #FFF;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 28px;
-  min-width: 140px;
-  outline: none;
-  text-transform: uppercase; }
-
-.mask_footer_no_hover:hover {
-  text-decoration: none !important; }
-
-.mask_footer_img_container {
-  max-width: 50%; }
-
-.mask_footer_img_1 {
-  height: auto;
-  padding-left: 2%;
-  padding-right: 5%;
-  padding-top: 2.5%;
-  width: 63%; }
-
-.mask_footer_img_2 {
-  height: auto;
-  margin-left: 1%;
-  margin-top: 2%;
-  width: 35%; }
-
-.mask_footer_tvc_text {
-  margin-left: 23%;
-  position: relative;
-  top: 7.5%; }
-
-.mask_footer_red {
-  color: #CB0036; }
-
-.mask_footer_blue {
-  color: #5F9FD7; }
-
-.mask_footer_img_0 {
-  height: auto;
-  max-width: 280px;
-  padding: 4% 5% 2% 2%;
-  width: 90%; }
-
-.mask_footer_link {
-  float: right; }
-
-@media screen and (max-width: 1200px) {
-  .mask_footer_spacer_2 {
-    margin-right: 0 !important; }
-  .mask_footer_img_2 {
-    width: 24%; }
-  .mask_footer_tvc {
-    margin-left: -5.25%; }
-  .mask_footer_img_container {
-    max-width: 460px;
-    min-width: 100px; }
-  .mask_footer_img_0, .mask_footer_img_1 {
-    max-width: 50%; } }
-
-@media screen and (max-width: 800px) {
-  .mask_footer_img_container {
-    max-width: 50%; }
-  .mask_footer_img_2 {
-    max-width: 150px;
-    width: 45%; }
-  .mask_footer_mask, .mask_footer_tvc {
-    margin: 0 !important;
-    min-width: 300px; }
-  .mask_footer_img_0, .mask_footer_img_1 {
-    max-width: 330px;
-    width: 90%; } }
+  justify-content: space-between;
+  align-items: center;
+  height: 45px;
+  margin-top: auto;
+  background-color: #fafafa;
+  padding: 0 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3); }
+  .mask-footer a:not(.btn):hover, .mask-footer a:not(.btn):focus {
+    text-decoration: none;
+    color: #D4372F; }
+  .mask-footer__item {
+    flex-grow: 1;
+    position: relative;
+    text-align: center; }
+    .mask-footer__item--first {
+      text-align: left; }
+    .mask-footer__item--last {
+      text-align: right; }
+  .mask-footer__separator {
+    height: 25px;
+    width: 1px;
+    background-color: #000;
+    opacity: 0.3;
+    margin: 0 10px; }
 
 .mask_tooltip {
   position: relative; }
@@ -718,6 +609,89 @@ img.brand-logo {
 .fade-leave-to {
   opacity: 0; }
 
+.mask-list {
+  padding: 10px;
+  height: 100vh;
+  overflow: hidden;
+  position: relative; }
+  .mask-list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fafafa; }
+    .mask-list__header a:hover,
+    .mask-list__header a:focus {
+      color: #D4372F;
+      text-decoration: none; }
+  .mask-list__logo-wrap {
+    display: flex;
+    align-items: center; }
+  .mask-list__logo {
+    display: block;
+    width: 50px;
+    height: auto;
+    margin-right: 10px; }
+  .mask-list__label {
+    font-size: 20px; }
+  .mask-list__docs {
+    margin-left: auto;
+    margin-right: 20px;
+    font-size: 20px; }
+  .mask-list__settings-wrap {
+    padding-right: 10px; }
+    .mask-list__settings-wrap a {
+      display: flex;
+      align-items: center; }
+  .mask-list__settings-label {
+    font-size: 20px;
+    margin-right: 10px; }
+
+.mask-elements {
+  display: flex; }
+  .mask-elements__column {
+    border: 1px solid #fafafa;
+    padding: 0 10px; }
+    .mask-elements__column--elements {
+      width: 66.66667%; }
+    .mask-elements__column--templates {
+      width: 33.33333%; }
+  .mask-elements__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 45px; }
+  .mask-elements__header-icon-wrap {
+    display: flex;
+    align-items: center; }
+  .mask-elements__header-icon-label {
+    font-size: 18px;
+    margin-left: 10px; }
+  .mask-elements__table-wrap {
+    height: 80vh;
+    overflow-y: scroll; }
+  .mask-elements__table tr {
+    height: 45px; }
+  .mask-elements__element-name {
+    display: flex;
+    align-items: center; }
+  .mask-elements__element-name-icon {
+    margin-right: 10px; }
+  .mask-elements__description {
+    font-size: 11px;
+    line-height: 1.2; }
+
+.templa {
+  text-align: left; }
+  .templa__wrap {
+    display: flex;
+    align-items: center; }
+  .templa__image {
+    margin-right: 10px; }
+  .templa__text {
+    font-size: 11px;
+    line-height: 1.2;
+    margin-bottom: 0; }
+
 #mask {
   padding: 0 15px; }
   @media screen and (min-width: 1200px) {
@@ -749,3 +723,6 @@ img.brand-logo {
 .tx_mask_field .callout {
   margin-top: 0;
   margin-bottom: 0; }
+
+.mask-heart {
+  color: #D4372F; }

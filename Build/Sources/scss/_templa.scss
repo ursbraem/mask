@@ -1,0 +1,18 @@
+.templa {
+  text-align: left;
+
+  &__wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  &__image {
+    margin-right: 10px;
+  }
+
+  &__text {
+    font-size: 11px;
+    line-height: 1.2;
+    margin-bottom: 0;
+  }
+}
