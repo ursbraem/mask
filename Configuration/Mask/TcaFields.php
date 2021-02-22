@@ -1,6 +1,6 @@
 <?php
 
-use MASK\Mask\DataStructure\FieldType;
+use MASK\Mask\Enumeration\FieldType;
 
 return [
     'config.default' => [

@@ -1,6 +1,6 @@
 <?php
 
-use MASK\Mask\DataStructure\Tab;
+use MASK\Mask\Enumeration\Tab;
 
 return [
     Tab::GENERAL => [

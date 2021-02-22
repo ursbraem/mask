@@ -45,7 +45,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['convertTempl
 (function () {
     // Register Icons needed in the backend module
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-    foreach (\MASK\Mask\DataStructure\FieldType::getConstants() as $maskIcon) {
+    foreach (\MASK\Mask\Enumeration\FieldType::getConstants() as $maskIcon) {
         $iconRegistry->registerIcon(
             'mask-fieldtype-' . $maskIcon,
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
@@ -68,7 +68,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['convertTempl
         }
         foreach ($configuration['pages']['tca'] as $fieldKey => $value) {
             $formType = $storageRepository->getFormType($fieldKey, '', 'pages');
-            if (!(\MASK\Mask\DataStructure\FieldType::cast($formType)->isGroupingField())) {
+            if (!(\MASK\Mask\Enumeration\FieldType::cast($formType)->isGroupingField())) {
                 // Add addRootLineFields for all page fields
                 $rootlineFields[] = $fieldKey;
             }

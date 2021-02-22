@@ -15,7 +15,7 @@
 
 namespace Domain\Repository;
 
-use MASK\Mask\DataStructure\FieldType;
+use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use TYPO3\TestingFramework\Core\BaseTestCase;
 

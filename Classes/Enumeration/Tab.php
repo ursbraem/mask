@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace MASK\Mask\DataStructure;
+namespace MASK\Mask\Enumeration;
 
 use TYPO3\CMS\Core\Type\Enumeration;
 

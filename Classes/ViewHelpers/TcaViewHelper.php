@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace MASK\Mask\ViewHelpers;
 
-use MASK\Mask\DataStructure\FieldType;
+use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Helper\FieldHelper;
 use MASK\Mask\Utility\GeneralUtility;
