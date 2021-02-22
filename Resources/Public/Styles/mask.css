@@ -565,6 +565,11 @@
     background-color: #000;
     opacity: 0.3;
     margin: 0 10px; }
+  .mask-footer__version {
+    display: flex;
+    align-items: center; }
+    .mask-footer__version img {
+      margin-right: 5px; }
 
 .mask_tooltip {
   position: relative; }

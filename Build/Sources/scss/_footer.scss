@@ -41,4 +41,13 @@
     opacity: 0.3;
     margin: 0 10px;
   }
+
+  &__version {
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 5px;
+    }
+  }
 }
