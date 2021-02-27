@@ -19,14 +19,6 @@
 @import "elements";
 @import "templa";
 
-#mask {
-  padding: 0 15px;
-
-  @media screen and (min-width: 1200px) {
-    padding: 0;
-  }
-}
-
 @media screen and (min-width: 1200px) {
   .bench {
     height: calc(100vh);

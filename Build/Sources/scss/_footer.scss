@@ -1,16 +1,17 @@
 .mask-footer {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 45px;
-  margin-top: auto;
-  background-color: $bg-light;
-  padding: 0 10px;
-  border-top: 1px solid rgba(#000, 0.3);
+  background-color: $bg-medium;
+  padding: 10px;
+  margin-top: 10px;
+
+  @media screen and (min-width: $bp-desktop) {
+    display: flex;
+    height: 45px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding: 0 10px;
+  }
 
   a:not(.btn) {
     &:hover,
@@ -24,27 +25,43 @@
     flex-grow: 1;
     position: relative;
     text-align: center;
+    margin-bottom: 20px;
+
+    @media screen and (min-width: $bp-desktop) {
+      margin-bottom: 0;
+    }
 
     &--first {
-      text-align: left;
+      @media screen and (min-width: $bp-desktop) {
+        text-align: left;
+      }
     }
 
     &--last {
-      text-align: right;
+      @media screen and (min-width: $bp-desktop) {
+        text-align: right;
+      }
     }
   }
 
   &__separator {
-    height: 25px;
-    width: 1px;
-    background-color: #000;
-    opacity: 0.3;
-    margin: 0 10px;
+    @media screen and (min-width: $bp-desktop) {
+      height: 25px;
+      width: 1px;
+      background-color: #000;
+      opacity: 0.3;
+      margin: 0 10px;
+    }
   }
 
   &__version {
     display: flex;
     align-items: center;
+    justify-content: center;
+
+    @media screen and (min-width: $bp-desktop) {
+      justify-content: flex-start;
+    }
 
     img {
       margin-right: 5px;
