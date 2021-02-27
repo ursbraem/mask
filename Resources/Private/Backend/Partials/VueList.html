@@ -21,7 +21,8 @@
                     <f:translate key="tx_mask.all.contentelements"/>
                 </div>
             </div>
-            <div @click="openNew('tt_content')" class="mask-elements__header-new btn btn-success"><i class="fa fa-plus"></i> <f:translate key="tx_mask.all.create_content_element"/></div>
+            <div v-if="missingFilesOrFolders" @click="fixMissing" class="mask-elements__missing btn btn-warning"><i class="fa fa-wrench"></i> <f:translate key="tx_mask.all.createmissingfolders"/></div>
+            <div @click="openNew('tt_content')" class="btn btn-success"><i class="fa fa-plus"></i> <f:translate key="tx_mask.all.create_content_element"/></div>
         </div>
         <div class="mask-elements__table-wrap">
             <table class="table mask-elements__table">

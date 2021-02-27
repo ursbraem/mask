@@ -71,7 +71,8 @@ define([
           maskPrefix: 'tx_mask_',
           deletedFields: [],
         },
-        loaded: false
+        loaded: false,
+        missingFilesOrFolders: false
       }
     },
     mounted: function () {
@@ -119,13 +120,7 @@ define([
         );
 
       // fetch elements
-      const elementsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements)).get()
-        .then(
-          async function (response) {
-            const result = await response.resolve();
-            mask.elements = result.elements;
-          }
-        );
+      const elementsRequest = this.loadElements();
 
       // fetch fontawesome icons
       const iconsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons)).get()
@@ -134,6 +129,15 @@ define([
             mask.faIcons = await response.resolve();
           }
         );
+
+      // fetch possible missing files or folders
+      const missingFilesRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_missing)).get()
+          .then(
+              async function (response) {
+                const missing = await response.resolve();
+                mask.missingFilesOrFolders = missing.missing;
+              }
+          );
 
       const deleteIconRequest = Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
         mask.icons.delete = icon;
@@ -155,6 +159,7 @@ define([
       promises.push(deleteIconRequest);
       promises.push(moveIconRequest);
       promises.push(dateIconRequest);
+      promises.push(missingFilesRequest);
 
       Promise.all(promises).then(() => {
         mask.loaded = true;
@@ -278,6 +283,15 @@ define([
           });
         });
         return postFields;
+      },
+      loadElements: function () {
+        return (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements)).get()
+            .then(
+                async function (response) {
+                  const result = await response.resolve();
+                  mask.elements = result.elements;
+                }
+            );
       },
       loadField: function () {
         if (this.isExistingMaskField) {
@@ -464,6 +478,21 @@ define([
               });
             }
           );
+      },
+      fixMissing() {
+        (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_fix_missing)).get()
+          .then(
+            async function (response) {
+              const fixed = await response.resolve();
+              if (fixed['success']) {
+                Notification.success(mask.language.missingCreated);
+                mask.missingFilesOrFolders = false;
+                mask.loadElements();
+              } else {
+                Notification.error('Something went wrong while trying to create missing files.');
+              }
+            }
+          )
       },
       resetState: function () {
         this.type = '';

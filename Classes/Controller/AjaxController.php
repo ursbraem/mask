@@ -91,6 +91,21 @@ class AjaxController extends ActionController
      */
     protected $flashMessageQueue;
 
+    /**
+     * $pathKeys
+     *
+     * @var array
+     */
+    protected static $folderPathKeys = [
+        'content',
+        'layouts',
+        'partials',
+        'backend',
+        'layouts_backend',
+        'partials_backend',
+        'preview'
+    ];
+
     public function __construct(
         StorageRepository $storageRepository,
         FieldHelper $fieldHelper,
@@ -107,6 +122,49 @@ class AjaxController extends ActionController
         $this->settingsService = $settingsService;
         $this->flashMessageQueue = new FlashMessageQueue('mask');
         $this->extSettings = $this->settingsService->get();
+    }
+
+    public function missingFilesOrFolders(ServerRequestInterface $request): Response
+    {
+        $json['missing'] = 0;
+        foreach (self::$folderPathKeys as $key) {
+            if (!file_exists(MaskUtility::getFileAbsFileName($this->extSettings[$key]))) {
+                $json['missing'] = 1;
+                break;
+            }
+        }
+
+        if (!$json['missing']) {
+            $json['missing'] = !file_exists(MaskUtility::getFileAbsFileName($this->extSettings['json']));
+        }
+
+        if (!$json['missing']) {
+            $storages = $this->storageRepository->load();
+            foreach ($storages['tt_content']['elements'] ?? [] as $element) {
+                if (!$this->checkTemplate($element['key'])) {
+                    $json['missing'] = 1;
+                    break;
+                }
+            }
+        }
+        return new JsonResponse($json);
+    }
+
+    public function fixMissingFilesOrFolders(ServerRequestInterface $request): Response
+    {
+        $success = true;
+        foreach (self::$folderPathKeys as $key) {
+            $success = $success && $this->createFolder($this->extSettings[$key]);
+        }
+        $success = $success && $this->createMaskJsonFile($this->extSettings['json']);
+
+        $storages = $this->storageRepository->load();
+        foreach ($storages['tt_content']['elements'] ?? [] as $element) {
+            if (!$this->checkTemplate($element['key'])) {
+                $this->createHtml($element['key']);
+            }
+        }
+        return new JsonResponse(['success' => $success]);
     }
 
     public function save(ServerRequestInterface $request): Response
@@ -496,6 +554,7 @@ class AjaxController extends ActionController
         $language['ok'] = LocalizationUtility::translate('tx_mask.ok', 'mask');
         $language['alert'] = LocalizationUtility::translate('tx_mask.alert', 'mask');
         $language['fieldsMissing'] = LocalizationUtility::translate('tx_mask.fieldsMissing', 'mask');
+        $language['missingCreated'] = LocalizationUtility::translate('tx_mask.all.createdmissingfolders', 'mask');
 
         return new JsonResponse($language);
     }
@@ -684,7 +743,51 @@ class AjaxController extends ActionController
      */
     protected function checkTemplate($key): bool
     {
-        $templatePath = MaskUtility::getTemplatePath($this->settingsService->get(), $key);
+        $templatePath = $this->getTemplate($key);
         return file_exists($templatePath) && is_file($templatePath);
+    }
+
+    protected function getTemplate($key): string
+    {
+        return  MaskUtility::getTemplatePath($this->settingsService->get(), $key);
+    }
+
+    /**
+     * @param $path
+     * @return bool
+     */
+    protected function createFolder($path): bool
+    {
+        $success = true;
+        $path = MaskUtility::getFileAbsFileName($path);
+        if (!file_exists($path)) {
+            $success = mkdir(
+                $path,
+                octdec($GLOBALS['TYPO3_CONF_VARS']['SYS']['folderCreateMask']),
+                true
+            );
+        }
+        return $success;
+    }
+
+    /**
+     * @param $path
+     * @return bool
+     */
+    protected function createMaskJsonFile($path): bool
+    {
+        $success = true;
+        $path = MaskUtility::getFileAbsFileName($path);
+        if (!file_exists($path)) {
+            $success = $this->createFolder(dirname($path));
+            $this->storageRepository->write([]);
+        }
+        return $success;
+    }
+
+    protected function createHtml($key)
+    {
+        $html = $this->htmlCodeGenerator->generateHtml($key, 'tt_content');
+        $this->saveHtml($key, $html);
     }
 }

@@ -62,5 +62,13 @@ return [
     'mask_multiuse' => [
         'path' => '/mask/multiuse',
         'target' => AjaxController::class . '::multiuse'
+    ],
+    'mask_missing' => [
+        'path' => '/mask/missing',
+        'target' => AjaxController::class . '::missingFilesOrFolders'
+    ],
+    'mask_fix_missing' => [
+        'path' => '/mask/fixmissing',
+        'target' => AjaxController::class . '::fixMissingFilesOrFolders'
     ]
 ];

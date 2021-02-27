@@ -758,6 +758,10 @@
   font-size: 11px;
   line-height: 1.2; }
 
+.mask-elements__missing {
+  margin-left: auto;
+  margin-right: 10px; }
+
 .templa {
   text-align: left; }
   .templa__wrap {
