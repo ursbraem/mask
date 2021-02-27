@@ -28,10 +28,10 @@
                 <tr v-for="(item, key) in elements">
                     <td>
                         <div class="mask-elements__element-name">
-                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon"></div> {{ item.label }}
+                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon"></div><span>{{ item.label }}<br><code>[{{ key }}]</code></span>
                         </div>
                     </td>
-                    <td><code>[{{ key }}]</code></td>
+                    <td></td>
                     <td>
                         <div class="mask-elements__description">{{ item.description }}</div>
                     </td>
