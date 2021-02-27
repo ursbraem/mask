@@ -722,11 +722,34 @@
   overflow-y: scroll; }
 
 .mask-elements__table tr {
-  height: 45px; }
+  height: 45px;
+  position: relative; }
+  .mask-elements__table tr.has-warning:after {
+    font-family: FontAwesome;
+    font-size: 15px;
+    text-align: center;
+    content: "\f06a";
+    color: #ffc107;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 3px;
+    left: 1px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #fff;
+    z-index: 1; }
 
 .mask-elements__element-name {
   display: flex;
-  align-items: center; }
+  align-items: center;
+  max-width: 500px; }
+
+.mask-elements__element-name-label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; }
 
 .mask-elements__element-name-icon {
   margin-right: 10px; }

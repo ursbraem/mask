@@ -139,7 +139,8 @@ class AjaxController extends ActionController
                 'key' => $element['key'],
                 'label' => $element['label'],
                 'shortLabel' => $element['shortLabel'],
-                'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'])->render() : ''
+                'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'])->render() : '',
+                'templateExists' => $this->checkTemplate($element['key']) ? 1 : 0
             ];
         }
         $json['elements'] = $elements;
@@ -675,5 +676,15 @@ class AjaxController extends ActionController
     protected function getFlashMessageQueue()
     {
         return $this->flashMessageQueue;
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    protected function checkTemplate($key): bool
+    {
+        $templatePath = MaskUtility::getTemplatePath($this->settingsService->get(), $key);
+        return file_exists($templatePath) && is_file($templatePath);
     }
 }

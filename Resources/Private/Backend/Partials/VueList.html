@@ -25,13 +25,12 @@
         </div>
         <div class="mask-elements__table-wrap">
             <table class="table mask-elements__table">
-                <tr v-for="(item, key) in elements">
+                <tr v-for="(item, key) in elements" :class="{'has-warning': !item.templateExists}">
                     <td>
                         <div class="mask-elements__element-name">
-                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon"></div><span>{{ item.label }}<br><code>[{{ key }}]</code></span>
+                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon"></div><span class="mask-elements__element-name-label">{{ item.label }}<br><code>[{{ key }}]</code></span>
                         </div>
                     </td>
-                    <td></td>
                     <td>
                         <div class="mask-elements__description">{{ item.description }}</div>
                     </td>
