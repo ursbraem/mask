@@ -185,6 +185,24 @@ class AjaxController extends ActionController
         return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
+    /**
+     * Delete a content element
+     *
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    public function delete(ServerRequestInterface $request): Response
+    {
+        $params = $request->getParsedBody();
+        if ($params['purge']) {
+            $this->deleteHtml($params['key']);
+        }
+        $this->storageRepository->persist($this->storageRepository->remove('tt_content', $params['key']));
+        $this->generateAction();
+        $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask'));
+        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
+    }
+
     public function elements(ServerRequestInterface $request): Response
     {
         $storages = $this->storageRepository->load();
@@ -556,6 +574,16 @@ class AjaxController extends ActionController
         $language['fieldsMissing'] = LocalizationUtility::translate('tx_mask.fieldsMissing', 'mask');
         $language['missingCreated'] = LocalizationUtility::translate('tx_mask.all.createdmissingfolders', 'mask');
 
+        $language['deleteModal'] = [
+            'title' => LocalizationUtility::translate('tx_mask.field.titleDelete', 'mask'),
+            'content' => LocalizationUtility::translate('tx_mask.all.confirmdelete', 'mask'),
+            'close' => LocalizationUtility::translate('tx_mask.all.abort', 'mask'),
+            'delete' => LocalizationUtility::translate('tx_mask.all.delete', 'mask'),
+            'purge' => LocalizationUtility::translate('tx_mask.all.purge', 'mask'),
+        ];
+
+        $language['deleted'] = LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask');
+
         return new JsonResponse($language);
     }
 
@@ -789,5 +817,20 @@ class AjaxController extends ActionController
     {
         $html = $this->htmlCodeGenerator->generateHtml($key, 'tt_content');
         $this->saveHtml($key, $html);
+    }
+
+    /**
+     * Deletes Fluid html, if file exists
+     *
+     * @param string $key
+     */
+    protected function deleteHtml($key): void
+    {
+        $paths = [];
+        $paths[] = MaskUtility::getTemplatePath($this->extSettings, $key);
+        $paths[] = MaskUtility::getTemplatePath($this->extSettings, $key, false, $this->extSettings['backend']);
+        foreach ($paths as $path) {
+            @unlink($path);
+        }
     }
 }

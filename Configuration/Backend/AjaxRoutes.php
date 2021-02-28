@@ -70,5 +70,9 @@ return [
     'mask_fix_missing' => [
         'path' => '/mask/fixmissing',
         'target' => AjaxController::class . '::fixMissingFilesOrFolders'
+    ],
+    'mask_delete' => [
+        'path' => '/mask/delete',
+        'target' => AjaxController::class . '::delete'
     ]
 ];

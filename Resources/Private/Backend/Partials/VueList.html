@@ -28,17 +28,22 @@
             <table class="table mask-elements__table">
                 <tr v-for="(item, key) in elements" :class="{'has-warning': !item.templateExists}">
                     <td>
-                        <div class="mask-elements__element-name">
-                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon"></div><span class="mask-elements__element-name-label">{{ item.label }}<br><code>[{{ key }}]</code></span>
+                        <div class="mask-elements__element-name" @click="openEdit('tt_content', item)" :title="item.label">
+                            <div v-html="item.iconMarkup" class="mask-elements__element-name-icon" ></div><span class="mask-elements__element-name-label">{{ item.label }}<br><code>[{{ key }}]</code></span>
                         </div>
                     </td>
                     <td>
                         <div class="mask-elements__description">{{ item.description }}</div>
                     </td>
                     <td>
-                        <a class="btn btn-default" @click="openEdit('tt_content', item)">
-                            <core:icon identifier="actions-open"/>
-                        </a>
+                        <div class="mask-elements__btn-group btn-group">
+                            <a class="btn btn-default" @click="openEdit('tt_content', item)">
+                                <core:icon identifier="actions-open"/>
+                            </a>
+                            <a class="btn btn-default" @click="openDeleteDialog(item)">
+                                <core:icon identifier="actions-edit-delete"/>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             </table>

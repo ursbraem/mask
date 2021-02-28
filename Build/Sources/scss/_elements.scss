@@ -87,6 +87,7 @@
     display: flex;
     align-items: center;
     max-width: 500px;
+    cursor: pointer;
   }
 
   &__element-name-label {
@@ -107,5 +108,9 @@
   &__missing {
     margin-left: auto;
     margin-right: 10px;
+  }
+
+  &__btn-group {
+    display: flex;
   }
 }

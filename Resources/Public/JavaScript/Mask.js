@@ -234,14 +234,7 @@ define([
             .then(
               async function (response) {
                 const res = await response.resolve();
-                Object.keys(res).forEach(function (key) {
-                  const item = res[key];
-                  if (item.severity === 0) {
-                    Notification.success(item.title, item.message);
-                  } else {
-                    Notification.error(item.title, item.message);
-                  }
-                });
+                mask.showMessages(res);
               }
             );
         } else {
@@ -479,6 +472,47 @@ define([
             }
           );
       },
+      deleteElement: function (item, purge) {
+        new AjaxRequest(TYPO3.settings.ajaxUrls.mask_delete).post({key: item.key, purge: purge})
+            .then(
+                async function (response) {
+                  const res = await response.resolve();
+                  mask.showMessages(res);
+                  mask.loadElements();
+                }
+            );
+      },
+      openDeleteDialog(item) {
+        Modal.confirm(
+            this.language.deleteModal.title,
+            this.language.deleteModal.content,
+            Severity.warning,
+            [
+              {
+                text: this.language.deleteModal.purge,
+                btnClass: 'btn-danger',
+                trigger: function () {
+                  Modal.dismiss();
+                  mask.deleteElement(item, 1);
+                }
+              },
+              {
+                text: this.language.deleteModal.close,
+                trigger: function () {
+                  Modal.dismiss();
+                }
+              },
+              {
+                text: this.language.deleteModal.delete,
+                active: true,
+                btnClass: 'btn-warning',
+                trigger: function () {
+                  Modal.dismiss();
+                  mask.deleteElement(item, 0);
+                }
+              }
+            ]);
+      },
       fixMissing() {
         (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_fix_missing)).get()
           .then(
@@ -493,6 +527,16 @@ define([
               }
             }
           )
+      },
+      showMessages: function (res) {
+        Object.keys(res).forEach(function (key) {
+          const item = res[key];
+          if (item.severity === 0) {
+            Notification.success(item.title, item.message);
+          } else {
+            Notification.error(item.title, item.message);
+          }
+        });
       },
       resetState: function () {
         this.type = '';
