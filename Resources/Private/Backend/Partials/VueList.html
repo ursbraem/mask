@@ -39,7 +39,7 @@
                         <td>
                             <div class="mask-elements__btn-group btn-group">
                                 <a class="btn btn-default" @click="openEdit('tt_content', item)">
-                                    <core:icon identifier="actions-open"/>
+                                    <span v-html="icons.edit"></span>
                                 </a>
                                 <hide-button @toggle="loadElements" :element="item" :show-messages="showMessages"></hide-button>
                                 <a class="btn btn-default" @click="openDeleteDialog(item)">

@@ -154,6 +154,9 @@ define([
       const dateIconRequest = Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
         mask.icons.date = icon;
       });
+      const editIconRequest = Icons.getIcon('actions-open', Icons.sizes.small).done(function (icon) {
+        mask.icons.edit = icon;
+      });
 
       promises.push(languageRequest);
       promises.push(tcaFieldsRequest);
@@ -165,6 +168,7 @@ define([
       promises.push(deleteIconRequest);
       promises.push(moveIconRequest);
       promises.push(dateIconRequest);
+      promises.push(editIconRequest);
       promises.push(missingFilesRequest);
 
       Promise.all(promises).then(() => {
