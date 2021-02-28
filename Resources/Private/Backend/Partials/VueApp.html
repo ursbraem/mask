@@ -2,13 +2,6 @@
     <div v-if="mode === 'edit' || mode === 'new'" class="mask-edit">
         <f:render partial="VueEdit" arguments="{_all}"/>
     </div>
-    <div v-if="mode == 'list'" class="mask-list">
-        <f:render partial="VueList" arguments="{_all}"/>
-    </div>
-    <transition name="fade">
-        <div class="mask-splashscreen" v-if="!loaded">
-            <f:image src="EXT:mask/Resources/Public/Icons/Extension.svg" class="mask-splashscreen__logo"/>
-            <h1 class="mask-splashscreen__label">Mask</h1>
-        </div>
-    </transition>
+    <f:render partial="VueList" arguments="{_all}"/>
+    <splashscreen :loaded="loaded"></splashscreen>
 </div>

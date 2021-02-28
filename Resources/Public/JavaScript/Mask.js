@@ -5,6 +5,7 @@ define([
   'TYPO3/CMS/Mask/Components/FormField',
   'TYPO3/CMS/Mask/Components/FieldKey',
   'TYPO3/CMS/Mask/Components/ElementKey',
+  'TYPO3/CMS/Mask/Components/SplashScreen',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
@@ -17,6 +18,7 @@ define([
   formField,
   fieldKey,
   elementKey,
+  splashscreen,
   AjaxRequest,
   Icons,
   Modal,
@@ -35,6 +37,7 @@ define([
       formField,
       elementKey,
       fieldKey,
+      splashscreen,
     },
     data: function () {
       return {

@@ -1,4 +1,4 @@
-<div class="row bench">
+<div v-show="loaded" style="display: none;" class="row bench">
     <div class="col-sm-2 tx_mask_borderright tx_mask_tabcell1">
         <div @click="mode = 'list'"><-- Back</div>
         <div v-if="type == 'tt_content'">
