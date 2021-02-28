@@ -519,11 +519,11 @@ define([
             async function (response) {
               const fixed = await response.resolve();
               if (fixed['success']) {
-                Notification.success(mask.language.missingCreated);
+                Notification.success('', mask.language.missingCreated);
                 mask.missingFilesOrFolders = false;
                 mask.loadElements();
               } else {
-                Notification.error('Something went wrong while trying to create missing files.');
+                Notification.error('', 'Something went wrong while trying to create missing files.');
               }
             }
           )
