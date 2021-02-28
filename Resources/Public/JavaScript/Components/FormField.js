@@ -17,7 +17,7 @@ define([
         data: function () {
           return {
             documentation: 'https://docs.typo3.org/m/typo3/reference-tca/10.4/en-us/'
-          }
+          };
         },
         beforeMount: function () {
           // Load richtextConfiguration with presets

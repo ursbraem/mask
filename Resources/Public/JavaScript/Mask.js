@@ -6,6 +6,7 @@ define([
   'TYPO3/CMS/Mask/Components/FieldKey',
   'TYPO3/CMS/Mask/Components/ElementKey',
   'TYPO3/CMS/Mask/Components/SplashScreen',
+  'TYPO3/CMS/Mask/Components/HideButton',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
@@ -19,6 +20,7 @@ define([
   fieldKey,
   elementKey,
   splashscreen,
+  hideButton,
   AjaxRequest,
   Icons,
   Modal,
@@ -38,6 +40,7 @@ define([
       elementKey,
       fieldKey,
       splashscreen,
+      hideButton,
     },
     data: function () {
       return {
@@ -228,7 +231,7 @@ define([
         this.validate();
         if (!this.hasErrors) {
           const payload = {
-            element: this.element,
+            element: this.getPostElement(),
             fields: JSON.stringify(this.getPostFields(this.fields)),
             type: this.type,
             isNew: this.mode === 'new' ? 1 : 0
@@ -265,6 +268,16 @@ define([
             ]
           )
         }
+      },
+      getPostElement() {
+        return {
+          icon: this.element.icon,
+          label: this.element.label,
+          shortLabel: this.element.shortLabel,
+          description: this.element.description,
+          color: this.element.color,
+          hidden: this.element.hidden,
+        };
       },
       getPostFields: function (fields) {
         const postFields = [];

@@ -41,8 +41,9 @@
                                 <a class="btn btn-default" @click="openEdit('tt_content', item)">
                                     <core:icon identifier="actions-open"/>
                                 </a>
+                                <hide-button @toggle="loadElements" :element="item" :show-messages="showMessages"></hide-button>
                                 <a class="btn btn-default" @click="openDeleteDialog(item)">
-                                    <core:icon identifier="actions-edit-delete"/>
+                                    <span v-html="icons.delete"></span>
                                 </a>
                             </div>
                         </td>

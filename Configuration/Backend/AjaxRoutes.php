@@ -74,5 +74,9 @@ return [
     'mask_delete' => [
         'path' => '/mask/delete',
         'target' => AjaxController::class . '::delete'
+    ],
+    'mask_toggle_visibility' => [
+        'path' => '/mask/toggle',
+        'target' => AjaxController::class . '::toggleVisibility'
     ]
 ];

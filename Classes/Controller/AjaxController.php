@@ -203,6 +203,24 @@ class AjaxController extends ActionController
         return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    public function toggleVisibility(ServerRequestInterface $request): Response
+    {
+        $params = $request->getParsedBody();
+        if ($params['element']['hidden']) {
+            $this->storageRepository->activate('tt_content', $params['element']['key']);
+            $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.activatedcontentelement', 'mask'));
+        } else {
+            $this->storageRepository->hide('tt_content', $params['element']['key']);
+            $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.hiddencontentelement', 'mask'));
+        }
+        $this->generateAction();
+        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
+    }
+
     public function elements(ServerRequestInterface $request): Response
     {
         $storages = $this->storageRepository->load();
@@ -216,7 +234,8 @@ class AjaxController extends ActionController
                 'label' => $element['label'],
                 'shortLabel' => $element['shortLabel'],
                 'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'])->render() : '',
-                'templateExists' => $this->checkTemplate($element['key']) ? 1 : 0
+                'templateExists' => $this->checkTemplate($element['key']) ? 1 : 0,
+                'hidden' => ($element['hidden'] ?? false) ? 1 : 0
             ];
         }
         $json['elements'] = $elements;
