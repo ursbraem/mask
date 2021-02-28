@@ -681,7 +681,7 @@
     display: flex; } }
 
 .mask-elements__column {
-  background-color: #efefef;
+  background-color: #fafafa;
   min-height: 100px; }
   .mask-elements__column--elements {
     margin-bottom: 10px; }
