@@ -13,8 +13,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: $bg-medium;
+    background: linear-gradient(90deg, rgba(212,55,47,1) 10%, rgba(26,26,184,1) 100%);
     margin-bottom: 10px;
+    color: #fff;
+
+    a {
+      color: #fff;
+    }
 
     a:hover,
     a:focus {

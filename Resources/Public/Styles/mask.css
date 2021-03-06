@@ -641,8 +641,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #efefef;
-    margin-bottom: 10px; }
+    background: linear-gradient(90deg, #d4372f 10%, #1a1ab8 100%);
+    margin-bottom: 10px;
+    color: #fff; }
+    .mask-list__header a {
+      color: #fff; }
     .mask-list__header a:hover,
     .mask-list__header a:focus {
       color: #D4372F;
