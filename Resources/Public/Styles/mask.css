@@ -767,7 +767,8 @@
   margin-right: 10px; }
 
 .mask-elements__btn-group {
-  display: flex; }
+  display: flex;
+  justify-content: flex-end; }
 
 .templa {
   text-align: left; }
