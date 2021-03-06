@@ -52,7 +52,7 @@ define([
 
                 Modal.advanced({
                   type: Modal.types.ajax,
-                  size: Modal.sizes.full,
+                  size: Modal.sizes.large,
                   title: 'Example Fluid Code for element: ' + element.label,
                   content: url.href
                 });
