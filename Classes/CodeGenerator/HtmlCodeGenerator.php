@@ -62,7 +62,10 @@ class HtmlCodeGenerator
                 $html[] = $part;
             }
         }
-        return implode("\n", $html) . "\n";
+        if (count($html) > 0) {
+            return implode("\n", $html) . "\n";
+        }
+        return '';
     }
 
     /**

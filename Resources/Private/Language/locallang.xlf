@@ -764,7 +764,7 @@ title3, value3, icon3, description3
 				<source>This is an example code for your frontend template.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.html.line2">
-				<source>On first creation of a contentelement this code is saved into the target folder, which you have specified in the extensionmanager configuration. Default is: EXT:mask_project/Resources/Private/Mask/Frontend/Templates.</source>
+				<source>On first creation of a contentelement this code is saved into the target folder, which you have specified in the extensionmanager configuration. Default is</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.html.line3a">
 				<source>Use the official</source>
@@ -773,7 +773,7 @@ title3, value3, icon3, description3
 				<source>Fluid-Documentation</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.html.line3c">
-				<source>for more details how to format the output.</source>
+				<source>for more details on how to format the output.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.multiuse">
 				<source>This field is in use in more than one contentelement.</source>
@@ -1021,6 +1021,9 @@ title3, value3, icon3, description3
 			</trans-unit>
 			<trans-unit id="tx_mask.tooltip.html">
 				<source>Show example fluid code</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.no_fields">
+				<source>This element has no fields.</source>
 			</trans-unit>
 		</body>
 	</file>
