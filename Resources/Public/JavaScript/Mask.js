@@ -498,18 +498,10 @@ define([
       },
       openDeleteDialog(item) {
         Modal.confirm(
-            this.language.deleteModal.title,
+            this.language.deleteModal.title + ': ' + item.label,
             this.language.deleteModal.content,
             Severity.warning,
             [
-              {
-                text: this.language.deleteModal.purge,
-                btnClass: 'btn-danger',
-                trigger: function () {
-                  Modal.dismiss();
-                  mask.deleteElement(item, 1);
-                }
-              },
               {
                 text: this.language.deleteModal.close,
                 trigger: function () {
@@ -523,6 +515,14 @@ define([
                 trigger: function () {
                   Modal.dismiss();
                   mask.deleteElement(item, 0);
+                }
+              },
+              {
+                text: this.language.deleteModal.purge,
+                btnClass: 'btn-danger',
+                trigger: function () {
+                  Modal.dismiss();
+                  mask.deleteElement(item, 1);
                 }
               }
             ]);

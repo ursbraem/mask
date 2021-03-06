@@ -67,7 +67,7 @@
 				<source>Add item</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.titleDelete">
-				<source>Delete item</source>
+				<source>Delete element</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.titleMove">
 				<source>Move item</source>
