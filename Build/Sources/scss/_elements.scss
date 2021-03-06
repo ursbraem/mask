@@ -98,6 +98,11 @@
 
   &__element-name-icon {
     margin-right: 10px;
+
+    .icon-overlay-hidden {
+      width: 50%;
+      height: 50%;
+    }
   }
 
   &__description {

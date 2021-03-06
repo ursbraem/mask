@@ -760,6 +760,9 @@
 
 .mask-elements__element-name-icon {
   margin-right: 10px; }
+  .mask-elements__element-name-icon .icon-overlay-hidden {
+    width: 50%;
+    height: 50%; }
 
 .mask-elements__description {
   font-size: 11px;

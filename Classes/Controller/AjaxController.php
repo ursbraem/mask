@@ -36,6 +36,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -297,6 +298,7 @@ class AjaxController extends ActionController
         $storages = $this->storageRepository->load();
         $elements = [];
         foreach ($storages['tt_content']['elements'] ?? [] as $element) {
+            $overlay = $element['hidden'] ? 'overlay-hidden' : null;
             $elements[$element['key']] = [
                 'color' => $element['color'],
                 'description' => $element['description'],
@@ -304,7 +306,7 @@ class AjaxController extends ActionController
                 'key' => $element['key'],
                 'label' => $element['label'],
                 'shortLabel' => $element['shortLabel'],
-                'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'])->render() : '',
+                'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'], Icon::SIZE_DEFAULT, $overlay)->render() : '',
                 'templateExists' => $this->checkTemplate($element['key']) ? 1 : 0,
                 'hidden' => ($element['hidden'] ?? false) ? 1 : 0
             ];
