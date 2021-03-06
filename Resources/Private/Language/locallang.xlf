@@ -1009,6 +1009,19 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.fieldsMissing">
 				<source>One or more fields are missing or are invalid. Please fill in the marked fields correctly and press save again.</source>
 			</trans-unit>
+
+			<trans-unit id="tx_mask.tooltip.edit_element">
+				<source>Edit Element</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.tooltip.disable_element">
+				<source>Disable element</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.tooltip.enable_element">
+				<source>Enable element</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.tooltip.delete_element">
+				<source>Delete element</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

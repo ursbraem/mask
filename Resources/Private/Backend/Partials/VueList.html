@@ -37,15 +37,15 @@
                             <div class="mask-elements__description">{{ item.description }}</div>
                         </td>
                         <td>
-                            <div class="mask-elements__btn-group btn-group">
-                                <a class="btn btn-default" @click="openEdit('tt_content', item)">
-                                    <span v-html="icons.edit"></span>
-                                </a>
-                                <hide-button @toggle="loadElements" :element="item" :show-messages="showMessages"></hide-button>
-                                <a class="btn btn-default" @click="openDeleteDialog(item)">
-                                    <span v-html="icons.delete"></span>
-                                </a>
-                            </div>
+                            <button-bar
+                                    @toggle="loadElements"
+                                    :element="item"
+                                    :icons="icons"
+                                    :show-messages="showMessages"
+                                    :open-edit="openEdit"
+                                    :open-delete-dialog="openDeleteDialog"
+                                    :language="language"
+                            ></button-bar>
                         </td>
                     </tr>
                 </table>

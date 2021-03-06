@@ -59,23 +59,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-6">
-        <label class="t3js-formengine-label" for="meta_icon">
-            <a href="https://fortawesome.github.io/Font-Awesome/icons/" target="_blank">
-                <f:translate key="tx_mask.all.icon"/>
-            </a>
-        </label>
-        <div class="t3js-formengine-field-item icon-field">
-            <div class="form-control-wrap">
-                <select
-                    class="form-control"
-                    id="meta_icon"
-                    title="{f:translate(key:'tx_mask.all.icon')}"
-                >
-                </select>
-            </div>
-        </div>
-    </div>
+    <font-icon-picker :element="element" :language="language" :fa-icons="faIcons" ref="iconPicker"></font-icon-picker>
     <div class="col-sm-6">
         <label class="t3js-formengine-label" for="meta_color">
             <f:translate key="tx_mask.all.color"/>

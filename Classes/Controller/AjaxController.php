@@ -601,7 +601,15 @@ class AjaxController extends ActionController
             'purge' => LocalizationUtility::translate('tx_mask.all.purge', 'mask'),
         ];
 
+        $language['tooltip'] = [
+            'editElement' => LocalizationUtility::translate('tx_mask.tooltip.edit_element', 'mask'),
+            'deleteElement' => LocalizationUtility::translate('tx_mask.tooltip.delete_element', 'mask'),
+            'enableElement' => LocalizationUtility::translate('tx_mask.tooltip.enable_element', 'mask'),
+            'disableElement' => LocalizationUtility::translate('tx_mask.tooltip.disable_element', 'mask'),
+        ];
+
         $language['deleted'] = LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask');
+        $language['icon'] = LocalizationUtility::translate('tx_mask.all.icon', 'mask');
 
         return new JsonResponse($language);
     }

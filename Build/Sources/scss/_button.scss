@@ -111,3 +111,7 @@
     background-color: lighten($webprofil, 5);
   }
 }
+
+.disable-pointer {
+  pointer-events: none;
+}

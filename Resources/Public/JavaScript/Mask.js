@@ -6,12 +6,13 @@ define([
   'TYPO3/CMS/Mask/Components/FieldKey',
   'TYPO3/CMS/Mask/Components/ElementKey',
   'TYPO3/CMS/Mask/Components/SplashScreen',
-  'TYPO3/CMS/Mask/Components/HideButton',
+  'TYPO3/CMS/Mask/Components/ButtonBar',
+  'TYPO3/CMS/Mask/Components/FontIconPicker',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
   'TYPO3/CMS/Backend/Severity',
-  'TYPO3/CMS/Backend/Notification'
+  'TYPO3/CMS/Backend/Notification',
 ], function (
   Vue,
   draggable,
@@ -20,12 +21,13 @@ define([
   fieldKey,
   elementKey,
   splashscreen,
-  hideButton,
+  buttonBar,
+  fontIconPicker,
   AjaxRequest,
   Icons,
   Modal,
   Severity,
-  Notification
+  Notification,
 ) {
   if (!document.getElementById('mask')) {
     return;
@@ -40,7 +42,8 @@ define([
       elementKey,
       fieldKey,
       splashscreen,
-      hideButton,
+      buttonBar,
+      fontIconPicker,
     },
     data: function () {
       return {
@@ -218,17 +221,6 @@ define([
             }
           );
       },
-      mode: function () {
-        if (this.maskBuilderOpen) {
-          // Boot font icon picker
-          require(['jquery', 'TYPO3/CMS/Mask/Contrib/FontIconPicker'], function ($) {
-            const iconPicker = $('#meta_icon').fontIconPicker({
-              source: mask.faIcons
-            });
-            iconPicker.setIcon(mask.element.icon);
-          });
-        }
-      }
     },
     methods: {
       save: function () {
@@ -245,6 +237,7 @@ define([
               async function (response) {
                 const res = await response.resolve();
                 mask.showMessages(res);
+                mask.loadElements();
               }
             );
         } else {
@@ -275,7 +268,8 @@ define([
       },
       getPostElement() {
         return {
-          icon: this.element.icon,
+          key: this.element.key,
+          icon: this.$refs.iconPicker.iconPicker.currentIcon,
           label: this.element.label,
           shortLabel: this.element.shortLabel,
           description: this.element.description,
