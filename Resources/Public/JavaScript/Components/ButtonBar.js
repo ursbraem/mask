@@ -3,9 +3,10 @@ define([
       'TYPO3/CMS/Backend/Icons',
       'TYPO3/CMS/Core/Ajax/AjaxRequest',
       'TYPO3/CMS/Backend/Tooltip',
+      'TYPO3/CMS/Backend/Modal',
       'jquery'
     ],
-    function (Vue, Icons, AjaxRequest, Tooltip, $) {
+    function (Vue, Icons, AjaxRequest, Tooltip, Modal, $) {
       return Vue.component(
           'button-bar',
           {
@@ -24,6 +25,7 @@ define([
                   actionsEditUnhide: '',
                   spinnerCircleDark: '',
                 },
+                htmlIcon: '',
                 loading: false
               };
             },
@@ -42,6 +44,18 @@ define([
               },
               hideTooltip(key) {
                 Tooltip.hide($(this.$refs[this.element.key + key]));
+              },
+              openFluidCodeModal(element) {
+                const url = new URL(TYPO3.settings.ajaxUrls.mask_html, window.location.origin);
+                url.searchParams.append('key', element.key);
+                url.searchParams.append('table', 'tt_content');
+
+                Modal.advanced({
+                  type: Modal.types.ajax,
+                  size: Modal.sizes.full,
+                  title: 'Example Fluid Code for element: ' + element.label,
+                  content: url.href
+                });
               },
             },
             computed: {
@@ -62,6 +76,9 @@ define([
               Icons.getIcon('spinner-circle-dark', Icons.sizes.small).done((icon) => {
                 this.toggleIcons.spinnerCircleDark = icon;
               });
+              Icons.getIcon('sysnote-type-2', Icons.sizes.small).done((icon) => {
+                this.htmlIcon = icon;
+              });
 
               Tooltip.initialize('[data-bs-toggle="tooltip"]', {
                 delay: {
@@ -74,6 +91,9 @@ define([
             },
             template: `
               <div class="mask-elements__btn-group btn-group">
+                <a :ref="element.key + 'html'" class="btn btn-default" @click="hideTooltip('html'); openFluidCodeModal(element);" data-bs-toggle="tooltip" :data-title="language.tooltip.html">
+                    <span v-html="htmlIcon"></span>
+                </a>
                 <a :ref="element.key + 'edit'" class="btn btn-default" @click="hideTooltip('edit'); openEdit('tt_content', element);" data-bs-toggle="tooltip" :data-title="language.tooltip.editElement">
                     <span v-html="icons.edit"></span>
                 </a>

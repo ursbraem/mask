@@ -764,10 +764,7 @@ title3, value3, icon3, description3
 				<source>This is an example code for your frontend template.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.html.line2">
-				<source>On first creation of a contentelement, this code is saved in the target-file into the folder,
-					which you have specified in extensionmanager in mask-configuration. Default is:
-					fileadmin/templates/content/.
-				</source>
+				<source>On first creation of a contentelement this code is saved into the target folder, which you have specified in the extensionmanager configuration. Default is: EXT:mask_project/Resources/Private/Mask/Frontend/Templates.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.html.line3a">
 				<source>Use the official</source>
@@ -1021,6 +1018,9 @@ title3, value3, icon3, description3
 			</trans-unit>
 			<trans-unit id="tx_mask.tooltip.delete_element">
 				<source>Delete element</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.tooltip.html">
+				<source>Show example fluid code</source>
 			</trans-unit>
 		</body>
 	</file>

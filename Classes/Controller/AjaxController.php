@@ -30,6 +30,7 @@ use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use MASK\Mask\Utility\TcaConverterUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -40,6 +41,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class AjaxController extends ActionController
 {
@@ -165,6 +167,23 @@ class AjaxController extends ActionController
             }
         }
         return new JsonResponse(['success' => $success]);
+    }
+
+    /**
+     * Generates Fluid HTML for Contentelements
+     *
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    public function showHtmlAction(ServerRequestInterface $request): Response
+    {
+        $params = $request->getQueryParams();
+        $html = $this->htmlCodeGenerator->generateHtml($params['key'], $params['table']);
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setPartialRootPaths(['EXT:mask/Resources/Private/Backend/Partials']);
+        $view->setTemplatePathAndFilename('EXT:mask/Resources/Private/Backend/Templates/Ajax/ShowHtml.html');
+        $view->assign('html', $html);
+        return new HtmlResponse($view->render());
     }
 
     public function save(ServerRequestInterface $request): Response
@@ -606,6 +625,7 @@ class AjaxController extends ActionController
             'deleteElement' => LocalizationUtility::translate('tx_mask.tooltip.delete_element', 'mask'),
             'enableElement' => LocalizationUtility::translate('tx_mask.tooltip.enable_element', 'mask'),
             'disableElement' => LocalizationUtility::translate('tx_mask.tooltip.disable_element', 'mask'),
+            'html' => LocalizationUtility::translate('tx_mask.tooltip.html', 'mask'),
         ];
 
         $language['deleted'] = LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask');

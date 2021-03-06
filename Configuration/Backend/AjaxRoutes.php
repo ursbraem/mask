@@ -78,5 +78,9 @@ return [
     'mask_toggle_visibility' => [
         'path' => '/mask/toggle',
         'target' => AjaxController::class . '::toggleVisibility'
+    ],
+    'mask_html' => [
+        'path' => '/mask/html',
+        'target' => AjaxController::class . '::showHtmlAction'
     ]
 ];
