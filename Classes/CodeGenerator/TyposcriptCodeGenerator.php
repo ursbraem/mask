@@ -187,6 +187,7 @@ class TyposcriptCodeGenerator
                     10 => 'EXT:mask/Resources/Private/Backend/Layouts/'
                 ]
             ],
+            // TODO remove
             'persistence' => [
                 'classes' => [
                     BackendLayout::class => [
