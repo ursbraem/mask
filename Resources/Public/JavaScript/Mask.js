@@ -51,6 +51,7 @@ define([
         type: '',
         elements: [],
         element: {},
+        backendLayouts: [],
         fieldTypes: [],
         tcaFields: {},
         tabs: {},
@@ -130,6 +131,15 @@ define([
 
       // fetch elements
       const elementsRequest = this.loadElements();
+
+      // fetch backend layouts
+      const backendLayoutRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_backend_layouts)).get()
+          .then(
+              async function (response) {
+                const backendLayouts = await response.resolve();
+                mask.backendLayouts = backendLayouts['backendLayouts'];
+              }
+          );
 
       // fetch fontawesome icons
       const iconsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons)).get()
@@ -267,15 +277,21 @@ define([
         }
       },
       getPostElement() {
-        return {
-          key: this.element.key,
-          icon: this.$refs.iconPicker.iconPicker.currentIcon,
-          label: this.element.label,
-          shortLabel: this.element.shortLabel,
-          description: this.element.description,
-          color: this.element.color,
-          hidden: this.element.hidden,
-        };
+        if (this.type === 'tt_content') {
+          return {
+            key: this.element.key,
+            icon: this.$refs.iconPicker.iconPicker.currentIcon,
+            label: this.element.label,
+            shortLabel: this.element.shortLabel,
+            description: this.element.description,
+            color: this.element.color,
+            hidden: this.element.hidden,
+          };
+        } else {
+          return {
+            key: this.element.key
+          }
+        }
       },
       getPostFields: function (fields) {
         const postFields = [];

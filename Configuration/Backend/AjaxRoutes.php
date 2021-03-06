@@ -82,5 +82,9 @@ return [
     'mask_html' => [
         'path' => '/mask/html',
         'target' => AjaxController::class . '::showHtmlAction'
+    ],
+    'mask_backend_layouts' => [
+        'path' => '/mask/backendlayouts',
+        'target' => AjaxController::class . '::backendLayouts'
     ]
 ];

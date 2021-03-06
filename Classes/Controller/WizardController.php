@@ -267,13 +267,6 @@ class WizardController extends ActionController
      */
     public function listAction()
     {
-        $settings = $this->settingsService->get();
-        $storages = $this->storageRepository->load();
-        $backendLayouts = $this->backendLayoutRepository->findAll(explode(',', $settings['backendlayout_pids']));
-        $this->checkFolders();
-
-        $this->view->assign('missingFolders', $this->missingFolders);
-        $this->view->assign('storages', $storages);
-        $this->view->assign('backendLayouts', $backendLayouts);
+        // Entry point for mask VueJs App
     }
 }

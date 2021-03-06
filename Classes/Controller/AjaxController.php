@@ -20,6 +20,7 @@ namespace MASK\Mask\Controller;
 use MASK\Mask\CodeGenerator\HtmlCodeGenerator;
 use MASK\Mask\CodeGenerator\SqlCodeGenerator;
 use MASK\Mask\CodeGenerator\TcaCodeGenerator;
+use MASK\Mask\Domain\Repository\BackendLayoutRepository;
 use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Enumeration\Tab;
 use MASK\Mask\Domain\Repository\StorageRepository;
@@ -29,6 +30,7 @@ use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use MASK\Mask\Utility\TcaConverterUtility;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\View\BackendLayout\BackendLayout;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
@@ -38,8 +40,10 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -94,6 +98,21 @@ class AjaxController extends ActionController
     protected $flashMessageQueue;
 
     /**
+     * @var BackendLayoutRepository
+     */
+    protected $backendLayoutRepository;
+
+    /**
+     * @var ImageService
+     */
+    protected $imageService;
+
+    /**
+     * @var ResourceFactory
+     */
+    protected $resourceFactory;
+
+    /**
      * $pathKeys
      *
      * @var array
@@ -114,7 +133,10 @@ class AjaxController extends ActionController
         IconFactory $iconFactory,
         SqlCodeGenerator $sqlCodeGenerator,
         HtmlCodeGenerator $htmlCodeGenerator,
-        SettingsService $settingsService
+        SettingsService $settingsService,
+        BackendLayoutRepository $backendLayoutRepository,
+        ImageService $imageService,
+        ResourceFactory $resourceFactory
     ) {
         $this->storageRepository = $storageRepository;
         $this->fieldHelper = $fieldHelper;
@@ -122,6 +144,9 @@ class AjaxController extends ActionController
         $this->sqlCodeGenerator = $sqlCodeGenerator;
         $this->htmlCodeGenerator = $htmlCodeGenerator;
         $this->settingsService = $settingsService;
+        $this->backendLayoutRepository = $backendLayoutRepository;
+        $this->imageService = $imageService;
+        $this->resourceFactory = $resourceFactory;
         $this->flashMessageQueue = new FlashMessageQueue('mask');
         $this->extSettings = $this->settingsService->get();
     }
@@ -238,6 +263,33 @@ class AjaxController extends ActionController
         }
         $this->generateAction();
         return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
+    }
+
+    public function backendLayouts(ServerRequestInterface $request): Response
+    {
+        $backendLayouts = $this->backendLayoutRepository->findAll(GeneralUtility::trimExplode(',', $this->extSettings['backendlayout_pids']));
+        $json['backendLayouts'] = [];
+        /** @var BackendLayout $backendLayout */
+        foreach ($backendLayouts as $key => $backendLayout) {
+            $iconPath = $backendLayout->getIconPath();
+            if ($iconPath) {
+                $image = $this->resourceFactory->retrieveFileOrFolderObject($iconPath);
+                $processingInstructions = [
+                    'width' => '32',
+                    'height' => '32c'
+                ];
+                $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
+                $imageUri = $this->imageService->getImageUri($processedImage);
+                $backendLayout->setIconPath($imageUri);
+            }
+            $json['backendLayouts'][] = [
+                'key' => $key,
+                'title' => $backendLayout->getTitle(),
+                'description' => $backendLayout->getDescription(),
+                'icon' => $backendLayout->getIconPath()
+            ];
+        }
+        return new JsonResponse($json);
     }
 
     public function elements(ServerRequestInterface $request): Response

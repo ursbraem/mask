@@ -1020,7 +1020,7 @@ title3, value3, icon3, description3
 				<source>Delete element</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.tooltip.html">
-				<source>Show example fluid code</source>
+				<source>Show fluid code</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.no_fields">
 				<source>This element has no fields.</source>

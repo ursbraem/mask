@@ -4,6 +4,7 @@
         <div v-if="type == 'tt_content'">
             <f:render partial="VueElement" arguments="{storage: storage}"/>
         </div>
+        <div v-else>{{ element.title }}</div>
         <div>
             <button class="btn btn-success col-sm-12" @click="save">{f:translate(key:'tx_mask.content.save')}</button>
             <button class="btn btn-default col-sm-12">{f:translate(key:'tx_mask.content.saveandexit')}</button>
