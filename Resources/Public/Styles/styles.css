@@ -1058,3 +1058,8 @@ ul.tx_mask_fieldtypes.tx_mask_field_templates li .id_move,
 .icons-selector .selector-button  {
     width: 50%;
 }
+
+.flatpickr-calendar {
+    top: 20px;
+    right: 20px;
+}
