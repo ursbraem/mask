@@ -1059,6 +1059,11 @@ ul.tx_mask_fieldtypes.tx_mask_field_templates li .id_move,
     width: 50%;
 }
 
+.flatpickr-calendar {
+    top: 20px;
+    right: 20px;
+}
+
 .form-switch.checkbox-invert .form-check-input {
     background-color: #79a548;
     background-position: right center;
