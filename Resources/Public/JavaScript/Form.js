@@ -492,6 +492,9 @@ define([
       let messages = $('.typo3-messages > div');
       $.each(messages, function (index, message) {
         let title = $(message).find('.alert-title').html();
+        if (typeof title === 'undefined') {
+          title = '';
+        }
         let text = $(message).find('.alert-message').html();
         if ($(this).hasClass('alert-danger')) {
           Notification.error(title, text);
