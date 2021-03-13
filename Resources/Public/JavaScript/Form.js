@@ -308,13 +308,18 @@ define([
         $('.tx_mask_tabcell3').append(fieldTemplate);
       }
 
-      // Initialize DateTimePicker
-      if (['date', 'datetime', 'timestamp'].includes(fieldType)) {
-        DateTimePicker.initialize('.t3js-datetimepicker');
-      }
-
       // Show field config
       $(buttonCode).click();
+
+      // Initialize DateTimePicker
+      if (['date', 'datetime', 'timestamp'].includes(fieldType)) {
+        $('.tx_mask_field[style$="block;"]').find('.t3js-datetimepicker').each(function () {
+          // TODO unset value instead when resolved https://forge.typo3.org/issues/93729
+          this.dataset.datepickerInitialized = 'undefined';
+          DateTimePicker.initialize(this);
+        });
+      }
+
       // Set focus to key field
       $('.tx_mask_newfieldname:visible').focus();
       Sortable.initSortable();
