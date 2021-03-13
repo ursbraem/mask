@@ -1021,6 +1021,7 @@ ul.tx_mask_fieldtypes.tx_mask_field_templates li .id_move,
 
 #meta_color {
     min-width: auto !important;
+    height: 32px;
 }
 
 .form-control-wrap {
