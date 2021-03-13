@@ -34,6 +34,7 @@ class DatePickerMarkupViewHelper extends AbstractViewHelper
         $this->registerArgument('name', 'string', 'The name for the input', true);
         $this->registerArgument('value', 'mixed', 'Value of the date', true);
         $this->registerArgument('key', 'string', 'The field key', true);
+        $this->registerArgument('id', 'string', 'A unique id for the label toggling', true);
         $this->registerArgument('type', 'string', 'The type of the date (date or datetime)');
     }
 
@@ -51,16 +52,16 @@ class DatePickerMarkupViewHelper extends AbstractViewHelper
         $name = $arguments['name'];
         $value = $arguments['value'];
         $key = $arguments['key'];
+        $id = $arguments['id'];
         $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-        $version = $typo3Version->getMajorVersion();
-        if ($version == 10) {
-            return self::getMarkupForTYPO3Version10($type, $name, $value, $key);
-        } elseif ($version == 11) {
-            return self::getMarkupForTYPO3Version11($type, $name, $value, $key);
+        if ($typo3Version->getMajorVersion() == 10) {
+            return self::getMarkupForTYPO3Version10($type, $name, $value, $key, $id);
+        } else {
+            return self::getMarkupForTYPO3Version11($type, $name, $value, $key, $id);
         }
     }
 
-    protected static function getMarkupForTYPO3Version11($type, $name, $value, $key)
+    protected static function getMarkupForTYPO3Version11($type, $name, $value, $key, $id)
     {
         $dateIcon = self::getDateIconMarkup();
         return
@@ -72,7 +73,7 @@ class DatePickerMarkupViewHelper extends AbstractViewHelper
                             <div class="input-group">
                                 <div class="form-control-clearable form-control">
                                     <input
-                                            id="timestamp-upper-$key"
+                                            id="timestamp-upper-$key-$id"
                                             class="t3js-datetimepicker form-control t3js-clearable flatpickr-input"
                                             data-date-type="$type"
                                             name="$name"
@@ -81,7 +82,7 @@ class DatePickerMarkupViewHelper extends AbstractViewHelper
                                 </div>
                                 <input type="hidden">
                                 <span class="input-group-btn">
-                                    <label class="btn btn-default" for="timestamp-upper-$key">
+                                    <label class="btn btn-default" for="timestamp-upper-$key-$id">
                                         $dateIcon
                                     </label>
                                 </span>
@@ -93,7 +94,7 @@ class DatePickerMarkupViewHelper extends AbstractViewHelper
 HEREDOC;
     }
 
-    protected static function getMarkupForTYPO3Version10($type, $name, $value, $key)
+    protected static function getMarkupForTYPO3Version10($type, $name, $value, $key, $id)
     {
         $dateIcon = self::getDateIconMarkup();
         return
@@ -102,14 +103,14 @@ HEREDOC;
                 <div class="form-control-wrap">
                     <div class="input-group">
                         <input
-                            id="timestamp-upper-$key"
+                            id="timestamp-upper-$key-$id"
                             class="t3js-datetimepicker form-control t3js-clearable"
                             data-date-type="$type"
                             name="$name"
                             value="$value"
                         >
                         <span class="input-group-btn">
-                            <label class="btn btn-default" for="timestamp-upper-$key">
+                            <label class="btn btn-default" for="timestamp-upper-$key-$id">
                                 $dateIcon
                             </label>
                         </span>

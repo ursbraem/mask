@@ -10,7 +10,7 @@
             <f:if condition="{field.config.range.lower}">
                 <f:variable name="lower" value="{f:format.date(date: field.config.range.lower, format: '{field -> mask:dateFormat()}')}"/>
             </f:if>
-            <mask:datePickerMarkup field="{field}" key="{key}" name="tx_mask_tools_maskmask[storage][tca][--index--][config][range][lower]" value="{lower}"/>
+            <mask:datePickerMarkup field="{field}" key="{key}" id="lower" name="tx_mask_tools_maskmask[storage][tca][--index--][config][range][lower]" value="{lower}"/>
         </div>
         <div class="form-group col-lg-6">
             <label class="t3js-formengine-label">
@@ -21,7 +21,7 @@
             <f:if condition="{field.config.range.upper}">
                 <f:variable name="upper" value="{f:format.date(date: field.config.range.upper, format: '{field -> mask:dateFormat()}')}"/>
             </f:if>
-            <mask:datePickerMarkup field="{field}" key="{key}" name="tx_mask_tools_maskmask[storage][tca][--index--][config][range][upper]" value="{upper}"/>
+            <mask:datePickerMarkup field="{field}" key="{key}" id="upper" name="tx_mask_tools_maskmask[storage][tca][--index--][config][range][upper]" value="{upper}"/>
         </div>
     </div>
     <div class="row">
