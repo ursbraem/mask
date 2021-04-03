@@ -11,18 +11,18 @@
     src: url(../Fonts/iconpicker.eot?90190138);
     src: url(../Fonts/iconpicker.eot?90190138#iefix) format("embedded-opentype"), url(../Fonts/iconpicker.woff?90190138) format("woff"), url(../Fonts/iconpicker.ttf?90190138) format("truetype"), url(../Fonts/iconpicker.svg?90190138#iconpicker) format("svg");
     font-weight: 400;
-    font-style: normal
+    font-style: normal;
 }
 
 .icons-selector {
     display: inline-block;
     vertical-align: middle;
-    text-align: left
+    text-align: left;
 }
 
 .icons-selector, .icons-selector *, .icons-selector:after, .icons-selector :after, .icons-selector:before, .icons-selector :before {
     -webkit-box-sizing: content-box;
-    box-sizing: content-box
+    box-sizing: content-box;
 }
 
 .icons-selector * {
@@ -32,7 +32,7 @@
     padding: 0;
     border: 0;
     font-size: 100%;
-    vertical-align: baseline
+    vertical-align: baseline;
 }
 
 .icons-selector .selector-button {
@@ -41,12 +41,12 @@
     display: block;
     text-align: center;
     cursor: pointer;
-    float: left
+    float: left;
 }
 
 .icons-selector .selector-button i {
     line-height: 38px;
-    text-align: center
+    text-align: center;
 }
 
 .icons-selector .selected-icon {
@@ -54,20 +54,20 @@
     width: 60px;
     height: 100%;
     float: left;
-    text-align: center
+    text-align: center;
 }
 
 .icons-selector .selected-icon i {
     line-height: 40px;
     font-size: 18px;
-    cursor: default
+    cursor: default;
 }
 
 .icons-selector.selector-popup-wrap, .icons-selector .selector-popup-wrap {
     position: absolute;
     z-index: 10000;
     width: 352px;
-    height: auto
+    height: auto;
 }
 
 .icons-selector .selector-popup {
@@ -76,12 +76,12 @@
     width: 342px;
     height: auto;
     background-color: #fefefe;
-    position: absolute
+    position: absolute;
 }
 
 .icons-selector .selector {
     width: 100px;
-    height: 40px
+    height: 40px;
 }
 
 .icons-selector .selector-category select, .icons-selector .selector-search input[type=text] {
@@ -93,44 +93,44 @@
     box-sizing: border-box;
     margin-bottom: 5px;
     font-size: 12px;
-    display: block
+    display: block;
 }
 
 .icons-selector .selector-category select {
-    height: 40px
+    height: 40px;
 }
 
 .icons-selector .selector-category select option {
-    padding: 10px
+    padding: 10px;
 }
 
 .icons-selector input::-webkit-input-placeholder {
-    text-transform: uppercase
+    text-transform: uppercase;
 }
 
 .icons-selector input:-ms-input-placeholder, .icons-selector input::-ms-input-placeholder {
-    text-transform: uppercase
+    text-transform: uppercase;
 }
 
 .icons-selector input::placeholder {
-    text-transform: uppercase
+    text-transform: uppercase;
 }
 
 .icons-selector .selector-search {
-    position: relative
+    position: relative;
 }
 
 .icons-selector .selector-search i {
     position: absolute;
     right: 10px;
-    top: 7px
+    top: 7px;
 }
 
 .icons-selector .fip-icons-container {
     width: 100%;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 5px
+    padding: 5px;
 }
 
 .icons-selector .fip-icons-container .loading {
@@ -138,7 +138,7 @@
     margin: 0 auto;
     padding: 20px 0;
     text-align: center;
-    width: 100%
+    width: 100%;
 }
 
 .icons-selector .fip-box {
@@ -149,39 +149,39 @@
     text-align: center;
     cursor: pointer;
     vertical-align: top;
-    height: 40px
+    height: 40px;
 }
 
 .icons-selector .selector-footer {
     line-height: 12px;
     padding: 5px 5px 0;
     text-align: center;
-    font-size: 14px
+    font-size: 14px;
 }
 
 .icons-selector .selector-footer i {
-    font-size: 14px
+    font-size: 14px;
 }
 
 .icons-selector .selector-footer .selector-arrows {
-    float: right
+    float: right;
 }
 
 .icons-selector .selector-footer .selector-arrows i {
-    cursor: pointer
+    cursor: pointer;
 }
 
 .icons-selector .selector-footer .selector-pages {
     font-size: 11px;
-    float: left
+    float: left;
 }
 
 .icons-selector .selector-footer em {
-    font-style: italic
+    font-style: italic;
 }
 
 .icons-selector .icons-picker-error i:before {
-    color: #eee
+    color: #eee;
 }
 
 .icons-selector [class*=" fip-icon-"]:before, .icons-selector [class^=fip-icon-]:before {
@@ -197,68 +197,68 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1em;
-    margin-left: .2em
+    margin-left: .2em;
 }
 
 .icons-selector .fip-icon-search:before {
     content: "\e812";
-    cursor: default
+    cursor: default;
 }
 
 .icons-selector .fip-icon-cancel:before {
     content: "\e814";
-    cursor: pointer
+    cursor: pointer;
 }
 
 .icons-selector .fip-icon-block:before {
     content: "\e84e";
-    color: #fed0d0
+    color: #fed0d0;
 }
 
 .icons-selector .fip-icon-down-dir:before {
-    content: "\e800"
+    content: "\e800";
 }
 
 .icons-selector .fip-icon-up-dir:before {
-    content: "\e813"
+    content: "\e813";
 }
 
 .icons-selector .fip-icon-left-dir:before {
-    content: "\e801"
+    content: "\e801";
 }
 
 .icons-selector .fip-icon-right-dir:before {
-    content: "\e802"
+    content: "\e802";
 }
 
 .icons-selector .fip-icon-spin3:before {
-    content: "\e815"
+    content: "\e815";
 }
 
 .icons-selector .fip-icon-spin3 {
     -webkit-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
-    display: inline-block
+    display: inline-block;
 }
 
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
-        transform: rotate(0deg)
+        transform: rotate(0deg);
     }
     to {
         -webkit-transform: rotate(359deg);
-        transform: rotate(359deg)
+        transform: rotate(359deg);
     }
 }
 
 @keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
-        transform: rotate(0deg)
+        transform: rotate(0deg);
     }
     to {
         -webkit-transform: rotate(359deg);
-        transform: rotate(359deg)
+        transform: rotate(359deg);
     }
 }
