@@ -310,6 +310,7 @@
   margin: 0;
   padding: 0; }
 
+.dragtarget .mask-select-field,
 .tx_mask_btn {
   position: relative;
   background: #f2f2f2;
@@ -317,6 +318,7 @@
   min-height: 37px;
   margin-bottom: 4px;
   width: 100%; }
+  .dragtarget .mask-select-field.has-error:before,
   .tx_mask_btn.has-error:before {
     font-family: FontAwesome;
     font-size: 15px;
@@ -333,23 +335,30 @@
     height: 13px;
     border-radius: 50%;
     background-color: #fff; }
+  .dragtarget .mask-select-field.ghost,
   .tx_mask_btn.ghost {
     opacity: 0.5; }
+  .dragtarget .mask-select-field_row,
   .tx_mask_btn_row {
     display: flex;
     align-items: center; }
+    .dragtarget .mask-select-field_row img,
     .tx_mask_btn_row img {
       vertical-align: bottom; }
+    .dragtarget .mask-select-field_row .tx_mask_btn_img img,
     .tx_mask_btn_row .tx_mask_btn_img img {
       width: 37px;
       height: auto; }
+    .dragtarget .mask-select-field_row .tx_mask_btn_text,
     .tx_mask_btn_row .tx_mask_btn_text {
       padding-left: 13px; }
+    .dragtarget .mask-select-field_row .tx_mask_btn_actions,
     .tx_mask_btn_row .tx_mask_btn_actions {
       padding-right: 10px;
       text-align: right;
       width: 69px;
       margin-left: auto; }
+  .dragtarget .mask-select-field .dragtarget,
   .tx_mask_btn .dragtarget {
     display: block;
     margin: 0;
@@ -400,31 +409,34 @@
     border: 1px solid #ccc;
     border-top: 0; }
 
-.tx_mask_tabcell2 {
-  padding-top: 65px; }
-  .tx_mask_tabcell2 > .dragtarget {
+.mask-field-list {
+  background: none;
+  height: auto;
+  margin: 0;
+  border: 1px dashed #bbb;
+  padding: 10px; }
+  .mask-field-list--empty {
+    background: url("/typo3conf/ext/mask/Resources/Public/Images/empty.svg") no-repeat;
+    background-position: center 35%;
+    background-size: 300px; }
+  .mask-field-list > .dragtarget {
     display: block;
-    min-height: 70px !important;
+    min-height: 438px !important;
     padding-bottom: 40px; }
-  .tx_mask_tabcell2 ul .dragtarget {
+  .mask-field-list ul .dragtarget {
     min-height: 38px;
     padding: 5px;
     border: 1px dashed #bbb; }
-    .tx_mask_tabcell2 ul .dragtarget li.tx_mask_btn {
+    .mask-field-list ul .dragtarget .mask-select-field,
+    .mask-field-list ul .dragtarget .tx_mask_btn {
       border-bottom: 2px solid #fafafa;
       margin-bottom: 0;
       margin-top: 3px; }
-  .tx_mask_tabcell2 .tx_mask_btn {
+  .mask-field-list .tx_mask_btn {
     cursor: pointer; }
-  .tx_mask_tabcell2 li.active,
-  .tx_mask_tabcell2 li:hover {
+  .mask-field-list li.active,
+  .mask-field-list li:hover {
     background: #eaf4fd; }
-  .tx_mask_tabcell2.form-group.col-sm-12.tx_mask_borderright {
-    background: none;
-    height: auto;
-    margin: 0;
-    padding: 11px;
-    border: 1px dashed #bbb; }
 
 .mask-field-form {
   background: #fff;
@@ -436,19 +448,11 @@
       padding: 0;
       margin-top: 0; } }
 
-.tx_mask_tabcell4 {
-  padding-top: 10px; }
-  @media screen and (min-width: 1200px) {
-    .tx_mask_tabcell4 {
-      height: 100%;
-      overflow: auto; } }
-  .tx_mask_tabcell4:after {
-    content: '';
-    display: block;
-    clear: both; }
-  .tx_mask_tabcell4 > label {
-    display: block;
-    color: #495460; }
+.mask-fields {
+  padding: 0 15px;
+  width: 480px; }
+  .mask-fields__label {
+    margin-bottom: 13px; }
 
 .mask-field-group {
   position: relative;

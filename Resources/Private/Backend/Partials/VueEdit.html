@@ -36,11 +36,11 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4 tx_mask_tabcell4">
-        <label class="t3js-formengine-label">
+    <div class="mask-fields">
+        <label class="mask-fields__label t3js-formengine-label">
             <f:translate key="tx_mask.all.fields_of_element"/>
         </label>
-        <div class="form-group col-sm-12 tx_mask_borderright tx_mask_tabcell2">
+        <div class="mask-field-list" :class="{'mask-field-list--empty': !fields.length}">
             <nested-draggable
                 :depth="0"
                 :index="0"

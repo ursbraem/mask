@@ -27,7 +27,7 @@ define([
           },
         },
         template: `
-          <li @click="addField(type);">
+          <li @click="addField(type);" class="mask-select-field">
               <div class="tx_mask_btn_row">
                   <div @mousedown="hideTooltip()" class="tx_mask_btn_img" v-html="type.icon" data-bs-toggle="tooltip" :data-title="type.label" :ref="type.name"></div>
               </div>

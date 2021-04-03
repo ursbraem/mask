@@ -1,0 +1,41 @@
+.mask-field-list {
+  background: none;
+  height: auto;
+  margin: 0;
+  border: 1px dashed #bbb;
+  padding: 10px;
+
+  &--empty {
+    background: url('/typo3conf/ext/mask/Resources/Public/Images/empty.svg') no-repeat;
+    background-position: center 35%;
+    background-size: 300px;
+  }
+
+  > .dragtarget {
+    display: block;
+    min-height: 438px !important;
+    padding-bottom: 40px;
+  }
+
+  ul .dragtarget {
+    min-height: 38px;
+    padding: 5px;
+    border: 1px dashed #bbb;
+
+    .mask-select-field,
+    .tx_mask_btn {
+      border-bottom: 2px solid #fafafa;
+      margin-bottom: 0;
+      margin-top: 3px;
+    }
+  }
+
+  .tx_mask_btn {
+    cursor: pointer;
+  }
+
+  li.active,
+  li:hover {
+    background: #eaf4fd;
+  }
+}
