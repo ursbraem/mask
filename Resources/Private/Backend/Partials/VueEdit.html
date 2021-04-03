@@ -12,7 +12,7 @@
                     <button @click="mode = 'list'" class="btn btn-default"><span v-html="icons.close"></span> {f:translate(key: 'tx_mask.close')}</button>
                 </li>
                 <li class="pull-right">
-                    <button class="btn btn-default" @click="save"><span v-html="icons.save"></span> {f:translate(key: 'tx_mask.content.save')}</button>
+                    <button class="btn btn-default" @click="save"><span v-show="!saving" v-html="icons.save"></span><span v-show="saving" v-html="icons.spinner"></span> {f:translate(key: 'tx_mask.content.save')}</button>
                 </li>
             </ul>
         </div>

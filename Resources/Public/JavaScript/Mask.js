@@ -87,7 +87,8 @@ define([
           deletedFields: [],
         },
         loaded: false,
-        missingFilesOrFolders: false
+        missingFilesOrFolders: false,
+        saving: false
       }
     },
     mounted: function () {
@@ -190,6 +191,9 @@ define([
       const closeIconRequest = Icons.getIcon('actions-close', Icons.sizes.small).done(function (icon) {
         mask.icons.close = icon;
       });
+      const spinnerIconRequest = Icons.getIcon('spinner-circle-dark', Icons.sizes.small).done(function (icon) {
+        mask.icons.spinner = icon;
+      });
 
       promises.push(languageRequest);
       promises.push(tcaFieldsRequest);
@@ -255,6 +259,7 @@ define([
     },
     methods: {
       save: function () {
+        this.saving = true;
         this.validate();
         if (!this.hasErrors) {
           const payload = {
@@ -269,9 +274,11 @@ define([
                 const res = await response.resolve();
                 mask.showMessages(res);
                 mask.loadElements();
+                mask.saving = false;
               }
             );
         } else {
+          this.saving = false;
           Modal.confirm(
             this.language.alert || 'Alert',
             this.language.fieldsMissing,
