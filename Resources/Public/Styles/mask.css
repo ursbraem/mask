@@ -304,102 +304,6 @@
 .icons-selector.fip-grey .icons-picker-error i:before {
   color: #eee; }
 
-.tx_mask_btn,
-.tx_mask_fieldtypes {
-  list-style-type: none;
-  margin: 0;
-  padding: 0; }
-
-.dragtarget .mask-select-field,
-.tx_mask_btn {
-  position: relative;
-  background: #f2f2f2;
-  cursor: move;
-  min-height: 37px;
-  margin-bottom: 4px;
-  width: 100%; }
-  .dragtarget .mask-select-field.has-error:before,
-  .tx_mask_btn.has-error:before {
-    font-family: FontAwesome;
-    font-size: 15px;
-    text-align: center;
-    content: "\f06a";
-    color: #c83c3c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: -2px;
-    left: -3px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background-color: #fff; }
-  .dragtarget .mask-select-field.ghost,
-  .tx_mask_btn.ghost {
-    opacity: 0.5; }
-  .dragtarget .mask-select-field_row,
-  .tx_mask_btn_row {
-    display: flex;
-    align-items: center; }
-    .dragtarget .mask-select-field_row img,
-    .tx_mask_btn_row img {
-      vertical-align: bottom; }
-    .dragtarget .mask-select-field_row .tx_mask_btn_img img,
-    .tx_mask_btn_row .tx_mask_btn_img img {
-      width: 37px;
-      height: auto; }
-    .dragtarget .mask-select-field_row .tx_mask_btn_text,
-    .tx_mask_btn_row .tx_mask_btn_text {
-      padding-left: 13px; }
-    .dragtarget .mask-select-field_row .tx_mask_btn_actions,
-    .tx_mask_btn_row .tx_mask_btn_actions {
-      padding-right: 10px;
-      text-align: right;
-      width: 69px;
-      margin-left: auto; }
-  .dragtarget .mask-select-field .dragtarget,
-  .tx_mask_btn .dragtarget {
-    display: block;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    background-color: #fff; }
-
-.tx_mask_btn_row .tx_mask_btn_img img,
-.tx_mask_fieldheader img,
-.icon-module-tools_MaskMask img {
-  border-radius: 2px; }
-
-.id_inline {
-  border-bottom: 0 !important; }
-  .id_inline > .tx_mask_btn_caption {
-    border-left: 4px solid #9e97d1; }
-
-.id_palette {
-  border-bottom: 0 !important; }
-  .id_palette > .tx_mask_btn_caption {
-    border-left: 4px solid #4e4e4e; }
-
-.tx_mask_field_templates li .tx_mask_btn_actions {
-  cursor: pointer;
-  display: none; }
-
-.tx_mask_field_templates .tx_mask_btn_row .tx_mask_btn_text {
-  background: #ffffffba;
-  display: none; }
-
-.btn-mask {
-  background-color: #cb002d;
-  border-color: #980022;
-  color: #fff; }
-  .btn-mask:hover {
-    color: #fff;
-    background-color: #e50033; }
-
-.disable-pointer {
-  pointer-events: none; }
-
 .mask-sidebar {
   width: 350px;
   background-color: #fff; }
@@ -425,14 +329,15 @@
     padding-bottom: 40px; }
   .mask-field-list ul .dragtarget {
     min-height: 38px;
-    padding: 5px;
-    border: 1px dashed #bbb; }
+    padding: 4px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc; }
     .mask-field-list ul .dragtarget .mask-select-field,
-    .mask-field-list ul .dragtarget .tx_mask_btn {
+    .mask-field-list ul .dragtarget .mask-field {
       border-bottom: 2px solid #fafafa;
       margin-bottom: 0;
       margin-top: 3px; }
-  .mask-field-list .tx_mask_btn {
+  .mask-field-list .mask-field {
     cursor: pointer; }
   .mask-field-list li.active,
   .mask-field-list li:hover {
@@ -814,6 +719,109 @@
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+
+.dragtarget .mask-select-field,
+.mask-field {
+  position: relative;
+  cursor: move;
+  min-height: 37px;
+  margin-bottom: 4px;
+  width: 100%; }
+  .dragtarget .mask-select-field.has-error:before,
+  .mask-field.has-error:before {
+    font-family: FontAwesome;
+    font-size: 15px;
+    text-align: center;
+    content: "\f06a";
+    color: #c83c3c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -2px;
+    left: -3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #fff; }
+  .dragtarget .mask-select-field.ghost,
+  .mask-field.ghost {
+    opacity: 0.5; }
+  .dragtarget .mask-select-field__body,
+  .mask-field__body {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-left: 0;
+    min-height: 37px;
+    flex-grow: 1; }
+  .dragtarget .mask-select-field .tx_mask_btn_row,
+  .mask-field .tx_mask_btn_row {
+    display: flex;
+    align-items: center; }
+    .dragtarget .mask-select-field .tx_mask_btn_row img,
+    .mask-field .tx_mask_btn_row img {
+      vertical-align: bottom; }
+    .dragtarget .mask-select-field .tx_mask_btn_row .tx_mask_btn_text,
+    .mask-field .tx_mask_btn_row .tx_mask_btn_text {
+      padding-left: 13px; }
+    .dragtarget .mask-select-field .tx_mask_btn_row .tx_mask_btn_actions,
+    .mask-field .tx_mask_btn_row .tx_mask_btn_actions {
+      padding-right: 10px;
+      text-align: right;
+      width: 69px;
+      margin-left: auto; }
+  .dragtarget .mask-select-field img,
+  .mask-field img {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px; }
+
+.dragtarget {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  .dragtarget .dragtarget {
+    background-color: #fff; }
+
+.id_inline,
+.id_palette {
+  border-bottom: 0 !important; }
+  .id_inline > .tx_mask_btn_row img,
+  .id_palette > .tx_mask_btn_row img {
+    border-bottom-left-radius: 0; }
+
+.id_inline > .tx_mask_btn_caption {
+  border-left: 4px solid #9e97d1; }
+
+.id_palette > .tx_mask_btn_caption {
+  border-left: 4px solid #4e4e4e; }
+
+.tx_mask_field_templates li .tx_mask_btn_actions {
+  cursor: pointer;
+  display: none; }
+
+.tx_mask_field_templates .tx_mask_btn_row .tx_mask_btn_text {
+  background: #ffffff;
+  display: none; }
+
+.btn-mask {
+  background-color: #cb002d;
+  border-color: #980022;
+  color: #fff; }
+  .btn-mask:hover {
+    color: #fff;
+    background-color: #e50033; }
+
+.disable-pointer {
+  pointer-events: none; }
+
+.mask-field .tx_mask_btn_img img,
+.mask-select-field .tx_mask_btn_img img {
+  width: 37px;
+  height: auto; }
+
+.mask-select-field img {
+  border-radius: 2px; }
 
 @media screen and (min-width: 1200px) {
   .bench {

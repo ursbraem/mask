@@ -716,6 +716,7 @@ class AjaxController extends ActionController
             'enableElement' => LocalizationUtility::translate('tx_mask.tooltip.enable_element', 'mask'),
             'disableElement' => LocalizationUtility::translate('tx_mask.tooltip.disable_element', 'mask'),
             'html' => LocalizationUtility::translate('tx_mask.tooltip.html', 'mask'),
+            'deleteField' => LocalizationUtility::translate('tx_mask.field.delete', 'mask'),
         ];
 
         $language['deleted'] = LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask');

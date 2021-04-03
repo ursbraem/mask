@@ -2,7 +2,6 @@
 @import "libs/font-icon-picker-theme";
 
 @import 'variables';
-@import "button";
 @import "sidebar";
 @import "field-list";
 @import "field-form";
@@ -11,7 +10,6 @@
 @import "fieldheader";
 @import "fieldtypes";
 @import "fieldcontent";
-@import "fieldtemplates";
 @import "footer";
 @import "splashscreen";
 @import "list";
@@ -19,6 +17,8 @@
 @import "elements";
 @import "templa";
 @import "spinner";
+@import "field";
+@import "select-field";
 
 @media screen and (min-width: 1200px) {
   .bench {

@@ -1,35 +1,35 @@
 .tx_mask_fieldheader {
-    display: flex;
-    height: 50px;
-    margin-bottom: 14px;
-    padding-bottom: 6px;
+  display: flex;
+  height: 50px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
 
-    &__icon {
-        margin-right: 10px;
+  &__icon {
+    margin-right: 10px;
 
-        img {
-            width: 44px;
-            height: auto;
-        }
+    img {
+      width: 44px;
+      height: auto;
+    }
+  }
+
+  &__text {
+    h1 {
+      font-family: Share, Verdana, Arial, Helvetica, sans-serif;
+      font-size: 165%;
+      font-weight: 400;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    &__text {
-        h1 {
-            font-family: Share, Verdana, Arial, Helvetica, sans-serif;
-            font-size: 165%;
-            font-weight: 400;
-            margin: 0;
-            overflow: hidden;
-            padding: 0;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        p {
-            font-size: 100%;
-            font-weight: 400;
-            margin: 0;
-            padding: 0;
-        }
+    p {
+      font-size: 100%;
+      font-weight: 400;
+      margin: 0;
+      padding: 0;
     }
+  }
 }

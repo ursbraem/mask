@@ -1052,6 +1052,9 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.fields">
 				<source>Fields</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.field.delete">
+				<source>Delete field</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

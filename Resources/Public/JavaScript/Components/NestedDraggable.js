@@ -1,8 +1,9 @@
 define([
     'TYPO3/CMS/Mask/Contrib/vue',
-    'TYPO3/CMS/Mask/Contrib/vuedraggable'
+    'TYPO3/CMS/Mask/Contrib/vuedraggable',
+    'TYPO3/CMS/Mask/Components/FieldRow',
   ],
-  function (Vue, draggable) {
+  function (Vue, draggable, fieldRow) {
     return Vue.component(
       'nested-draggable',
       {
@@ -14,10 +15,12 @@ define([
           index: Number,
           move: Function,
           fieldHasError: Function,
-          validateKey: Function
+          validateKey: Function,
+          language: Object
         },
         components: {
-          draggable
+          draggable,
+          fieldRow
         },
         methods: {
           uuid(e) {
@@ -68,13 +71,6 @@ define([
           },
           isParentField: function (field) {
             return ['inline', 'palette'].includes(field.name);
-          },
-          keyWithoutMask: function (key) {
-            if (key.substr(0, 8) === this.global.maskPrefix) {
-              return key.substr(8);
-            } else {
-              return key;
-            }
           }
         },
         template: `
@@ -87,21 +83,16 @@ define([
     @add="onAdd"
     :move="move"
   >
-  <li v-for="(field, index) in fields" :key="uuid(field)" class="tx_mask_btn" :class="[{active: global.activeField == field}, 'id_' + field.name, {'has-error': fieldHasError(field)}]">
-    <div class="tx_mask_btn_row" @click="global.activeField = field; global.currentTab = 'general'">
-        <div class="tx_mask_btn_img">
-            <div v-html="field.icon"></div>
-        </div>
-        <div class="tx_mask_btn_text">
-          <span v-if="field.name == 'linebreak'" class="id_labeltext">Linebreak</span>
-          <span v-else class="id_labeltext">{{ field.label }}</span>
-          <span class="id_keytext" v-if="!global.sctructuralFields.includes(field.name)">{{ keyWithoutMask(field.key) }}</span>
-        </div>
-        <div class="tx_mask_btn_actions">
-            <span @click.stop="removeField(index)" class="id_delete" title="Delete item" v-html="icons.delete"></span>
-            <span class="id_move" title="Move item" v-html="icons.move"></span>
-        </div>
-    </div>
+  <li v-for="(field, index) in fields" :key="uuid(field)" class="mask-field" :class="[{active: global.activeField == field}, 'id_' + field.name, {'has-error': fieldHasError(field)}]">
+    <field-row
+        :global="global"
+        :fields="fields"
+        :field="field"
+        :language="language"
+        :icons="icons"
+        :index="index"
+        @remove-field="removeField($event)"
+    ></field-row>
     <div class="tx_mask_btn_caption" v-if="isParentField(field)">
         <nested-draggable
             @set-parent-active="setParentActive($event)"
@@ -113,6 +104,7 @@ define([
             :move="move"
             :field-has-error="fieldHasError"
             :validate-key="validateKey"
+            :language="language"
           />
     </div>
   </li>

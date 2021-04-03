@@ -19,18 +19,19 @@
 
   ul .dragtarget {
     min-height: 38px;
-    padding: 5px;
-    border: 1px dashed #bbb;
+    padding: 4px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
 
     .mask-select-field,
-    .tx_mask_btn {
+    .mask-field {
       border-bottom: 2px solid #fafafa;
       margin-bottom: 0;
       margin-top: 3px;
     }
   }
 
-  .tx_mask_btn {
+  .mask-field {
     cursor: pointer;
   }
 
