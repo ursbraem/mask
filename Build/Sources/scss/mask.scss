@@ -3,28 +3,27 @@
 
 @import 'variables';
 @import "button";
-@import "tabcell1";
+@import "sidebar";
 @import "tabcell2";
-@import "tabcell3";
+@import "field-form";
 @import "tabcell4";
-@import "tabcell5";
+@import "field-group";
 @import "fieldheader";
 @import "fieldtypes";
 @import "fieldcontent";
 @import "fieldtemplates";
 @import "footer";
-@import "tooltip";
 @import "splashscreen";
 @import "list";
+@import "edit";
 @import "elements";
 @import "templa";
 @import "spinner";
 
 @media screen and (min-width: 1200px) {
   .bench {
-    height: calc(100vh);
+    display: flex;
     margin: 0;
-    overflow: hidden;
   }
 }
 

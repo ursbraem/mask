@@ -1025,6 +1025,33 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.no_fields">
 				<source>This element has no fields.</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.input">
+				<source>Input</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.text">
+				<source>Text</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.date">
+				<source>Date</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.choice">
+				<source>Choice</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.repeating">
+				<source>Repeating</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.structure">
+				<source>Structure</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.close">
+				<source>Close</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.element">
+				<source>Element</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.fields">
+				<source>Fields</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

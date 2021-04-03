@@ -86,5 +86,9 @@ return [
     'mask_backend_layouts' => [
         'path' => '/mask/backendlayouts',
         'target' => AjaxController::class . '::backendLayouts'
+    ],
+    'mask_field_groups' => [
+        'path' => '/mask/fieldGroups',
+        'target' => AjaxController::class . '::fieldGroups'
     ]
 ];

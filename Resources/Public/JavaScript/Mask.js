@@ -8,6 +8,7 @@ define([
   'TYPO3/CMS/Mask/Components/SplashScreen',
   'TYPO3/CMS/Mask/Components/ButtonBar',
   'TYPO3/CMS/Mask/Components/FontIconPicker',
+  'TYPO3/CMS/Mask/Components/FieldGroup',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
@@ -23,6 +24,7 @@ define([
   splashscreen,
   buttonBar,
   fontIconPicker,
+  fieldGroup,
   AjaxRequest,
   Icons,
   Modal,
@@ -44,11 +46,14 @@ define([
       splashscreen,
       buttonBar,
       fontIconPicker,
+      fieldGroup,
     },
     data: function () {
       return {
         mode: 'list',
         type: '',
+        sidebar: 'fields',
+        groups: [],
         elements: [],
         element: {},
         backendLayouts: [],
@@ -129,6 +134,15 @@ define([
           }
         );
 
+      // fetch field groups
+      const fieldGroupsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_field_groups)).get()
+          .then(
+              async function (response) {
+                const result = await response.resolve();
+                mask.groups = result.groups;
+              }
+          );
+
       // fetch elements
       const elementsRequest = this.loadElements();
 
@@ -170,12 +184,19 @@ define([
       const editIconRequest = Icons.getIcon('actions-open', Icons.sizes.small).done(function (icon) {
         mask.icons.edit = icon;
       });
+      const saveIconRequest = Icons.getIcon('actions-save', Icons.sizes.small).done(function (icon) {
+        mask.icons.save = icon;
+      });
+      const closeIconRequest = Icons.getIcon('actions-close', Icons.sizes.small).done(function (icon) {
+        mask.icons.close = icon;
+      });
 
       promises.push(languageRequest);
       promises.push(tcaFieldsRequest);
       promises.push(tabsRequest);
       promises.push(richtextConfigurationRequest);
       promises.push(ctypesRequest);
+      promises.push(fieldGroupsRequest);
       promises.push(elementsRequest);
       promises.push(iconsRequest);
       promises.push(deleteIconRequest);
@@ -919,6 +940,12 @@ define([
           return this.multiUseElements[this.global.activeField.key]
         }
         return [];
+      },
+      elementTabOpened: function () {
+        return this.sidebar === 'element';
+      },
+      fieldsTabOpened: function () {
+        return this.sidebar === 'fields';
       }
     }
   });

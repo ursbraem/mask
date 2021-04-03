@@ -1,37 +1,42 @@
 <div v-show="loaded" style="display: none;" class="row bench">
-    <div class="col-sm-2 tx_mask_borderright tx_mask_tabcell1">
-        <div @click="mode = 'list'"><-- Back</div>
-        <div v-if="type == 'tt_content'">
-            <f:render partial="VueElement" arguments="{storage: storage}"/>
+    <div class="mask-sidebar">
+        <div class="tabpanel">
+            <ul class="nav nav-tabs">
+                <li :class="{active: elementTabOpened}">
+                    <a @click.prevent="sidebar = 'element'" href="">{f:translate(key: 'tx_mask.element')}</a>
+                </li>
+                <li :class="{active: fieldsTabOpened}">
+                    <a @click.prevent="sidebar = 'fields'" href="#">{f:translate(key: 'tx_mask.fields')}</a>
+                </li>
+                <li class="pull-right">
+                    <button @click="mode = 'list'" class="btn btn-default"><span v-html="icons.close"></span> {f:translate(key: 'tx_mask.close')}</button>
+                </li>
+                <li class="pull-right">
+                    <button class="btn btn-default" @click="save"><span v-html="icons.save"></span> {f:translate(key: 'tx_mask.content.save')}</button>
+                </li>
+            </ul>
         </div>
-        <div v-else>{{ element.title }}</div>
-        <div>
-            <button class="btn btn-success col-sm-12" @click="save">{f:translate(key:'tx_mask.content.save')}</button>
-            <button class="btn btn-default col-sm-12">{f:translate(key:'tx_mask.content.saveandexit')}</button>
+        <div class="mask-sidebar__content">
+            <div v-show="sidebar == 'element'">
+                <div v-if="type == 'tt_content'">
+                    <f:render partial="VueElement" arguments="{storage: storage}"/>
+                </div>
+                <div v-else>{{ element.title }}</div>
+            </div>
+            <div v-show="sidebar == 'fields'">
+                <field-group
+                    v-for="group in groups"
+                    :group="group.name"
+                    :label="group.label"
+                    :on-move="onMove"
+                    :handle-clone="handleClone"
+                    :add-field="addField"
+                    :field-types="fieldTypes"
+                ></field-group>
+            </div>
         </div>
     </div>
     <div class="col-sm-4 tx_mask_tabcell4">
-        <label class="t3js-formengine-label">
-            <f:translate key="tx_mask.all.add_new_fields"/>
-        </label>
-        <div class="col-sm-12 tx_mask_tabcell5">
-            <ul class="tx_mask_fieldtypes tx_mask_field_templates" id="dragstart">
-                <draggable
-                    :list="fieldTypes"
-                    :group="{name: 'fieldTypes', pull: 'clone', 'put': false}"
-                    :sort="false"
-                    :clone="handleClone"
-                    :move="onMove"
-                >
-                    <li v-for="type in fieldTypes" class="tx_mask_btn mask_tooltip" @click="addField(type)">
-                        <span class="tooltiptext">{{ type.name }}</span>
-                        <div class="tx_mask_btn_row">
-                            <div class="tx_mask_btn_img" v-html="type.icon"></div>
-                        </div>
-                    </li>
-                </draggable>
-            </ul>
-        </div>
         <label class="t3js-formengine-label">
             <f:translate key="tx_mask.all.fields_of_element"/>
         </label>
@@ -49,7 +54,7 @@
             </nested-draggable>
         </div>
     </div>
-    <div class="form-group col-sm-6 tx_mask_tabcell3">
+    <div class="form-group col-sm-6 mask-field-form">
         <f:render partial="VueForm"/>
     </div>
 </div>

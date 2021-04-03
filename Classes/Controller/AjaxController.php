@@ -429,14 +429,16 @@ class AjaxController extends ActionController
     {
         $json = [];
         $defaults = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Defaults.php');
+        $grouping = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/FieldGroups.php');
         foreach (FieldType::getConstants() as $type) {
             $config = [
                 'name' => $type,
                 'icon' => $this->iconFactory->getIcon('mask-fieldtype-' . $type)->getMarkup(),
                 'fields' => [],
                 'key' => '',
-                'label' => '',
+                'label' => LocalizationUtility::translate('tx_mask.field.' . $type, 'mask'),
                 'parent' => [],
+                'group' => $grouping[$type],
                 'newField' => true,
                 'tca' => [
                     'l10n_mode' => ''
@@ -453,6 +455,40 @@ class AjaxController extends ActionController
             $json[] = $config;
         }
         return new JsonResponse($json);
+    }
+
+    public function fieldGroups(ServerRequestInterface $request): Response
+    {
+        return new JsonResponse(
+            [
+                'groups' => [
+                    [
+                        'name' => 'input',
+                        'label' => LocalizationUtility::translate('tx_mask.input', 'mask')
+                    ],
+                    [
+                        'name' => 'text',
+                        'label' => LocalizationUtility::translate('tx_mask.text', 'mask')
+                    ],
+                    [
+                        'name' => 'date',
+                        'label' => LocalizationUtility::translate('tx_mask.date', 'mask')
+                    ],
+                    [
+                        'name' => 'choice',
+                        'label' => LocalizationUtility::translate('tx_mask.choice', 'mask')
+                    ],
+                    [
+                        'name' => 'repeating',
+                        'label' => LocalizationUtility::translate('tx_mask.repeating', 'mask')
+                    ],
+                    [
+                        'name' => 'structure',
+                        'label' => LocalizationUtility::translate('tx_mask.structure', 'mask')
+                    ]
+                ]
+            ]
+        );
     }
 
     public function multiUse(ServerRequestInterface $request): Response

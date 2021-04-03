@@ -1,0 +1,11 @@
+.mask-sidebar {
+  width: 350px;
+  background-color: #fff;
+
+  &__content {
+    background-color: #fafafa;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-top: 0;
+  }
+}

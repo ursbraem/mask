@@ -87,7 +87,7 @@ define([
     @add="onAdd"
     :move="move"
   >
-  <li v-for="(field, index) in fields" :key="uuid(field)" :class="['tx_mask_btn', {active: global.activeField == field}, 'id_' + field.name, {'has-error': fieldHasError(field)}]">
+  <li v-for="(field, index) in fields" :key="uuid(field)" class="tx_mask_btn" :class="[{active: global.activeField == field}, 'id_' + field.name, {'has-error': fieldHasError(field)}]">
     <div class="tx_mask_btn_row" @click="global.activeField = field; global.currentTab = 'general'">
         <div class="tx_mask_btn_img">
             <div v-html="field.icon"></div>
