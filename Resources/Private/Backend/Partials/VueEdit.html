@@ -37,9 +37,8 @@
         </div>
     </div>
     <div class="mask-fields">
-        <div class="mask-fields__label t3js-formengine-label">
-            <f:translate key="tx_mask.all.fields_of_element"/>
-        </div>
+        <div v-if="type == 'tt_content'" class="mask-fields__label t3js-formengine-label">{{ element.label }}</div>
+        <div v-else class="mask-fields__label t3js-formengine-label">{{ element.title }}</div>
         <div class="mask-field-list" :class="{'mask-field-list--empty': !fields.length}">
             <nested-draggable
                 :depth="0"
