@@ -298,6 +298,7 @@
 
 .mask-sidebar {
   width: 350px;
+  flex-shrink: 0;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -309,6 +310,8 @@
     border: 1px solid #ccc;
     border-top: 0;
     flex-grow: 1; }
+  .mask-sidebar textarea {
+    max-width: 100%; }
 
 .mask-field-list {
   background: none;
@@ -355,6 +358,7 @@
 
 .mask-fields {
   width: 480px;
+  flex-shrink: 0;
   background-color: #fafafa;
   border: 1px solid #ccc;
   margin-right: 10px;
@@ -627,24 +631,25 @@
   overflow-y: scroll; }
 
 .mask-elements__table tr {
-  height: 45px;
-  position: relative; }
-  .mask-elements__table tr.has-warning:after {
-    font-family: FontAwesome;
-    font-size: 15px;
-    text-align: center;
-    content: "\f06a";
-    color: #ffc107;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 3px;
-    left: 1px;
-    height: 13px;
-    border-radius: 50%;
-    background-color: #fff;
-    z-index: 1; }
+  height: 45px; }
+  .mask-elements__table tr.has-warning {
+    position: relative; }
+    .mask-elements__table tr.has-warning:after {
+      font-family: FontAwesome;
+      font-size: 15px;
+      text-align: center;
+      content: "\f06a";
+      color: #ffc107;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 3px;
+      left: 1px;
+      height: 13px;
+      border-radius: 50%;
+      background-color: #fff;
+      z-index: 1; }
 
 .mask-elements__element-name {
   display: flex;

@@ -26,10 +26,9 @@ define([
             },
             template: `
     <div class="col-sm-6">
-        <label class="t3js-formengine-label" for="meta_icon">
-            <a href="https://fortawesome.github.io/Font-Awesome/icons/" target="_blank">
-                {{ language.icon }}
-            </a>
+        <label class="t3js-formengine-label">
+            {{ language.icon }}
+            <a href="https://fontawesome.com/v4.7.0/icons/" target="_blank" title="FontAwesome 4.7 Icons"><i class="fa fa-question-circle"></i></a>
         </label>
         <div class="t3js-formengine-field-item icon-field">
             <div class="form-control-wrap">

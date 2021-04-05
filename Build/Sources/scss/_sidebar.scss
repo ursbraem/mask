@@ -1,5 +1,6 @@
 .mask-sidebar {
   width: 350px;
+  flex-shrink: 0;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -12,5 +13,9 @@
     border: 1px solid #ccc;
     border-top: 0;
     flex-grow: 1;
+  }
+
+  textarea {
+    max-width: 100%;
   }
 }

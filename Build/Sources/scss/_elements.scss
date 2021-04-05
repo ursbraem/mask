@@ -59,9 +59,10 @@
   &__table {
     tr {
       height: 45px;
-      position: relative;
 
       &.has-warning {
+        position: relative;
+
         &:after {
           font-family: FontAwesome;
           font-size: 15px;
