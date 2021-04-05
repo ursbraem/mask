@@ -1,8 +1,11 @@
 .mask-fields {
-  padding: 0 15px;
   width: 480px;
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  padding: 8px 15px 20px;
 
   &__label {
-    margin-bottom: 13px;
+    margin-bottom: 5px;
   }
 }

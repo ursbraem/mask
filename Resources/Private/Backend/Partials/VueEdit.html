@@ -37,9 +37,9 @@
         </div>
     </div>
     <div class="mask-fields">
-        <label class="mask-fields__label t3js-formengine-label">
+        <div class="mask-fields__label t3js-formengine-label">
             <f:translate key="tx_mask.all.fields_of_element"/>
-        </label>
+        </div>
         <div class="mask-field-list" :class="{'mask-field-list--empty': !fields.length}">
             <nested-draggable
                 :depth="0"
@@ -55,7 +55,7 @@
             </nested-draggable>
         </div>
     </div>
-    <div class="form-group col-sm-6 mask-field-form">
+    <div class="form-group mask-field-form">
         <f:render partial="VueForm"/>
     </div>
 </div>

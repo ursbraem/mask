@@ -1,11 +1,16 @@
 .mask-sidebar {
   width: 350px;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 20px);
+  margin-right: 10px;
 
   &__content {
     background-color: #fafafa;
     padding: 10px;
     border: 1px solid #ccc;
     border-top: 0;
+    flex-grow: 1;
   }
 }

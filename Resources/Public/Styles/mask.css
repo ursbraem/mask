@@ -298,23 +298,30 @@
 
 .mask-sidebar {
   width: 350px;
-  background-color: #fff; }
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 20px);
+  margin-right: 10px; }
   .mask-sidebar__content {
     background-color: #fafafa;
     padding: 10px;
     border: 1px solid #ccc;
-    border-top: 0; }
+    border-top: 0;
+    flex-grow: 1; }
 
 .mask-field-list {
   background: none;
   height: auto;
   margin: 0;
   border: 1px dashed #bbb;
-  padding: 10px; }
+  padding: 10px;
+  background-color: #fff; }
   .mask-field-list--empty {
     background: url("/typo3conf/ext/mask/Resources/Public/Images/empty.svg") no-repeat;
     background-position: center 35%;
-    background-size: 300px; }
+    background-size: 300px;
+    background-color: #fff; }
   .mask-field-list > .dragtarget {
     display: block;
     min-height: 438px !important;
@@ -338,7 +345,8 @@
 .mask-field-form {
   background: #fff;
   margin-top: 20px;
-  padding-top: 30px; }
+  padding-top: 30px;
+  flex-grow: 1; }
   @media screen and (min-width: 1200px) {
     .mask-field-form {
       height: 100%;
@@ -346,10 +354,13 @@
       margin-top: 0; } }
 
 .mask-fields {
-  padding: 0 15px;
-  width: 480px; }
+  width: 480px;
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  padding: 8px 15px 20px; }
   .mask-fields__label {
-    margin-bottom: 13px; }
+    margin-bottom: 5px; }
 
 .mask-field-group {
   position: relative;
