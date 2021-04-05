@@ -60,21 +60,5 @@
 
 <div class="row">
     <font-icon-picker :element="element" :language="language" :fa-icons="faIcons" ref="iconPicker"></font-icon-picker>
-    <div class="col-sm-6">
-        <label class="t3js-formengine-label" for="meta_color">
-            <f:translate key="tx_mask.all.color"/>
-        </label>
-        <div class="t3js-formengine-field-item">
-            <div class="form-control-wrap">
-                <input
-                    v-model="element.color"
-                    type="color"
-                    class="form-control"
-                    id="meta_color"
-                    placeholder="{f:translate(key: 'tx_mask.all.color')}"
-                    title="{f:translate(key: 'tx_mask.all.color')}"
-                />
-            </div>
-        </div>
-    </div>
+    <element-color-picker :element="element" :language="language"></element-color-picker>
 </div>

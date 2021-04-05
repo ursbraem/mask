@@ -722,6 +722,7 @@ class AjaxController extends ActionController
 
         $language['deleted'] = LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask');
         $language['icon'] = LocalizationUtility::translate('tx_mask.all.icon', 'mask');
+        $language['color'] = LocalizationUtility::translate('tx_mask.all.color', 'mask');
 
         return new JsonResponse($language);
     }

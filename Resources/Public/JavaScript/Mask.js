@@ -9,6 +9,7 @@ define([
   'TYPO3/CMS/Mask/Components/ButtonBar',
   'TYPO3/CMS/Mask/Components/FontIconPicker',
   'TYPO3/CMS/Mask/Components/FieldGroup',
+  'TYPO3/CMS/Mask/Components/ElementColorPicker',
   'TYPO3/CMS/Core/Ajax/AjaxRequest',
   'TYPO3/CMS/Backend/Icons',
   'TYPO3/CMS/Backend/Modal',
@@ -25,6 +26,7 @@ define([
   buttonBar,
   fontIconPicker,
   fieldGroup,
+  elementColorPicker,
   AjaxRequest,
   Icons,
   Modal,
@@ -47,6 +49,7 @@ define([
       buttonBar,
       fontIconPicker,
       fieldGroup,
+      elementColorPicker,
     },
     data: function () {
       return {
