@@ -450,7 +450,7 @@ return [
         'label' => 'tx_mask.field.select.foreign_table_where',
         'description' => 'tx_mask.field.select.foreign_table_where.description',
         'code' => 'foreign_table_where',
-        'documentation' => 'ColumnsConfig/Type/selectSingle.html#foreign_table_where'
+        'documentation' => 'ColumnsConfig/Type/selectSingle.html#foreign-table-where'
     ],
     'config.fileFolder' => [
         'type' => 'text',
