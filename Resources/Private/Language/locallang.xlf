@@ -511,7 +511,7 @@ title3, value3, icon3, description3
 				<source>Size</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.select.size.description">
-				<source>Minimum height of the box in FormEngine. The behaviour is dependent of the renderType.</source>
+				<source>Minimum height of the box in FormEngine. The behaviour depends on the renderType.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.select.autosizemax">
 				<source>AutoSizeMax</source>
