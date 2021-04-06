@@ -19,6 +19,11 @@ namespace MASK\Mask\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
+/**
+ * Class Content
+ * @package MASK\Mask\Domain\Model
+ * @todo delete me
+ */
 class Content extends AbstractEntity
 {
 

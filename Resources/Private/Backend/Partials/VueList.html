@@ -36,7 +36,8 @@
                         <td>
                             <div class="mask-elements__description">{{ item.description }}</div>
                         </td>
-                        <td>
+                        <td class="mask-elements__count"><span :title="language.usage">{{ item.count }}</span></td>
+                        <td class="mask-elements__buttons">
                             <button-bar
                                     @toggle="loadElements"
                                     :element="item"

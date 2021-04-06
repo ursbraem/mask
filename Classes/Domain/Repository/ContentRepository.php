@@ -23,6 +23,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * @method findByContentType(string $string)
+ * @todo delete me
  */
 class ContentRepository extends Repository
 {

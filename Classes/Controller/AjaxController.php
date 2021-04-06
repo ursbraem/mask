@@ -32,6 +32,7 @@ use MASK\Mask\Utility\TcaConverterUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\View\BackendLayout\BackendLayout;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
@@ -308,11 +309,25 @@ class AjaxController extends ActionController
                 'shortLabel' => $element['shortLabel'],
                 'iconMarkup' => $element['key'] ? $this->iconFactory->getIcon('mask-ce-' . $element['key'], Icon::SIZE_DEFAULT, $overlay)->render() : '',
                 'templateExists' => $this->checkTemplate($element['key']) ? 1 : 0,
-                'hidden' => ($element['hidden'] ?? false) ? 1 : 0
+                'hidden' => ($element['hidden'] ?? false) ? 1 : 0,
+                'count' => $this->getElementCount($element['key'])
             ];
         }
         $json['elements'] = $elements;
         return new JsonResponse($json);
+    }
+
+    protected function getElementCount($elementKey)
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('tt_content');
+
+        return $queryBuilder
+            ->select('uid')
+            ->from('tt_content')
+            ->where($queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(MaskUtility::addMaskCTypePrefix($elementKey))))
+            ->execute()
+            ->rowCount();
     }
 
     public function loadElement(ServerRequestInterface $request): Response
@@ -417,7 +432,7 @@ class AjaxController extends ActionController
 
             if ($fieldType->isParentField()) {
                 $inlineTable = $fieldType->equals(FieldType::INLINE) ? $newField['key'] : $table;
-                $newField['fields'] = $this->addFields($field['inlineFields'], $inlineTable , $elementKey, $newField);
+                $newField['fields'] = $this->addFields($field['inlineFields'], $inlineTable, $elementKey, $newField);
             }
 
             $nestedFields[] = $newField;
@@ -723,6 +738,7 @@ class AjaxController extends ActionController
         $language['deleted'] = LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask');
         $language['icon'] = LocalizationUtility::translate('tx_mask.all.icon', 'mask');
         $language['color'] = LocalizationUtility::translate('tx_mask.all.color', 'mask');
+        $language['usage'] = LocalizationUtility::translate('tx_mask.content.count', 'mask');
 
         return new JsonResponse($language);
     }
@@ -917,7 +933,7 @@ class AjaxController extends ActionController
 
     protected function getTemplate($key): string
     {
-        return  MaskUtility::getTemplatePath($this->settingsService->get(), $key);
+        return MaskUtility::getTemplatePath($this->settingsService->get(), $key);
     }
 
     /**

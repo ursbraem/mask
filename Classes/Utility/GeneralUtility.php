@@ -34,6 +34,10 @@ class GeneralUtility
      */
     protected $storageRepository;
 
+    protected const MASK_PREFIX = 'tx_mask_';
+
+    protected const MASK_CTYPE_PREFIX = 'mask_';
+
     public function __construct(StorageRepository $storageRepository)
     {
         $this->storageRepository = $storageRepository;
@@ -234,7 +238,7 @@ class GeneralUtility
      */
     public static function isMaskCType($cType)
     {
-        return strpos($cType, 'mask_') === 0;
+        return strpos($cType, self::MASK_PREFIX) === 0;
     }
 
     /**
@@ -245,7 +249,10 @@ class GeneralUtility
      */
     public static function removeMaskPrefix($maskKey)
     {
-        return substr($maskKey, 8);
+        if (self::isMaskIrreTable($maskKey)) {
+            return substr($maskKey, 8);
+        }
+        return $maskKey;
     }
 
     /**
@@ -256,6 +263,21 @@ class GeneralUtility
      */
     public static function removeCtypePrefix($maskKey)
     {
-        return substr($maskKey, 5);
+        if (self::isMaskCType($maskKey)) {
+            return substr($maskKey, 5);
+        }
+        return $maskKey;
+    }
+
+    public static function addMaskPrefix($key)
+    {
+        $key = self::removeMaskPrefix($key);
+        return self::MASK_PREFIX . $key;
+    }
+
+    public static function addMaskCTypePrefix($key)
+    {
+        $key = self::removeCtypePrefix($key);
+        return self::MASK_CTYPE_PREFIX . $key;
     }
 }

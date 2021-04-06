@@ -19,6 +19,11 @@ namespace MASK\Mask\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * Class PageRepository
+ * @package MASK\Mask\Domain\Repository
+ * @todo delete me
+ */
 class PageRepository extends Repository
 {
 }

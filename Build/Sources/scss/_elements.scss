@@ -56,6 +56,14 @@
     overflow-y: scroll;
   }
 
+  &__count {
+    text-align: right;
+  }
+
+  &__buttons {
+    width: 130px;
+  }
+
   &__table {
     tr {
       height: 45px;

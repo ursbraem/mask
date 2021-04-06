@@ -630,6 +630,12 @@
   height: 80vh;
   overflow-y: scroll; }
 
+.mask-elements__count {
+  text-align: right; }
+
+.mask-elements__buttons {
+  width: 130px; }
+
 .mask-elements__table tr {
   height: 45px; }
   .mask-elements__table tr.has-warning {
