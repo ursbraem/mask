@@ -406,7 +406,7 @@ define([
         });
 
         // Step 3: Check if key is in possible tca array and avoid ajax check if so
-        if (this.availableTcaKeys[field.name].includes(field.key)) {
+        if (this.getAvailableTcaKeys()[field.name].includes(field.key)) {
           return;
         }
 
@@ -418,7 +418,6 @@ define([
         // Check if key already exists in table
         let arguments = {
           key: field.key,
-          table: this.type,
           type: field.name,
           elementKey: ''
         };
@@ -836,7 +835,20 @@ define([
           }
         });
         return keys;
-      }
+      },
+      getAvailableTcaKeys: function () {
+        const keys = {};
+        Object.keys(this.availableTca).forEach(function (key) {
+          keys[key] = [];
+          mask.availableTca[key].core.forEach(function (item) {
+            keys[key].push(item.field);
+          });
+          mask.availableTca[key].mask.forEach(function (item) {
+            keys[key].push(item.field);
+          });
+        });
+        return keys;
+      },
     },
     computed: {
       hasErrors: function () {
@@ -902,19 +914,6 @@ define([
       },
       isGeneralTabOpen: function () {
         return this.global.currentTab === 'general';
-      },
-      availableTcaKeys: function () {
-        const keys = {};
-        Object.keys(this.availableTca).forEach(function (key) {
-          keys[key] = [];
-          mask.availableTca[key].core.forEach(function (item) {
-            keys[key].push(item.field);
-          });
-          mask.availableTca[key].mask.forEach(function (item) {
-            keys[key].push(item.field);
-          });
-        });
-        return keys;
       },
       availableCoreTcaForActiveField: function () {
         return this.availableTcaForActiveField('core');

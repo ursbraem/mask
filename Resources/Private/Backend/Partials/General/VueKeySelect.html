@@ -15,7 +15,7 @@
                     <f:translate key="tx_mask.field.newfield"/>
                 </option>
             </optgroup>
-            <optgroup label="Current new key" v-if="global.activeField.key !== global.maskPrefix && !availableTcaKeys[global.activeField.name].includes(global.activeField.key)">
+            <optgroup label="Current new key" v-if="global.activeField.key !== global.maskPrefix && !(getAvailableTcaKeys()[global.activeField.name].includes(global.activeField.key))">
                 <option :value="global.activeField.key">{{ global.activeField.key }}</option>
             </optgroup>
             <optgroup v-if="availableCoreTcaForActiveField.length" class="c-divider" label="Core fields">
