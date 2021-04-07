@@ -854,7 +854,10 @@ class AjaxController extends ActionController
     }
 
     /**
-     * Checks if a key for a field is available
+     * Checks if a key for a field is available.
+     * Inline fields and content fields must not be used across elements.
+     * Other "normal" fields can be used in different elements, but changes are applied for both.
+     *
      * @param ServerRequest $request
      * @return Response
      */
@@ -862,10 +865,6 @@ class AjaxController extends ActionController
     {
         $queryParams = $request->getQueryParams();
         $fieldKey = $queryParams['key'];
-        $table = $queryParams['table'];
-        if (!$table) {
-            $table = 'tt_content';
-        }
         $type = $queryParams['type'];
         $elementKey = $queryParams['elementKey'];
 
@@ -878,13 +877,6 @@ class AjaxController extends ActionController
 
         if ($type == FieldType::CONTENT) {
             $fieldExists = $this->fieldHelper->getFieldType($fieldKey, $elementKey);
-        } elseif ($elementKey) {
-            $elementsUse = $this->storageRepository->getElementsWhichUseField($fieldKey, $table);
-            if (count($elementsUse) > 0) {
-                $fieldExists = true;
-            }
-        } else {
-            $fieldExists = $this->storageRepository->loadField($table, $fieldKey);
         }
 
         return new JsonResponse(['isAvailable' => !$keyExists && !$fieldExists]);
