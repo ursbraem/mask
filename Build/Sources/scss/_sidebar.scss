@@ -18,4 +18,34 @@
   textarea {
     max-width: 100%;
   }
+
+  &__toggle-wrap {
+    display: flex;
+    margin: 0 -5px;
+  }
+
+  &__toggle {
+    flex-grow: 1;
+    padding: 7px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+    cursor: pointer;
+    width: 50%;
+    position: relative;
+
+    &.active,
+    &:hover {
+      background-color: #eaf4fd;
+    }
+
+    &.has-error {
+      &:before {
+        @extend %error;
+      }
+    }
+  }
 }

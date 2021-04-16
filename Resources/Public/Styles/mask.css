@@ -296,6 +296,24 @@
 .icons-selector.fip-grey .icons-picker-error i:before {
   color: #eee; }
 
+.mask-sidebar__toggle.has-error:before, .dragtarget .mask-select-field.has-error:before,
+.mask-field.has-error:before {
+  font-family: FontAwesome;
+  font-size: 15px;
+  text-align: center;
+  content: "\f06a";
+  color: #c83c3c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -2px;
+  left: -3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: #fff; }
+
 .mask-sidebar {
   width: 350px;
   flex-shrink: 0;
@@ -312,6 +330,23 @@
     flex-grow: 1; }
   .mask-sidebar textarea {
     max-width: 100%; }
+  .mask-sidebar__toggle-wrap {
+    display: flex;
+    margin: 0 -5px; }
+  .mask-sidebar__toggle {
+    flex-grow: 1;
+    padding: 7px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+    cursor: pointer;
+    width: 50%;
+    position: relative; }
+    .mask-sidebar__toggle.active, .mask-sidebar__toggle:hover {
+      background-color: #eaf4fd; }
 
 .mask-field-list {
   background: none;
@@ -741,23 +776,6 @@
   min-height: 37px;
   margin-bottom: 4px;
   width: 100%; }
-  .dragtarget .mask-select-field.has-error:before,
-  .mask-field.has-error:before {
-    font-family: FontAwesome;
-    font-size: 15px;
-    text-align: center;
-    content: "\f06a";
-    color: #c83c3c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: -2px;
-    left: -3px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background-color: #fff; }
   .dragtarget .mask-select-field.ghost,
   .mask-field.ghost {
     opacity: 0.5; }

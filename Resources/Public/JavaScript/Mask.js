@@ -950,10 +950,10 @@ define([
         }
         return [];
       },
-      elementTabOpened: function () {
-        return this.sidebar === 'element';
+      metaVisible: function () {
+        return this.sidebar === 'meta';
       },
-      fieldsTabOpened: function () {
+      fieldsVisible: function () {
         return this.sidebar === 'fields';
       }
     }
