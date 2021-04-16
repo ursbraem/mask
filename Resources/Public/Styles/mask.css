@@ -332,19 +332,18 @@
     max-width: 100%; }
   .mask-sidebar__toggle-wrap {
     display: flex;
-    margin: 0 -5px; }
+    border: 1px solid #ccc;
+    margin-bottom: 10px; }
   .mask-sidebar__toggle {
     flex-grow: 1;
     padding: 7px;
     background-color: #fff;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
     text-align: center;
     cursor: pointer;
     width: 50%;
     position: relative; }
+    .mask-sidebar__toggle:first-child {
+      border-right: 1px solid #ccc; }
     .mask-sidebar__toggle.active, .mask-sidebar__toggle:hover {
       background-color: #eaf4fd; }
 
