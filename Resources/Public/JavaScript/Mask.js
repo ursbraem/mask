@@ -485,7 +485,7 @@ define([
         this.element = this.getNewElement();
 
         /** Step 1: Choose element label */
-        MultiStepWizard.addSlide('new-mask-element-step-1', 'Choose element label', 'Choose element label', Severity.info, 'Choose title', function (slide) {
+        MultiStepWizard.addSlide('new-mask-element-step-1', 'Choose element label', '', Severity.info, null, function (slide) {
           let html = '';
           html += '<p>You can change the label later on in "Element Meta Data".</p>';
           html += '<label class="control-label" for="mask-step-label">Element label</label>';
@@ -504,7 +504,7 @@ define([
         });
 
         /** Step 2: Choose element key. Generate suggestion from chosen label. */
-        MultiStepWizard.addSlide('new-mask-element-step-2', 'Choose element key', 'Choose element key', Severity.info, 'Choose key', (slide) => {
+        MultiStepWizard.addSlide('new-mask-element-step-2', 'Choose element key', '', Severity.info, null, (slide) => {
           let html = '';
           html += '<p>You can change the key later on in "Element Meta Data".</p>';
           html += '<label class="control-label" for="mask-step-label">Element key</label>';
