@@ -15,6 +15,7 @@ define([
   'TYPO3/CMS/Backend/Modal',
   'TYPO3/CMS/Backend/Severity',
   'TYPO3/CMS/Backend/Notification',
+  'TYPO3/CMS/Backend/MultiStepWizard',
 ], function (
   Vue,
   draggable,
@@ -32,6 +33,7 @@ define([
   Modal,
   Severity,
   Notification,
+  MultiStepWizard,
 ) {
   if (!document.getElementById('mask')) {
     return;
@@ -477,17 +479,63 @@ define([
           return field !== removedField;
         });
       },
-      openNew: function (type) {
-        this.loaded = false;
+      openNew: function () {
         this.resetState();
-        this.mode = 'new';
-        this.type = type;
-        if (this.type === 'tt_content') {
-          this.element = this.getNewElement();
-        }
+        this.type = 'tt_content';
+        this.element = this.getNewElement();
 
-        Promise.resolve(this.loadTca()).then(() => {
-          mask.loaded = true;
+        /** Step 1: Choose element label */
+        MultiStepWizard.addSlide('new-mask-element-step-1', 'Choose element label', 'Choose element label', Severity.info, 'Choose title', function (slide) {
+          let html = '';
+          html += '<p>You can change the label later on in "Element Meta Data".</p>';
+          html += '<label class="control-label" for="mask-step-label">Element label</label>';
+          html += '<input id="mask-step-label" class="form-control" placeholder="My Element Label"/>';
+          slide.html(html);
+
+          MultiStepWizard.blurCancelStep();
+          MultiStepWizard.lockPrevStep();
+
+          const elementLabel = MultiStepWizard.setup.$carousel.closest('.modal').find('#mask-step-label');
+          elementLabel.focus();
+          MultiStepWizard.set('elementLabel', '');
+          elementLabel.on('change', function () {
+            MultiStepWizard.set('elementLabel', $(this).val());
+          });
+        });
+
+        /** Step 2: Choose element key. Generate suggestion from chosen label. */
+        MultiStepWizard.addSlide('new-mask-element-step-2', 'Choose element key', 'Choose element key', Severity.info, 'Choose key', (slide) => {
+          let html = '';
+          html += '<p>You can change the key later on in "Element Meta Data".</p>';
+          html += '<label class="control-label" for="mask-step-label">Element key</label>';
+          html += '<input id="mask-step-key" class="form-control" placeholder="my_element_key"/>';
+          slide.html(html);
+
+          const elementKey = MultiStepWizard.setup.$carousel.closest('.modal').find('#mask-step-key');
+          elementKey.val(this.checkAllowedCharacters(MultiStepWizard.setup.settings['elementLabel']));
+          MultiStepWizard.set('elementKey', elementKey.val());
+          elementKey.on('change', function () {
+            MultiStepWizard.set('elementKey', $(this).val());
+          });
+
+          let modal = MultiStepWizard.setup.$carousel.closest('.modal');
+          let nextButton = modal.find('.modal-footer').find('button[name="next"]');
+          nextButton.focus();
+        });
+
+        MultiStepWizard.addFinalProcessingSlide(() => {
+          this.element.label = MultiStepWizard.setup.settings['elementLabel'];
+          this.element.key = MultiStepWizard.setup.settings['elementKey'];
+          this.loaded = false;
+          this.mode = 'new';
+          this.validate();
+
+          Promise.resolve(this.loadTca()).then(() => {
+            this.loaded = true;
+            MultiStepWizard.dismiss();
+          });
+        }).done(function () {
+          MultiStepWizard.show();
         });
       },
       openEdit: function (type, element) {
@@ -602,6 +650,7 @@ define([
         this.type = '';
         this.element = {};
         this.fields = [];
+        this.sidebar = 'fields';
         this.multiUseElements = {};
         this.global.deletedFields = [];
         this.global.activeField = {};
@@ -796,6 +845,7 @@ define([
       },
       checkAllowedCharacters: function (key) {
         key = key.toLowerCase();
+        key = key.replace(/\s/g, '_');
         key = key.replace(/[^a-z0-9_]/g, '');
         return key;
       },
