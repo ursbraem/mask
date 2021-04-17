@@ -115,7 +115,8 @@ class SqlCodeGenerator
                         $sql_content[] = 'CREATE TABLE ' . $table . " (\n\t" . $fieldKey . ' ' . $definition . "\n);\n";
                         // if this field is a content field, also add parent columns
                         if ($fieldType == FieldType::CONTENT) {
-                            $sql_content[] = "CREATE TABLE tt_content (\n\t" . $fieldKey . '_parent' . ' ' . $definition . ",\n\t" . 'KEY ' . $fieldKey . ' (' . $fieldKey . '_parent,pid)' . "\n);\n";
+                            $parentField = MaskUtility::addMaskParentSuffix($fieldKey);
+                            $sql_content[] = "CREATE TABLE tt_content (\n\t" . $parentField . ' ' . $definition . ",\n\t" . 'KEY ' . $fieldKey . ' (' . $parentField . ',pid)' . "\n);\n";
                         }
                     }
                 }

@@ -480,4 +480,27 @@ class GeneralUtilityTest extends UnitTestCase
     {
         self::assertSame($expected, GeneralUtility::replaceKey($data, $replaceKey, $replaceMarker));
     }
+
+    /**
+     * @test
+     */
+    public function maskPrefixSuffixTest()
+    {
+        self::assertSame('abc', GeneralUtility::removeMaskPrefix('tx_mask_abc'));
+        self::assertSame('tx_mask_abc', GeneralUtility::addMaskPrefix('abc'));
+        self::assertSame('tx_mask_abc', GeneralUtility::addMaskPrefix('tx_mask_abc'));
+        self::assertTrue(GeneralUtility::isMaskIrreTable('tx_mask_abc'));
+        self::assertFalse(GeneralUtility::isMaskIrreTable('tx_maskabc'));
+
+        self::assertSame('abc', GeneralUtility::removeCTypePrefix('mask_abc'));
+        self::assertSame('mask_abc', GeneralUtility::addMaskCTypePrefix('abc'));
+        self::assertSame('mask_abc', GeneralUtility::addMaskCTypePrefix('mask_abc'));
+        self::assertTrue(GeneralUtility::isMaskCType('mask_abc'));
+        self::assertFalse(GeneralUtility::isMaskCType('maskabc'));
+
+        self::assertSame('tx_mask_abc', GeneralUtility::removeMaskParentSuffix('tx_mask_abc_parent'));
+        self::assertSame('tx_mask_abc_parent', GeneralUtility::addMaskParentSuffix('tx_mask_abc'));
+        self::assertTrue(GeneralUtility::isMaskParent('tx_mask_abc_parent'));
+        self::assertFalse(GeneralUtility::isMaskParent('tx_mask_abcparent'));
+    }
 }

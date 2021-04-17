@@ -112,7 +112,7 @@ class InlineHelper
 
         // if the table is tt_content, load the element and all its columns
         if ($table === 'tt_content') {
-            $element = $this->storageRepository->loadElement($table, MaskUtility::removeCtypePrefix($cType));
+            $element = $this->storageRepository->loadElement($table, MaskUtility::removeCTypePrefix($cType));
             $elementFields = $element['columns'];
         } elseif ($table === 'pages') {
             // if the table is pages, then load the pid
@@ -139,7 +139,7 @@ class InlineHelper
 
         // Check type of all element columns
         foreach ($elementFields ?? [] as $field) {
-            $fieldKey = str_replace('tx_mask_', '', $field);
+            $fieldKey = MaskUtility::removeMaskPrefix($field);
             $type = $this->storageRepository->getFormType($fieldKey, ($element['key'] ?? ''), $table);
 
             if ($type == FieldType::PALETTE) {
@@ -166,7 +166,7 @@ class InlineHelper
                 $data,
                 $field,
                 $cType,
-                $field . '_parent',
+                MaskUtility::addMaskParentSuffix($field),
                 'tt_content',
                 'tt_content'
             );

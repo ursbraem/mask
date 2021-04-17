@@ -623,7 +623,7 @@ class AjaxController extends ActionController
                 }
                 if ($fieldType === $type) {
                     $key = $isMaskField ? 'mask' : 'core';
-                    $label = $isMaskField ? (str_replace('tx_mask_', '', $tcaField)) : LocalizationUtility::translate($tcaConfig['label']);
+                    $label = $isMaskField ? MaskUtility::removeMaskPrefix($tcaField) : LocalizationUtility::translate($tcaConfig['label']);
                     $fields[$key][] = [
                         'field' => $tcaField,
                         'label' => $label,

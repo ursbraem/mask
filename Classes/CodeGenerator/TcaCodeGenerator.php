@@ -141,6 +141,8 @@ class TcaCodeGenerator
                 continue;
             }
 
+            $cTypeKey = MaskUtility::addMaskCTypePrefix($elementvalue['key']);
+
             // Optional shortLabel
             $label = $elementvalue['shortLabel'] ?: $elementvalue['label'];
 
@@ -148,7 +150,7 @@ class TcaCodeGenerator
             ExtensionManagementUtility::addPlugin(
                 [
                     $label,
-                    'mask_' . $elementvalue['key'],
+                    $cTypeKey,
                     'mask-ce-' . $elementvalue['key']
                 ],
                 'CType',
@@ -158,9 +160,9 @@ class TcaCodeGenerator
             // Add all the fields that should be shown
             [$prependTabs, $fields] = $this->generateShowItem($prependTabs, $key, 'tt_content');
 
-            $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['mask_' . $elementvalue['key']] = 'mask-ce-' . $elementvalue['key'];
-            $GLOBALS['TCA']['tt_content']['types']['mask_' . $elementvalue['key']]['columnsOverrides']['bodytext']['config']['enableRichtext'] = 1;
-            $GLOBALS['TCA']['tt_content']['types']['mask_' . $elementvalue['key']]['showitem'] = $prependTabs . $defaultPalette . $fields . $defaultTabs . $gridelements;
+            $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes'][$cTypeKey] = 'mask-ce-' . $elementvalue['key'];
+            $GLOBALS['TCA']['tt_content']['types'][$cTypeKey]['columnsOverrides']['bodytext']['config']['enableRichtext'] = 1;
+            $GLOBALS['TCA']['tt_content']['types'][$cTypeKey]['showitem'] = $prependTabs . $defaultPalette . $fields . $defaultTabs . $gridelements;
         }
     }
 
@@ -354,7 +356,7 @@ class TcaCodeGenerator
 
             // Content: Set foreign_field and default CType in select if restricted.
             if (($tcavalue['config']['foreign_table'] ?? '') === 'tt_content' && ($tcavalue['config']['type'] ?? '') === 'inline') {
-                $parentField = $tcakey . '_parent';
+                $parentField = MaskUtility::addMaskParentSuffix($tcakey);
                 $tcavalue['config']['foreign_field'] = $parentField;
                 if ($table === 'tt_content') {
                     $columns[$parentField] = [

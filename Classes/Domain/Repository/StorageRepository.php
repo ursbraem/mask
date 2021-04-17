@@ -159,13 +159,14 @@ class StorageRepository implements SingletonInterface
                     $inlineParent = $tca['inlineParent'] ?? '';
                 }
                 if ($inlineParent === $parentKey) {
+                    $maskKey = MaskUtility::addMaskPrefix($tca['key']);
                     if ($this->getFormType($tca['key'], $elementKey, $table) === FieldType::INLINE) {
                         $tca['inlineFields'] = $this->loadInlineFields($key, $elementKey);
                     }
                     if (($tca['config']['type'] ?? '') === 'palette') {
-                        $tca['inlineFields'] = $this->loadInlineFields('tx_mask_' . $tca['key'], $elementKey);
+                        $tca['inlineFields'] = $this->loadInlineFields($maskKey, $elementKey);
                     }
-                    $tca['maskKey'] = 'tx_mask_' . $tca['key'];
+                    $tca['maskKey'] = $maskKey;
                     $inlineFields[] = $tca;
                 }
             }
@@ -429,7 +430,7 @@ class StorageRepository implements SingletonInterface
     private function removeField($table, $field, $json): array
     {
         $maskKey = $field;
-        $field = str_replace('tx_mask_', '', $maskKey);
+        $field = MaskUtility::removeMaskPrefix($maskKey);
         $keyToUse = isset($json[$table]['tca'][$field]) ? $field : $maskKey;
 
         // check if this field is used in any other elements
@@ -452,7 +453,7 @@ class StorageRepository implements SingletonInterface
                 // Only remove if not in use in another element
                 if (!$usedInAnotherElement) {
                     $parentTable = ($inlineField['inPalette'] ?? false) ? $table : $inlineField['inlineParent'];
-                    $inlineKey = 'tx_mask_' . $inlineField['key'];
+                    $inlineKey = MaskUtility::addMaskPrefix($inlineField['key']);
                     $json = $this->removeField($parentTable, $inlineKey, $json);
                 }
             }
@@ -556,9 +557,10 @@ class StorageRepository implements SingletonInterface
     public function getFormType($fieldKey, $elementKey = '', $type = 'tt_content'): string
     {
         $element = [];
+        $maskKey = MaskUtility::addMaskPrefix($fieldKey);
 
         // Check if TCA for mask key exists, else assume it's a core field.
-        $tca = $GLOBALS['TCA'][$type]['columns']['tx_mask_' . $fieldKey] ?? [];
+        $tca = $GLOBALS['TCA'][$type]['columns'][$maskKey] ?? [];
         if (!$tca) {
             $tca = $GLOBALS['TCA'][$type]['columns'][$fieldKey] ?? [];
         }
@@ -575,7 +577,7 @@ class StorageRepository implements SingletonInterface
         if (!$tca || !in_array($type, ['tt_content', 'pages'])) {
             $tca = $this->loadField($type, $fieldKey);
             if (!($tca['config'] ?? false)) {
-                $tca = $this->loadField($type, 'tx_mask_' . $fieldKey);
+                $tca = $this->loadField($type, $maskKey);
             }
         }
 
