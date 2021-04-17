@@ -8,10 +8,7 @@ defined('TYPO3_MODE') or die();
     'mask',
     'bottom',
     [
-        \MASK\Mask\Controller\WizardController::class => 'list, createMissingFolders',
-        \MASK\Mask\Controller\WizardContentController::class => 'new, create, update, delete, purge, generate, showHtml, createMissingFolders, hide, activate, createHtml',
-        \MASK\Mask\Controller\WizardPageController::class => 'edit, update, showHtml',
-        \MASK\Mask\Controller\AjaxController::class => 'fieldTypes'
+        \MASK\Mask\Controller\WizardController::class => 'list',
     ],
     [
         'access' => 'admin',

@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace MASK\Mask\CodeGenerator;
 
 use MASK\Mask\Enumeration\FieldType;
-use MASK\Mask\Domain\Model\BackendLayout;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Imaging\IconProvider\ContentElementIconProvider;
@@ -173,35 +172,6 @@ class TyposcriptCodeGenerator
         $configuration = $this->storageRepository->load();
         // generate TypoScript setup
         $setupContent = [];
-
-        // for backend module
-        $setupContent[] = $this->convertArrayToTypoScript([
-            'view' => [
-                'templateRootPaths' => [
-                    10 => 'EXT:mask/Resources/Private/Backend/Templates/'
-                ],
-                'partialRootPaths' => [
-                    10 => 'EXT:mask/Resources/Private/Backend/Partials/'
-                ],
-                'layoutRootPaths' => [
-                    10 => 'EXT:mask/Resources/Private/Backend/Layouts/'
-                ]
-            ],
-            // TODO remove
-            'persistence' => [
-                'classes' => [
-                    BackendLayout::class => [
-                        'mapping' => [
-                            'tableName' => 'backend_layout',
-                            'columns' => [
-                                'uid.mapOnProperty' => 'uid',
-                                'title.mapOnProperty' => 'title'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ], 'module.tx_mask');
 
         // for base paths to fluid templates configured in extension settings
         $setupContent[] = $this->convertArrayToTypoScript([
