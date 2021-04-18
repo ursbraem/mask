@@ -78,4 +78,78 @@ class TcaConverterUtilityTest extends BaseTestCase
     {
         self::assertSame($expected, TcaConverterUtility::convertTcaArrayToFlat($array));
     }
+
+    public function convertFlatTcaToArrayTestDataProvider()
+    {
+        return [
+            'Simple flat array is converted to original TCA array' => [
+                [
+                    'config.type' => 'input'
+                ],
+                [
+                    'config' => [
+                        'type' => 'input'
+                    ]
+                ]
+            ],
+            'Nested flat array is converted to original TCA array' => [
+                [
+                    'config.nested.option' => 'value'
+                ],
+                [
+                    'config' => [
+                        'nested' => [
+                            'option' => 'value'
+                        ]
+                    ]
+                ]
+            ],
+            'Items converted to items array' => [
+                [
+                    'config.items' => "label,item\nlabel2,item2"
+                ],
+                [
+                    'config' => [
+                        'items' => [
+                            ['label', 'item'],
+                            ['label2', 'item2'],
+                        ]
+                    ]
+                ]
+            ],
+            'Eval values converted to comma separated list' => [
+                [
+                    'config.eval.required' => 1,
+                    'config.eval.int' => 1,
+                ],
+                [
+                    'config' => [
+                        'eval' => 'required,int'
+                    ]
+                ]
+            ],
+            'Date eval value moves back to eval list' => [
+                [
+                    'config.eval.required' => 1,
+                    'config.eval' => 'date',
+                ],
+                [
+                    'config' => [
+                        'eval' => 'required,date'
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider convertFlatTcaToArrayTestDataProvider
+     * @param $array
+     * @param $expected
+     */
+    public function convertFlatTcaToArrayTest($array, $expected)
+    {
+        self::assertSame($expected, TcaConverterUtility::convertFlatTcaToArray($array));
+    }
 }

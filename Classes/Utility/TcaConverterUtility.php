@@ -70,10 +70,13 @@ class TcaConverterUtility
     }
 
     /**
-     * @param $tca
+     * Does the opposite of convertTcaArrayToFlat.
+     * Converts flat TCA options to normal TCA array, which can be directly used by TYPO3.
+     *
+     * @param array $tca
      * @return array
      */
-    public static function convertFlatTcaToArray($tca): array
+    public static function convertFlatTcaToArray(array $tca): array
     {
         $tcaArray = [];
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -99,7 +102,11 @@ class TcaConverterUtility
         return self::mergeEvalValues($tcaArray);
     }
 
-    protected static function mergeEvalValues($tcaArray): array
+    /**
+     * @param array $tcaArray
+     * @return array
+     */
+    protected static function mergeEvalValues(array $tcaArray): array
     {
         if (!isset($tcaArray['config']['eval'])) {
             return $tcaArray;
