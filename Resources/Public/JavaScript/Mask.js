@@ -100,119 +100,105 @@ define([
       const promises = [];
 
       // Fetch language
-      const languageRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_language)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_language)).get()
         .then(
           async function (response) {
             mask.language = await response.resolve();
           }
-        );
+        ));
 
       // Fetch tcaFields for existing core and mask fields
-      const tcaFieldsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca_fields)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tca_fields)).get()
         .then(
           async function (response) {
             mask.tcaFields = await response.resolve();
           }
-        );
+        ));
 
       // fetch tab declarations
-      const tabsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tabs)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_tabs)).get()
         .then(
           async function (response) {
             mask.tabs = await response.resolve();
           }
-        );
+        ));
 
       // fetch richtext configuration
-      const richtextConfigurationRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_richtext_configuration)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_richtext_configuration)).get()
         .then(
           async function (response) {
             mask.global.richtextConfiguration = await response.resolve();
           }
-        );
+        ));
 
       // fetch CTypes
-      const ctypesRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_ctypes)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_ctypes)).get()
         .then(
           async function (response) {
             const result = await response.resolve();
             mask.global.ctypes = result.ctypes;
           }
-        );
+        ));
 
       // fetch field groups
-      const fieldGroupsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_field_groups)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_field_groups)).get()
           .then(
               async function (response) {
                 const result = await response.resolve();
                 mask.groups = result.groups;
               }
-          );
+          ));
 
       // fetch elements
-      const elementsRequest = this.loadElements();
+      promises.push(this.loadElements());
 
       // fetch backend layouts
-      const backendLayoutRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_backend_layouts)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_backend_layouts)).get()
           .then(
               async function (response) {
                 const backendLayouts = await response.resolve();
                 mask.backendLayouts = backendLayouts['backendLayouts'];
               }
-          );
+          ));
 
       // fetch fontawesome icons
-      const iconsRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_icons)).get()
         .then(
           async function (response) {
             mask.faIcons = await response.resolve();
           }
-        );
+        ));
 
       // fetch possible missing files or folders
-      const missingFilesRequest = (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_missing)).get()
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_missing)).get()
           .then(
               async function (response) {
                 const missing = await response.resolve();
                 mask.missingFilesOrFolders = missing.missing;
               }
-          );
+          ));
 
-      const deleteIconRequest = Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
+      promises.push(Icons.getIcon('actions-edit-delete', Icons.sizes.small).done(function (icon) {
         mask.icons.delete = icon;
-      });
-      const moveIconRequest = Icons.getIcon('actions-move-move', Icons.sizes.small).done(function (icon) {
+      }));
+      promises.push(Icons.getIcon('actions-move-move', Icons.sizes.small).done(function (icon) {
         mask.icons.move = icon;
-      });
-      const dateIconRequest = Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
+      }));
+      promises.push(Icons.getIcon('actions-edit-pick-date', Icons.sizes.small).done(function (icon) {
         mask.icons.date = icon;
-      });
-      const editIconRequest = Icons.getIcon('actions-open', Icons.sizes.small).done(function (icon) {
+      }));
+      promises.push(Icons.getIcon('actions-open', Icons.sizes.small).done(function (icon) {
         mask.icons.edit = icon;
-      });
-      const saveIconRequest = Icons.getIcon('actions-save', Icons.sizes.small).done(function (icon) {
+      }));
+      promises.push(Icons.getIcon('actions-save', Icons.sizes.small).done(function (icon) {
         mask.icons.save = icon;
-      });
-      const closeIconRequest = Icons.getIcon('actions-close', Icons.sizes.small).done(function (icon) {
+      }));
+      promises.push(Icons.getIcon('actions-close', Icons.sizes.small).done(function (icon) {
         mask.icons.close = icon;
-      });
-      const spinnerIconRequest = Icons.getIcon('spinner-circle-dark', Icons.sizes.small).done(function (icon) {
+      }));
+      promises.push(Icons.getIcon('spinner-circle-dark', Icons.sizes.small).done(function (icon) {
         mask.icons.spinner = icon;
-      });
-
-      promises.push(languageRequest);
-      promises.push(tcaFieldsRequest);
-      promises.push(tabsRequest);
-      promises.push(richtextConfigurationRequest);
-      promises.push(ctypesRequest);
-      promises.push(fieldGroupsRequest);
-      promises.push(elementsRequest);
-      promises.push(iconsRequest);
-      promises.push(deleteIconRequest);
-      promises.push(moveIconRequest);
-      promises.push(dateIconRequest);
-      promises.push(editIconRequest);
-      promises.push(missingFilesRequest);
+      }));
 
       Promise.all(promises).then(() => {
         mask.loaded = true;
