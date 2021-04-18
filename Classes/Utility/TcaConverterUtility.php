@@ -42,7 +42,7 @@ class TcaConverterUtility
             } elseif (is_array($value)) {
                 $tca = array_merge($tca, self::convertTcaArrayToFlat($value, $path));
             } else {
-                if ($key === 'eval') {
+                if ($key === 'eval' || $key === 'blindLinkOptions') {
                     if ($value !== '') {
                         $keys = explode(',', $value);
 
@@ -99,25 +99,30 @@ class TcaConverterUtility
             });
             $accessor->setValue($tcaArray, $propertyPath, $value);
         }
-        return self::mergeEvalValues($tcaArray);
+
+        if (isset($tcaArray['config']['eval'])) {
+            $tcaArray['config']['eval'] = self::mergeCommaSeperatedOptions($tcaArray['config']['eval']);
+        }
+
+        if (isset($tcaArray['config']['fieldControl']['linkPopup']['options']['blindLinkOptions'])) {
+            $tcaArray['config']['fieldControl']['linkPopup']['options']['blindLinkOptions'] = self::mergeCommaSeperatedOptions($tcaArray['config']['fieldControl']['linkPopup']['options']['blindLinkOptions']);
+        }
+
+        return $tcaArray;
     }
 
     /**
      * @param array $tcaArray
      * @return array
      */
-    protected static function mergeEvalValues(array $tcaArray): array
+    protected static function mergeCommaSeperatedOptions(array $tcaArray): string
     {
-        if (!isset($tcaArray['config']['eval'])) {
-            return $tcaArray;
-        }
         $mergedTca = [];
-        foreach($tcaArray['config']['eval'] as $key => $evalValue) {
+        foreach($tcaArray as $key => $evalValue) {
             if ($evalValue) {
                 $mergedTca[] = $key;
             }
         }
-        $tcaArray['config']['eval'] = implode(',', $mergedTca);
-        return $tcaArray;
+        return implode(',', $mergedTca);
     }
 }

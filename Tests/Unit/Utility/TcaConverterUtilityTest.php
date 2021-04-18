@@ -67,6 +67,21 @@ class TcaConverterUtilityTest extends BaseTestCase
                     'config.eval' => 'date'
                 ]
             ],
+            'blindLinkOptions values converted as seperate entries' => [
+                [
+                    'fieldControl' => [
+                        'linkPopup' => [
+                            'options' => [
+                                'blindLinkOptions' => 'file,folder'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'config.fieldControl.linkPopup.options.blindLinkOptions.file' => 1,
+                    'config.fieldControl.linkPopup.options.blindLinkOptions.folder' => 1,
+                ]
+            ],
         ];
     }
 
@@ -138,6 +153,23 @@ class TcaConverterUtilityTest extends BaseTestCase
                         'eval' => 'required,date'
                     ]
                 ]
+            ],
+            'blindLinkOptions values converted to comma separated list' => [
+                [
+                    'config.fieldControl.linkPopup.options.blindLinkOptions.file' => 1,
+                    'config.fieldControl.linkPopup.options.blindLinkOptions.folder' => 1,
+                ],
+                [
+                    'config' => [
+                        'fieldControl' => [
+                            'linkPopup' => [
+                                'options' => [
+                                    'blindLinkOptions' => 'file,folder'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
             ],
         ];
     }
