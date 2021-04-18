@@ -19,6 +19,7 @@ return [
     ],
     Tab::FIELD_CONTROL => [
         [
+            'config.fieldControl.linkPopup.options.blindLinkOptions' => 12,
             'config.fieldControl.linkPopup.options.blindLinkOptions.file' => 4,
             'config.fieldControl.linkPopup.options.blindLinkOptions.mail' => 4,
             'config.fieldControl.linkPopup.options.blindLinkOptions.page' => 4,

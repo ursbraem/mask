@@ -265,6 +265,13 @@ return [
         'code' => 'allowedExtensions',
         'documentation' => 'ColumnsConfig/Type/inputLink.html?highlight=allowedExtensions#linkpopup',
     ],
+    'config.fieldControl.linkPopup.options.blindLinkOptions' => [
+        'type' => 'plainText',
+        'label' => 'tx_mask.blindLinkOptions',
+        'description' => 'tx_mask.blindLinkOptions.description',
+        'code' => 'blindLinkOptions',
+        'documentation' => 'ColumnsConfig/Type/inputLink.html?highlight=blindLinkOptions#linkpopup',
+    ],
     'config.fieldControl.linkPopup.options.blindLinkOptions.file' => [
         'type' => 'checkbox',
         'label' => 'tx_mask.field.link.file',
