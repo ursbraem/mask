@@ -6,18 +6,38 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class TcaConverterUtility
 {
+    /**
+     * Converts the content of TCA config to a flat array, where each nesting is seperated with a period.
+     *
+     * Inside config:
+     * [
+     *     'type' => 'input',
+     *     'renderType' => 'inputLink'
+     * ]
+     *
+     * Result:
+     *
+     * [
+     *     'config.type' => 'input',
+     *     'config.renderType' => 'inputLink'
+     * ]
+     *
+     * @param array $config
+     * @param string[] $path
+     * @return array
+     */
     public static function convertTcaArrayToFlat(array $config, $path = ['config']): array
     {
         $tca = [];
         foreach ($config as $key => $value) {
             $path[] = $key;
+            $fullPath = implode('.', $path);
             if ($key === 'items') {
                 $items = $value;
                 $itemText = '';
                 foreach ($items as $item) {
                     $itemText .= implode(',', $item) . "\n";
                 }
-                $fullPath = implode('.', $path);
                 $tca[$fullPath] = trim($itemText);
             } elseif (is_array($value)) {
                 $tca = array_merge($tca, self::convertTcaArrayToFlat($value, $path));
@@ -29,7 +49,6 @@ class TcaConverterUtility
                         // Special handling for timestamp field, as the dateType is in the key "config.eval"
                         $dateTypesInKeys = array_intersect($keys, ['date', 'datetime', 'time', 'timesec']);
                         if (count($dateTypesInKeys) > 0) {
-                            $fullPath = implode('.', $path);
                             $tca[$fullPath] = $dateTypesInKeys[0];
                             // Remove dateType from normal eval array
                             $keys = array_filter($keys, function ($a) use ($dateTypesInKeys) {
@@ -37,11 +56,11 @@ class TcaConverterUtility
                             });
                         }
 
+                        // For each eval value create an entry with value set to 1
                         $evalArray = array_combine($keys, array_fill(0, count($keys), 1));
                         $tca = array_merge($tca, self::convertTcaArrayToFlat($evalArray, $path));
                     }
                 } else {
-                    $fullPath = implode('.', $path);
                     $tca[$fullPath] = $value;
                 }
             }
