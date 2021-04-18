@@ -26,6 +26,7 @@ use MASK\Mask\Enumeration\Tab;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Helper\FieldHelper;
+use MASK\Mask\Utility\AffixUtility;
 use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use MASK\Mask\Utility\TcaConverterUtility;
@@ -325,7 +326,7 @@ class AjaxController extends ActionController
         return $queryBuilder
             ->select('uid')
             ->from('tt_content')
-            ->where($queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(MaskUtility::addMaskCTypePrefix($elementKey))))
+            ->where($queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(AffixUtility::addMaskCTypePrefix($elementKey))))
             ->execute()
             ->rowCount();
     }
@@ -389,7 +390,7 @@ class AjaxController extends ActionController
                 }
             }
 
-            $newField['isMaskField'] = MaskUtility::isMaskIrreTable($newField['key']);
+            $newField['isMaskField'] = AffixUtility::hasMaskPrefix($newField['key']);
             $newField['name'] = (string)$fieldType;
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
@@ -609,9 +610,9 @@ class AjaxController extends ActionController
         // Grouping and parent fields shouldn't be reusable.
         if (FieldType::cast($type)->isGroupingField() || FieldType::cast($type)->isParentField()) {
             $fields = $emptyFields;
-        } elseif (!MaskUtility::isMaskIrreTable($table)) {
+        } elseif (!AffixUtility::hasMaskPrefix($table)) {
             foreach ($GLOBALS['TCA'][$table]['columns'] as $tcaField => $tcaConfig) {
-                $isMaskField = MaskUtility::isMaskIrreTable($tcaField);
+                $isMaskField = AffixUtility::hasMaskPrefix($tcaField);
                 if (!$isMaskField && !in_array($tcaField, $allowedFields[$table] ?? [])) {
                     continue;
                 }
@@ -623,7 +624,7 @@ class AjaxController extends ActionController
                 }
                 if ($fieldType === $type) {
                     $key = $isMaskField ? 'mask' : 'core';
-                    $label = $isMaskField ? MaskUtility::removeMaskPrefix($tcaField) : LocalizationUtility::translate($tcaConfig['label']);
+                    $label = $isMaskField ? AffixUtility::removeMaskPrefix($tcaField) : LocalizationUtility::translate($tcaConfig['label']);
                     $fields[$key][] = [
                         'field' => $tcaField,
                         'label' => $label,

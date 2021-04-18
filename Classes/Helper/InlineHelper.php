@@ -20,7 +20,8 @@ namespace MASK\Mask\Helper;
 use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Repository\BackendLayoutRepository;
 use MASK\Mask\Domain\Repository\StorageRepository;
-use MASK\Mask\Utility\GeneralUtility as MaskUtility;
+use MASK\Mask\Utility\AffixUtility;
+use MASK\Mask\Utility\AffixUtility as MaskUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -112,7 +113,7 @@ class InlineHelper
 
         // if the table is tt_content, load the element and all its columns
         if ($table === 'tt_content') {
-            $element = $this->storageRepository->loadElement($table, MaskUtility::removeCTypePrefix($cType));
+            $element = $this->storageRepository->loadElement($table, AffixUtility::removeCTypePrefix($cType));
             $elementFields = $element['columns'];
         } elseif ($table === 'pages') {
             // if the table is pages, then load the pid
@@ -166,7 +167,7 @@ class InlineHelper
                 $data,
                 $field,
                 $cType,
-                MaskUtility::addMaskParentSuffix($field),
+                AffixUtility::addMaskParentSuffix($field),
                 'tt_content',
                 'tt_content'
             );

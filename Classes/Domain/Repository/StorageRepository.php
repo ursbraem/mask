@@ -19,6 +19,7 @@ namespace MASK\Mask\Domain\Repository;
 
 use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Service\SettingsService;
+use MASK\Mask\Utility\AffixUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use MASK\Mask\Utility\TcaConverterUtility;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -159,7 +160,7 @@ class StorageRepository implements SingletonInterface
                     $inlineParent = $tca['inlineParent'] ?? '';
                 }
                 if ($inlineParent === $parentKey) {
-                    $maskKey = MaskUtility::addMaskPrefix($tca['key']);
+                    $maskKey = AffixUtility::addMaskPrefix($tca['key']);
                     if ($this->getFormType($tca['key'], $elementKey, $table) === FieldType::INLINE) {
                         $tca['inlineFields'] = $this->loadInlineFields($key, $elementKey);
                     }
@@ -269,7 +270,7 @@ class StorageRepository implements SingletonInterface
         $defaults = $this->getDefaults();
         foreach ($fields as $field) {
             $fieldname = $field['key'];
-            if (MaskUtility::isMaskIrreTable($field['key']) && isset($defaults[$field['name']]['sql'])) {
+            if (AffixUtility::hasMaskPrefix($field['key']) && isset($defaults[$field['name']]['sql'])) {
                 $json[$table]['sql'][$fieldname][$table][$fieldname] = $defaults[$field['name']]['sql'];
             }
             if (isset($field['fields'])) {
@@ -287,7 +288,7 @@ class StorageRepository implements SingletonInterface
             $order += 1;
             $fieldAdd = [];
             $onRootLevel = $table === $defaultTable;
-            $isMaskField = MaskUtility::isMaskIrreTable($field['key']);
+            $isMaskField = AffixUtility::hasMaskPrefix($field['key']);
 
             // Add columns and labels to element if on root level
             if ($onRootLevel && !$parent) {
@@ -301,7 +302,7 @@ class StorageRepository implements SingletonInterface
                 $field['tca'] = $field['tca'] ?? [];
                 ArrayUtility::mergeRecursiveWithOverrule($field['tca'], $defaults[$field['name']]['tca_out'] ?? []);
                 $fieldAdd = TcaConverterUtility::convertFlatTcaToArray($field['tca']);
-                $fieldAdd['key'] = MaskUtility::removeMaskPrefix($field['key']);
+                $fieldAdd['key'] = AffixUtility::removeMaskPrefix($field['key']);
                 $fieldAdd['description'] = $field['description'] ?? '';
                 $fieldAdd['exclude'] = 1; // TODO Can this be moved to TcaCodeGenerator, as it's always 1?
             } else {
@@ -430,7 +431,7 @@ class StorageRepository implements SingletonInterface
     private function removeField($table, $field, $json): array
     {
         $maskKey = $field;
-        $field = MaskUtility::removeMaskPrefix($maskKey);
+        $field = AffixUtility::removeMaskPrefix($maskKey);
         $keyToUse = isset($json[$table]['tca'][$field]) ? $field : $maskKey;
 
         // check if this field is used in any other elements
@@ -453,7 +454,7 @@ class StorageRepository implements SingletonInterface
                 // Only remove if not in use in another element
                 if (!$usedInAnotherElement) {
                     $parentTable = ($inlineField['inPalette'] ?? false) ? $table : $inlineField['inlineParent'];
-                    $inlineKey = MaskUtility::addMaskPrefix($inlineField['key']);
+                    $inlineKey = AffixUtility::addMaskPrefix($inlineField['key']);
                     $json = $this->removeField($parentTable, $inlineKey, $json);
                 }
             }
@@ -557,7 +558,7 @@ class StorageRepository implements SingletonInterface
     public function getFormType($fieldKey, $elementKey = '', $type = 'tt_content'): string
     {
         $element = [];
-        $maskKey = MaskUtility::addMaskPrefix($fieldKey);
+        $maskKey = AffixUtility::addMaskPrefix($fieldKey);
 
         // Check if TCA for mask key exists, else assume it's a core field.
         $tca = $GLOBALS['TCA'][$type]['columns'][$maskKey] ?? [];

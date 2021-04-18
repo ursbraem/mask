@@ -21,6 +21,7 @@ use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Domain\Service\SettingsService;
 use MASK\Mask\Imaging\IconProvider\ContentElementIconProvider;
+use MASK\Mask\Utility\AffixUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -85,7 +86,7 @@ class TyposcriptCodeGenerator
 
             // add the content element wizard for each content element
             $element['description'] = trim(preg_replace('/\s+/', ' ', $element['description']));
-            $cTypeKey = MaskUtility::addMaskCTypePrefix($element['key']);
+            $cTypeKey = AffixUtility::addMaskCTypePrefix($element['key']);
             $wizard = [
                 'header' => 'LLL:EXT:mask/Resources/Private/Language/locallang_mask.xlf:new_content_element_tab',
                 'elements.' . $cTypeKey => [
@@ -153,7 +154,7 @@ class TyposcriptCodeGenerator
                 }
                 // With config is custom mask field
                 if (isset($item['config'])) {
-                    $key = MaskUtility::addMaskPrefix($item['key']);
+                    $key = AffixUtility::addMaskPrefix($item['key']);
                 } else {
                     $key = $item['key'];
                 }
@@ -191,7 +192,7 @@ class TyposcriptCodeGenerator
         if ($configuration['tt_content']['elements']) {
             foreach ($configuration['tt_content']['elements'] as $element) {
                 if (!$element['hidden']) {
-                    $cTypeKey = MaskUtility::addMaskCTypePrefix($element['key']);
+                    $cTypeKey = AffixUtility::addMaskCTypePrefix($element['key']);
                     $templateName = MaskUtility::getTemplatePath($this->extSettings, $element['key'], true);
                     $elementContent = [];
                     $elementContent[] = 'tt_content.' . $cTypeKey . ' =< lib.maskContentElement' . LF;

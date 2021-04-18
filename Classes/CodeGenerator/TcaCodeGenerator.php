@@ -21,6 +21,7 @@ use Exception;
 use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Helper\FieldHelper;
+use MASK\Mask\Utility\AffixUtility;
 use MASK\Mask\Utility\DateUtility;
 use MASK\Mask\Utility\GeneralUtility as MaskUtility;
 use TYPO3\CMS\Core\Resource\File;
@@ -57,7 +58,7 @@ class TcaCodeGenerator
     {
         $json = $this->storageRepository->load();
         foreach ($json as $table => $subJson) {
-            if (!MaskUtility::isMaskIrreTable($table)) {
+            if (!AffixUtility::hasMaskPrefix($table)) {
                 continue;
             }
             // Generate Table TCA
@@ -141,7 +142,7 @@ class TcaCodeGenerator
                 continue;
             }
 
-            $cTypeKey = MaskUtility::addMaskCTypePrefix($elementvalue['key']);
+            $cTypeKey = AffixUtility::addMaskCTypePrefix($elementvalue['key']);
 
             // Optional shortLabel
             $label = $elementvalue['shortLabel'] ?: $elementvalue['label'];
@@ -356,7 +357,7 @@ class TcaCodeGenerator
 
             // Content: Set foreign_field and default CType in select if restricted.
             if (($tcavalue['config']['foreign_table'] ?? '') === 'tt_content' && ($tcavalue['config']['type'] ?? '') === 'inline') {
-                $parentField = MaskUtility::addMaskParentSuffix($tcakey);
+                $parentField = AffixUtility::addMaskParentSuffix($tcakey);
                 $tcavalue['config']['foreign_field'] = $parentField;
                 if ($table === 'tt_content') {
                     $columns[$parentField] = [
@@ -468,7 +469,7 @@ class TcaCodeGenerator
     {
         $configuration = $this->storageRepository->load();
         $irreTables = array_filter(array_keys($configuration), function ($table) {
-            return MaskUtility::isMaskIrreTable($table);
+            return AffixUtility::hasMaskPrefix($table);
         });
         return array_values($irreTables);
     }

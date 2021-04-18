@@ -17,7 +17,7 @@ namespace MASK\Mask\CodeGenerator;
 
 use MASK\Mask\Enumeration\FieldType;
 use MASK\Mask\Domain\Repository\StorageRepository;
-use MASK\Mask\Utility\GeneralUtility as MaskUtility;
+use MASK\Mask\Utility\AffixUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -194,7 +194,7 @@ class HtmlCodeGenerator
      */
     protected function getVariable($datafield, $fieldKey)
     {
-        $key = MaskUtility::isMaskIrreTable($fieldKey) ? MaskUtility::removeMaskPrefix($fieldKey) : $fieldKey;
+        $key = AffixUtility::hasMaskPrefix($fieldKey) ? AffixUtility::removeMaskPrefix($fieldKey) : $fieldKey;
         return '<f:variable name="' . GeneralUtility::underscoredToLowerCamelCase($key) . '" value="{' . $datafield . '.' . $fieldKey . '}"/>';
     }
 

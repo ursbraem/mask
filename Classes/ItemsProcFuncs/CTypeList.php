@@ -19,7 +19,8 @@ namespace MASK\Mask\ItemsProcFuncs;
 
 use MASK\Mask\Domain\Repository\StorageRepository;
 use MASK\Mask\Helper\FieldHelper;
-use MASK\Mask\Utility\GeneralUtility as MaskUtility;
+use MASK\Mask\Utility\AffixUtility;
+use MASK\Mask\Utility\AffixUtility as MaskUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -59,15 +60,15 @@ class CTypeList extends AbstractList
             if (isset($GLOBALS['TYPO3_REQUEST']->getParsedBody()['ajax']['context'])) {
                 $ajaxContext = json_decode($GLOBALS['TYPO3_REQUEST']->getParsedBody()['ajax']['context'], true, 512, 4194304);
                 $config = json_decode($ajaxContext['config'], true, 512, 4194304);
-                $fieldKey = MaskUtility::removeMaskParentSuffix($config['foreign_field']);
+                $fieldKey = AffixUtility::removeMaskParentSuffix($config['foreign_field']);
             } else {
                 $fields = $params['row'];
                 foreach ($fields as $key => $field) {
                     // search for the parent field, to get the key of mask field this content element belongs to
-                    if ($field > 0 && MaskUtility::isMaskIrreTable($key) && MaskUtility::isMaskParent($key)) {
+                    if ($field > 0 && AffixUtility::hasMaskPrefix($key) && MaskUtility::hasMaskParentSuffix($key)) {
 
                         // if a parent field was found, that is filled with a uid, extract the mask field name from it
-                        $fieldKey = MaskUtility::removeMaskParentSuffix($key);
+                        $fieldKey = AffixUtility::removeMaskParentSuffix($key);
 
                         // if one parent field was found, don't continue search, there can only be one parent
                         break;
