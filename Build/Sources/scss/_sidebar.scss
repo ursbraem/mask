@@ -8,9 +8,9 @@
   margin-right: 10px;
 
   &__content {
-    background-color: #fafafa;
+    background-color: $bg-light;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid $border-color;
     border-top: 0;
     flex-grow: 1;
   }
@@ -21,7 +21,7 @@
 
   &__toggle-wrap {
     display: flex;
-    border: 1px solid #ccc;
+    border: 1px solid $border-color;
     margin-bottom: 10px;
   }
 
@@ -35,12 +35,12 @@
     position: relative;
 
     &:first-child {
-      border-right: 1px solid #ccc;
+      border-right: 1px solid $border-color;
     }
 
     &.active,
     &:hover {
-      background-color: #eaf4fd;
+      background-color: $highlight-color;
     }
 
     &.has-error {

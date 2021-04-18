@@ -38,17 +38,17 @@ define([
           }
         },
         template: `
-    <div class="tx_mask_btn_row" @click="global.activeField = field; global.currentTab = 'general'">
-        <div class="tx_mask_btn_img">
+    <div class="mask-field__row" @click="global.activeField = field; global.currentTab = 'general'">
+        <div class="mask-field__image">
             <div v-html="field.icon"></div>
         </div>
         <div class="mask-field__body">
-          <div class="tx_mask_btn_text">
-            <span v-if="field.name == 'linebreak'" class="id_labeltext">Linebreak</span>
-            <span v-else class="id_labeltext">{{ field.label }}</span>
-            <span class="id_keytext" v-if="!global.sctructuralFields.includes(field.name)">{{ keyWithoutMask(field.key) }}</span>
+          <div class="mask-field__text">
+            <span v-if="field.name == 'linebreak'" class="mask-field__label">Linebreak</span>
+            <span v-else class="mask-field__label">{{ field.label }}</span>
+            <span class="mask-field__key" v-if="!global.sctructuralFields.includes(field.name)">{{ keyWithoutMask(field.key) }}</span>
           </div>
-          <div class="tx_mask_btn_actions">
+          <div class="mask-field__actions">
               <a class="btn btn-default btn-sm" @click.stop="$emit('remove-field', index); hideTooltip();" data-bs-toggle="tooltip" :data-title="language.tooltip.deleteField" v-html="icons.delete" :ref="'row' + index"></a>
           </div>
         </div>

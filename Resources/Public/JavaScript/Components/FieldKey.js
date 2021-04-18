@@ -19,7 +19,7 @@ define([
           <input
               v-model="global.activeField.key"
               id="form_key"
-              class="form-control tx_mask_newfieldname lowercase tceforms-textfield"
+              class="form-control"
               required="required"
               :readOnly="!global.activeField.newField"
               @input="validateKey(global.activeField); loadField();"

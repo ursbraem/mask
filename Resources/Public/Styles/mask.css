@@ -1,3 +1,29 @@
+.mask-sidebar__toggle.has-error:before, .mask-field.has-error:before {
+  font-family: FontAwesome;
+  font-size: 15px;
+  text-align: center;
+  content: "\f06a";
+  color: #c83c3c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -2px;
+  left: -3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: #fff; }
+
+.fa.fa-plus-circle {
+  color: #4c7e3a; }
+
+.mask-heart {
+  color: #D4372F; }
+
+.disable-pointer {
+  pointer-events: none; }
+
 /*!
  * CSS files for fontIconPicker
  *
@@ -38,6 +64,9 @@
   text-align: center;
   cursor: pointer;
   float: left; }
+
+.icons-selector i {
+  font-family: FontAwesome, sans-serif; }
 
 .icons-selector .selector-button i {
   line-height: 38px;
@@ -296,24 +325,6 @@
 .icons-selector.fip-grey .icons-picker-error i:before {
   color: #eee; }
 
-.mask-sidebar__toggle.has-error:before, .dragtarget .mask-select-field.has-error:before,
-.mask-field.has-error:before {
-  font-family: FontAwesome;
-  font-size: 15px;
-  text-align: center;
-  content: "\f06a";
-  color: #c83c3c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: -2px;
-  left: -3px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background-color: #fff; }
-
 .mask-sidebar {
   width: 350px;
   flex-shrink: 0;
@@ -361,23 +372,13 @@
     background-color: #fff; }
   .mask-field-list > .dragtarget {
     display: block;
-    min-height: 438px !important;
-    padding-bottom: 40px; }
-  .mask-field-list ul .dragtarget {
-    min-height: 38px;
-    padding: 4px;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc; }
-    .mask-field-list ul .dragtarget .mask-select-field,
-    .mask-field-list ul .dragtarget .mask-field {
-      border-bottom: 2px solid #fafafa;
-      margin-bottom: 0;
-      margin-top: 3px; }
-  .mask-field-list .mask-field {
-    cursor: pointer; }
-  .mask-field-list li.active,
-  .mask-field-list li:hover {
-    background: #eaf4fd; }
+    min-height: 438px;
+    padding: 0 0 40px;
+    margin: 0;
+    list-style: none; }
+  .mask-field-list .mask-field--select {
+    width: 100%;
+    border: 1px dashed #ccc; }
 
 .mask-field-form {
   background: #fff;
@@ -428,69 +429,11 @@
       font-family: 'Source Sans Pro', sans-serif;
       font-size: 1.2em;
       font-weight: 700;
-      margin: 2px 3px;
-      cursor: pointer; }
+      margin: 2px 3px; }
       .mask-field-group__list li img {
         box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3); }
       .mask-field-group__list li:hover img {
         filter: brightness(0.85); }
-
-.tx_mask_fieldheader {
-  display: flex;
-  height: 50px;
-  margin-bottom: 14px;
-  padding-bottom: 6px; }
-  .tx_mask_fieldheader__icon {
-    margin-right: 10px; }
-    .tx_mask_fieldheader__icon img {
-      width: 44px;
-      height: auto; }
-  .tx_mask_fieldheader__text h1 {
-    font-family: Share, Verdana, Arial, Helvetica, sans-serif;
-    font-size: 165%;
-    font-weight: 400;
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
-  .tx_mask_fieldheader__text p {
-    font-size: 100%;
-    font-weight: 400;
-    margin: 0;
-    padding: 0; }
-
-.tx_mask_fieldtypes li .id_typetext {
-  line-height: 220%; }
-
-.tx_mask_fieldtypes li .id_labeltext {
-  color: #525252;
-  display: block;
-  font-family: 'Source Sans-Pro', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; }
-
-.tx_mask_fieldtypes li .id_keytext {
-  color: #525252;
-  display: block;
-  font-size: 10px; }
-
-.tx_mask_fieldtypes li .tx_mask_fieldcontent_highlight {
-  border: 1px dashed #aaa;
-  height: 37px;
-  list-style: none;
-  margin-bottom: 3px; }
-
-.tx_mask_fieldcontent label.check-item {
-  float: left;
-  margin: 11px; }
-
-.tx_mask_fieldcontent .t3js-formengine-field-item.check-item {
-  float: left; }
 
 .mask-footer {
   background-color: #efefef;
@@ -769,72 +712,77 @@
   100% {
     transform: rotate(360deg); } }
 
-.dragtarget .mask-select-field,
 .mask-field {
   position: relative;
-  cursor: move;
   min-height: 37px;
   margin-bottom: 4px;
-  width: 100%; }
-  .dragtarget .mask-select-field.ghost,
+  width: 100%;
+  cursor: pointer; }
+  .mask-field.active > .mask-field__row .mask-field__body, .mask-field:hover > .mask-field__row .mask-field__body {
+    background-color: #eaf4fd; }
   .mask-field.ghost {
     opacity: 0.5; }
-  .dragtarget .mask-select-field__body,
   .mask-field__body {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
     border-left: 0;
     min-height: 37px;
-    flex-grow: 1; }
-  .dragtarget .mask-select-field .tx_mask_btn_row,
-  .mask-field .tx_mask_btn_row {
+    flex-grow: 1;
+    background-color: #fff; }
+  .mask-field__row {
     display: flex;
     align-items: center; }
-    .dragtarget .mask-select-field .tx_mask_btn_row img,
-    .mask-field .tx_mask_btn_row img {
-      vertical-align: bottom; }
-    .dragtarget .mask-select-field .tx_mask_btn_row .tx_mask_btn_text,
-    .mask-field .tx_mask_btn_row .tx_mask_btn_text {
-      padding-left: 13px; }
-    .dragtarget .mask-select-field .tx_mask_btn_row .tx_mask_btn_actions,
-    .mask-field .tx_mask_btn_row .tx_mask_btn_actions {
-      padding-right: 10px;
-      text-align: right;
-      width: 69px;
-      margin-left: auto; }
-  .dragtarget .mask-select-field img,
-  .mask-field img {
+  .mask-field__actions {
+    padding-right: 10px;
+    text-align: right;
+    width: 69px;
+    margin-left: auto; }
+  .mask-field__text {
+    padding-left: 13px; }
+  .mask-field__label {
+    color: #525252;
+    display: block;
+    font-family: 'Source Sans-Pro', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
+  .mask-field__key {
+    color: #525252;
+    display: block;
+    font-size: 10px; }
+  .mask-field__image img {
+    width: 37px;
+    height: auto;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px; }
-
-.dragtarget {
-  margin: 0;
-  padding: 0;
-  list-style: none; }
-  .dragtarget .dragtarget {
-    background-color: #fff; }
-
-.id_inline,
-.id_palette {
-  border-bottom: 0 !important; }
-  .id_inline > .tx_mask_btn_row img,
-  .id_palette > .tx_mask_btn_row img {
+  .mask-field__dragarea .dragtarget {
+    margin: 0;
+    list-style: none;
+    background-color: #fff;
+    min-height: 38px;
+    padding: 4px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc; }
+    .mask-field__dragarea .dragtarget .mask-field {
+      border-bottom: 2px solid #fafafa;
+      margin-bottom: 0;
+      margin-top: 3px; }
+      .mask-field__dragarea .dragtarget .mask-field--select {
+        border-bottom: 1px dashed #ccc; }
+  .mask-field--select {
+    width: auto; }
+    .mask-field--select .mask-field__image img {
+      border-radius: 2px; }
+  .mask-field--inline > .mask-field__row img, .mask-field--palette > .mask-field__row img {
     border-bottom-left-radius: 0; }
-
-.id_inline > .tx_mask_btn_caption {
-  border-left: 4px solid #9e97d1; }
-
-.id_palette > .tx_mask_btn_caption {
-  border-left: 4px solid #4e4e4e; }
-
-.tx_mask_field_templates li .tx_mask_btn_actions {
-  cursor: pointer;
-  display: none; }
-
-.tx_mask_field_templates .tx_mask_btn_row .tx_mask_btn_text {
-  background: #ffffff;
-  display: none; }
+  .mask-field--inline > .mask-field__dragarea {
+    border-left: 4px solid #9e97d1; }
+  .mask-field--palette > .mask-field__dragarea {
+    border-left: 4px solid #4e4e4e; }
 
 .btn-mask {
   background-color: #cb002d;
@@ -844,38 +792,7 @@
     color: #fff;
     background-color: #e50033; }
 
-.disable-pointer {
-  pointer-events: none; }
-
-.mask-field .tx_mask_btn_img img,
-.mask-select-field .tx_mask_btn_img img {
-  width: 37px;
-  height: auto; }
-
-.mask-select-field img {
-  border-radius: 2px; }
-
 @media screen and (min-width: 1200px) {
   .bench {
     display: flex;
     margin: 0; } }
-
-.fa.fa-plus-circle {
-  color: #4c7e3a; }
-
-.field-description {
-  display: flex;
-  align-items: flex-end; }
-
-.icons-selector i {
-  font-family: FontAwesome, sans-serif; }
-
-#meta_icon {
-  position: absolute !important; }
-
-.tx_mask_field .callout {
-  margin-top: 0;
-  margin-bottom: 0; }
-
-.mask-heart {
-  color: #D4372F; }

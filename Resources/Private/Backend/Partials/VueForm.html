@@ -24,7 +24,7 @@
                 </a>
             </li>
         </ul>
-        <div class="tx_mask_fieldcontent tab-content">
+        <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="default_{key}">
                 <div v-if="global.currentTab == 'general'" class="form-section">
 
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <div v-if="overrideLabelVisible" class="row tx_mask_fieldcontent_existing">
+                    <div v-if="overrideLabelVisible" class="row">
                         <div class="form-group col-sm-6">
                             <f:render partial="General/VueOverrideLabel"/>
                         </div>

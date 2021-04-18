@@ -1,16 +1,14 @@
+@import 'variables';
+@import "utility";
+
 @import "libs/font-icon-picker";
 @import "libs/font-icon-picker-theme";
 
-@import 'variables';
-@import "error";
 @import "sidebar";
 @import "field-list";
 @import "field-form";
 @import "fields";
 @import "field-group";
-@import "fieldheader";
-@import "fieldtypes";
-@import "fieldcontent";
 @import "footer";
 @import "splashscreen";
 @import "list";
@@ -19,39 +17,5 @@
 @import "templa";
 @import "spinner";
 @import "field";
-@import "select-field";
-
-@media screen and (min-width: 1200px) {
-  .bench {
-    display: flex;
-    margin: 0;
-  }
-}
-
-.fa.fa-plus-circle {
-  color: #4c7e3a;
-}
-
-.field-description {
-  display: flex;
-  align-items: flex-end;
-}
-
-.icons-selector i {
-  font-family: FontAwesome, sans-serif;
-}
-
-#meta_icon {
-  position: absolute !important;
-}
-
-.tx_mask_field {
-  .callout {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-}
-
-.mask-heart {
-  color: $mask;
-}
+@import "button";
+@import "bench";

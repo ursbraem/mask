@@ -76,14 +76,14 @@ define([
         template: `
 <draggable
     tag="ul"
-    class="tx_mask_fieldtypes dragtarget"
+    class="dragtarget"
     :list="fields"
     group="fieldTypes"
     ghost-class="ghost"
     @add="onAdd"
     :move="move"
   >
-  <li v-for="(field, index) in fields" :key="uuid(field)" class="mask-field" :class="[{active: global.activeField == field}, 'id_' + field.name, {'has-error': fieldHasError(field)}]">
+  <li v-for="(field, index) in fields" :key="uuid(field)" class="mask-field" :class="[{active: global.activeField == field}, 'mask-field--' + field.name, {'has-error': fieldHasError(field)}]">
     <field-row
         :global="global"
         :fields="fields"
@@ -93,7 +93,7 @@ define([
         :index="index"
         @remove-field="removeField($event)"
     ></field-row>
-    <div class="tx_mask_btn_caption" v-if="isParentField(field)">
+    <div class="mask-field__dragarea" v-if="isParentField(field)">
         <nested-draggable
             @set-parent-active="setParentActive($event)"
             :depth="depth + 1"

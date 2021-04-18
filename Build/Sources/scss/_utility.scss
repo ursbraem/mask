@@ -15,3 +15,15 @@
   border-radius: 50%;
   background-color: #fff;
 }
+
+.fa.fa-plus-circle {
+  color: #4c7e3a;
+}
+
+.mask-heart {
+  color: $mask;
+}
+
+.disable-pointer {
+  pointer-events: none;
+}

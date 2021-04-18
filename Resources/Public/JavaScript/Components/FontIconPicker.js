@@ -18,7 +18,7 @@ define([
               }
             },
             mounted() {
-              const iconPicker = $('#meta_icon').fontIconPicker({
+              const iconPicker = $('#meta-icon').fontIconPicker({
                 source: this.faIcons
               });
               iconPicker.setIcon(this.element.icon);
@@ -32,7 +32,7 @@ define([
         </label>
         <div class="t3js-formengine-field-item icon-field">
             <div class="form-control-wrap">
-                <select id="meta_icon"></select>
+                <select id="meta-icon"></select>
             </div>
         </div>
     </div>
