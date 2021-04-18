@@ -1,3 +1,10 @@
+%textoverflow {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .mask-field {
   position: relative;
   min-height: 37px;
@@ -47,21 +54,17 @@
   }
 
   &__label {
-    color: #525252;
     display: block;
-    font-family: 'Source Sans-Pro', sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 13px;
     font-weight: 700;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    @extend %textoverflow;
   }
 
   &__key {
-    color: #525252;
     display: block;
     font-size: 10px;
+    @extend %textoverflow;
   }
 
   &__image img {

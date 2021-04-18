@@ -712,6 +712,12 @@
   100% {
     transform: rotate(360deg); } }
 
+.mask-field__label, .mask-field__key {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
 .mask-field {
   position: relative;
   min-height: 37px;
@@ -741,17 +747,11 @@
   .mask-field__text {
     padding-left: 13px; }
   .mask-field__label {
-    color: #525252;
     display: block;
-    font-family: 'Source Sans-Pro', sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 13px;
-    font-weight: 700;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
+    font-weight: 700; }
   .mask-field__key {
-    color: #525252;
     display: block;
     font-size: 10px; }
   .mask-field__image img {
