@@ -404,7 +404,7 @@
   padding: 8px 15px 20px; }
   .mask-fields__label {
     margin-bottom: 5px;
-    min-height: 18px; }
+    font-size: 16px; }
 
 .mask-field-group {
   position: relative;
