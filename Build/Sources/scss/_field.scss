@@ -105,14 +105,14 @@
         margin-bottom: 0;
         margin-top: 3px;
 
-        &--select {
+        &--selectable {
           border-bottom: 1px dashed $border-color;
         }
       }
     }
   }
 
-  &--select {
+  &--selectable {
     width: auto;
 
     .mask-field__image img {

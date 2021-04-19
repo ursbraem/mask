@@ -379,7 +379,7 @@
     padding: 0 0 40px;
     margin: 0;
     list-style: none; }
-  .mask-field-list .mask-field--select {
+  .mask-field-list .mask-field--selectable {
     width: 100%;
     border: 1px dashed #ccc; }
 
@@ -791,11 +791,11 @@
       border-bottom: 2px solid #fafafa;
       margin-bottom: 0;
       margin-top: 3px; }
-      .mask-field__dragarea .dragtarget .mask-field--select {
+      .mask-field__dragarea .dragtarget .mask-field--selectable {
         border-bottom: 1px dashed #ccc; }
-  .mask-field--select {
+  .mask-field--selectable {
     width: auto; }
-    .mask-field--select .mask-field__image img {
+    .mask-field--selectable .mask-field__image img {
       border-radius: 2px; }
   .mask-field--inline > .mask-field__row img, .mask-field--palette > .mask-field__row img {
     border-bottom-left-radius: 0; }
