@@ -16,7 +16,9 @@ define([
           move: Function,
           fieldHasError: Function,
           validateKey: Function,
-          language: Object
+          language: Object,
+          loadMultiUse: Function,
+          multiUseElements: Object
         },
         components: {
           draggable,
@@ -91,6 +93,8 @@ define([
         :language="language"
         :icons="icons"
         :index="index"
+        :load-multi-use="loadMultiUse"
+        :multi-use-elements="multiUseElements"
         @remove-field="removeField($event)"
     ></field-row>
     <div class="mask-field__dragarea" v-if="isParentField(field)">
@@ -105,6 +109,8 @@ define([
             :field-has-error="fieldHasError"
             :validate-key="validateKey"
             :language="language"
+            :load-multi-use="loadMultiUse"
+            :multi-use-elements="multiUseElements"
           />
     </div>
   </li>

@@ -13,7 +13,9 @@ define([
           field: Object,
           language: Object,
           icons: Object,
-          index: Number
+          index: Number,
+          loadMultiUse: Function,
+          multiUseElements: Object
         },
         mounted: function () {
           Tooltip.initialize('[data-bs-toggle="tooltip"]', {
@@ -37,8 +39,14 @@ define([
             }
           }
         },
+        computed: {
+          isMultiUse: function () {
+            return (typeof this.multiUseElements[this.field.key] !== 'undefined') && this.multiUseElements[this.field.key].length;
+          }
+        },
         template: `
-    <div class="mask-field__row" @click="global.activeField = field; global.currentTab = 'general'">
+    <div class="mask-field__row" @click="global.activeField = field; global.currentTab = 'general'; loadMultiUse();">
+        <i v-if="isMultiUse" class="mask-field__multiuse fa fa-info-circle"></i>
         <div class="mask-field__image">
             <div v-html="field.icon"></div>
         </div>

@@ -74,6 +74,22 @@
     border-bottom-left-radius: 2px;
   }
 
+  &__multiuse {
+    font-size: 15px;
+    text-align: center;
+    color: #6daae0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: -2px;
+    left: -3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
   &__dragarea {
     .dragtarget {
       margin: 0;

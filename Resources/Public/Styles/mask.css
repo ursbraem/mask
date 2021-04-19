@@ -24,6 +24,9 @@
 .disable-pointer {
   pointer-events: none; }
 
+.mb-0 {
+  margin-bottom: 0; }
+
 /*!
  * CSS files for fontIconPicker
  *
@@ -331,7 +334,7 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 20px);
+  min-height: calc(100vh - 20px);
   margin-right: 10px; }
   .mask-sidebar__content {
     background-color: #fafafa;
@@ -384,7 +387,8 @@
   background: #fff;
   margin-top: 20px;
   padding-top: 30px;
-  flex-grow: 1; }
+  flex-grow: 1;
+  margin-bottom: 0; }
   @media screen and (min-width: 1200px) {
     .mask-field-form {
       height: 100%;
@@ -759,6 +763,20 @@
     height: auto;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px; }
+  .mask-field__multiuse {
+    font-size: 15px;
+    text-align: center;
+    color: #6daae0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: -2px;
+    left: -3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #fff; }
   .mask-field__dragarea .dragtarget {
     margin: 0;
     list-style: none;
@@ -797,6 +815,6 @@
     display: flex;
     margin: 0; } }
 
-.callout-warning {
+.mask-field-form .callout {
   margin-top: 0;
   margin-bottom: 10px; }

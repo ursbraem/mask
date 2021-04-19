@@ -9,12 +9,13 @@
         </f:be.infobox>
     </div>
     <div v-if="activeMultiUseElements.length">
-        <f:be.infobox title="{f:translate(key:'tx_mask.content.multiuse')}" state="-1">
-            <f:translate key="tx_mask.content.multiuse.description"/>
-            <ul>
-                <li v-for="element in activeMultiUseElements">{{ element }}</li>
-            </ul>
-        </f:be.infobox>
+        <div class="callout callout-info">
+            <div class="media">
+                <div class="media-body">
+                    <p class="mb-0"><b><f:translate key="tx_mask.content.multiuse"/></b><br><f:translate key="tx_mask.content.multiuse.description"/> <a href="#" @click.prevent="openMultiUsageModal" class="btn btn-xs btn-default"><f:translate key="tx_mask.showMultiuseElements"/></a></p>
+                </div>
+            </div>
+        </div>
     </div>
     <div v-if="global.activeField.name != 'linebreak'" class="mask-field-form__tabpanel" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist" data-store-last-tab="1">

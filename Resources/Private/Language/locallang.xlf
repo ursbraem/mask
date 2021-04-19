@@ -776,10 +776,10 @@ title3, value3, icon3, description3
 				<source>for more details on how to format the output.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.multiuse">
-				<source>This field is in use in more than one contentelement.</source>
+				<source>This field is in use in more than one content element.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.multiuse.description">
-				<source>If you change this field, changes will affect these contentelements:</source>
+				<source>If you change this field, changes will affect these content elements:</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.newcontentelement">
 				<source>New content element was created.</source>
@@ -1060,6 +1060,9 @@ title3, value3, icon3, description3
 			</trans-unit>
 			<trans-unit id="tx_mask.blindLinkOptions.description">
 				<source>Link options that should be displayed</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.showMultiuseElements">
+				<source>Show content elements</source>
 			</trans-unit>
 		</body>
 	</file>

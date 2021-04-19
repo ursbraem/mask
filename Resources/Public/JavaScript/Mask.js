@@ -346,20 +346,32 @@ define([
                 mask.global.activeField.tca = result.field.tca;
               }
             );
-          if (!mask.multiUseElements[this.global.activeField.key]) {
-            new AjaxRequest(TYPO3.settings.ajaxUrls.mask_multiuse)
-              .withQueryArguments({key: this.global.activeField.key, elementKey: this.element.key, newField: this.global.activeField.newField ? 1 : 0})
-              .get()
-              .then(
-                async function (response) {
-                  const result = await response.resolve();
-                  mask.$set(mask.multiUseElements, mask.global.activeField.key, result.multiUseElements);
-                }
-              );
-          }
+            mask.loadMultiUse();
         } else {
           this.global.activeField.tca = Object.assign({}, this.defaultTca[this.global.activeField.name]);
         }
+      },
+      loadMultiUse: function () {
+        // If it's not an existing tca key there can't be multi usages.
+        if (!this.isExistingMaskField) {
+          return;
+        }
+
+        // If already cached, return.
+        if (this.multiUseElements[this.global.activeField.key]) {
+          return;
+        }
+
+        new AjaxRequest(TYPO3.settings.ajaxUrls.mask_multiuse)
+            .withQueryArguments({key: this.global.activeField.key, elementKey: this.element.key, newField: this.global.activeField.newField ? 1 : 0})
+            .get()
+            .then(
+                async function (response) {
+                  const result = await response.resolve();
+                  // We need to use $set here for reactivity to work, as keys are added dynamically.
+                  mask.$set(mask.multiUseElements, mask.global.activeField.key, result.multiUseElements);
+                }
+            );
       },
       validateKey: function (field) {
         // Force mask prefix if not a core field
@@ -530,23 +542,39 @@ define([
         this.mode = 'edit';
         this.type = type;
         this.element = element;
-        const tcaRequest = this.loadTca();
+        let requests = [];
 
-        Promise.resolve(tcaRequest).then(() => {
-          // load element fields
+        // load element fields
+        requests.push(this.loadTca().then(function () {
           new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+              .withQueryArguments({
+                type: type,
+                key: element.key
+              })
+              .get()
+              .then(
+                  async function (response) {
+                    const result = await response.resolve();
+                    mask.fields = result.fields;
+                  }
+              )
+        }));
+
+        requests.push(new AjaxRequest(TYPO3.settings.ajaxUrls.mask_all_multiuse)
             .withQueryArguments({
-              type: type,
-              key: element.key
+              table: this.type,
+              elementKey: element.key
             })
             .get()
             .then(
-              async function (response) {
-                const result = await response.resolve();
-                mask.fields = result.fields;
-                mask.loaded = true;
-              }
-            );
+                async function (response) {
+                  const result = await response.resolve();
+                  mask.multiUseElements = result.multiUseElements;
+                }
+            ));
+
+        Promise.all(requests).then(function () {
+          mask.loaded = true;
         });
       },
       loadTca: function () {
@@ -584,6 +612,7 @@ define([
             [
               {
                 text: this.language.deleteModal.close,
+                btnClass: 'btn-default',
                 trigger: function () {
                   Modal.dismiss();
                 }
@@ -885,6 +914,21 @@ define([
         });
         return keys;
       },
+      openMultiUsageModal() {
+        Modal.confirm(
+            'Content elements with same field',
+            this.activeMultiUseElements.join(', '),
+            Severity.info,
+            [
+              {
+                text: this.language.close,
+                btnClass: 'btn-default',
+                trigger: function () {
+                  Modal.dismiss();
+                }
+              },
+            ]);
+      }
     },
     computed: {
       hasErrors: function () {

@@ -517,16 +517,73 @@ class AjaxController extends ActionController
         if ($newField === 0) {
             $elementKey = $params['elementKey'];
         }
-        $type = $this->fieldHelper->getFieldType($key, $elementKey);
-        $multiUseElements = $this->fieldHelper->getStorageRepository()->getElementsWhichUseField($key, $type);
-        $json['multiUseElements'] = [];
-        foreach ($multiUseElements as $element) {
-            if ($element['key'] === $params['elementKey']) {
+        $json['multiUseElements'] = $this->getMultiUseForField($key, $elementKey);
+        return new JsonResponse($json);
+    }
+
+    /**
+     * Checks all fields of an element for muli usage.
+     * These fields CAN NOT be shared: inline, palette, tab, fields in inline.
+     * These fields CAN be shared: all other first level fields, all other fields in first level palettes.
+     *
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    public function loadAllMultiUse(ServerRequestInterface $request): Response
+    {
+        $params = $request->getQueryParams();
+        $storage = $this->storageRepository->loadElement($params['table'], $params['elementKey']);
+        $multiUseElements = [];
+        foreach ($storage['tca'] ?? [] as $key => $field) {
+            $fieldType = FieldType::cast($this->getFormType($field['key'], $params['table'], $params['elementKey']));
+
+            // These fields can not be shared
+            if ($fieldType->equals(FieldType::INLINE) || $fieldType->equals(FieldType::TAB)) {
                 continue;
             }
-            $json['multiUseElements'][] = $element['key'];
+
+            // Get fields in palette
+            if ($fieldType->equals(FieldType::PALETTE)) {
+                $paletteFields = $this->storageRepository->loadInlineFields($field['key'], $params['elementKey']);
+
+                foreach ($paletteFields as $paletteField) {
+                    $paletteFieldType = FieldType::cast($this->getFormType($paletteField['key'], $params['table'], $params['elementKey']));
+                    if ($paletteFieldType->equals(FieldType::INLINE)) {
+                        continue;
+                    }
+                    $multiUseElements[$paletteField['maskKey']] = $this->getMultiUseForField($paletteField['maskKey'], $params['elementKey']);
+                }
+                continue;
+            }
+
+            $multiUseElements[$key] = $this->getMultiUseForField($key, $params['elementKey']);
         }
-        return new JsonResponse($json);
+
+        return new JsonResponse(['multiUseElements' => $multiUseElements]);
+    }
+
+    protected function getMultiUseForField($key, $elementKey)
+    {
+        $type = $this->fieldHelper->getFieldType($key, $elementKey);
+        $multiUseElements = $this->fieldHelper->getStorageRepository()->getElementsWhichUseField($key, $type);
+
+        // Filter elements with same element key
+        $multiUseElements = array_filter(
+            $multiUseElements,
+            function ($item) use ($elementKey) {
+                return $item['key'] !== $elementKey;
+            }
+        );
+
+        // Only return key of element
+        return array_values(
+            array_map(
+                function ($item) {
+                    return $item['key'];
+                },
+                $multiUseElements
+            )
+        );
     }
 
     public function icons(ServerRequestInterface $request): Response
@@ -715,6 +772,7 @@ class AjaxController extends ActionController
         $language['tabs'] = $tabs;
 
         $language['ok'] = LocalizationUtility::translate('tx_mask.ok', 'mask');
+        $language['close'] = LocalizationUtility::translate('tx_mask.close', 'mask');
         $language['alert'] = LocalizationUtility::translate('tx_mask.alert', 'mask');
         $language['fieldsMissing'] = LocalizationUtility::translate('tx_mask.fieldsMissing', 'mask');
         $language['missingCreated'] = LocalizationUtility::translate('tx_mask.all.createdmissingfolders', 'mask');
