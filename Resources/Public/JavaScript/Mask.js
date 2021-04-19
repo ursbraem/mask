@@ -569,7 +569,9 @@ define([
             .then(
                 async function (response) {
                   const result = await response.resolve();
-                  mask.multiUseElements = result.multiUseElements;
+                  if (result.multiUseElements.length !== 0) {
+                    mask.multiUseElements = result.multiUseElements;
+                  }
                 }
             ));
 
