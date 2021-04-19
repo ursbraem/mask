@@ -535,6 +535,10 @@ class AjaxController extends ActionController
         $storage = $this->storageRepository->loadElement($params['table'], $params['elementKey']);
         $multiUseElements = [];
         foreach ($storage['tca'] ?? [] as $key => $field) {
+            if (!AffixUtility::hasMaskPrefix($key)) {
+                continue;
+            }
+
             $fieldType = FieldType::cast($this->getFormType($field['key'], $params['table'], $params['elementKey']));
 
             // These fields can not be shared
