@@ -638,6 +638,8 @@
       border-radius: 50%;
       background-color: #fff;
       z-index: 1; }
+  .mask-elements__table tr.disabled {
+    opacity: 0.5; }
 
 .mask-elements__element-name {
   display: flex;

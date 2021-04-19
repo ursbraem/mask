@@ -27,7 +27,7 @@
             </div>
             <div class="mask-elements__table-wrap">
                 <table class="table table-hover mask-elements__table">
-                    <tr v-for="(item, key) in elements" :class="{'has-warning': !item.templateExists}">
+                    <tr v-for="(item, key) in elements" :class="{'has-warning': !item.templateExists, 'disabled': item.hidden}">
                         <td>
                             <div class="mask-elements__element-name" @click="openEdit('tt_content', item)" :title="item.label">
                                 <div v-html="item.iconMarkup" class="mask-elements__element-name-icon" ></div><span class="mask-elements__element-name-label">{{ item.label }}<br><code>[{{ key }}]</code></span>
