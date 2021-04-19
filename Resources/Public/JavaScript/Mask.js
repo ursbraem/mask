@@ -915,9 +915,13 @@ define([
         return keys;
       },
       openMultiUsageModal() {
+        let template = '';
+        this.activeMultiUseElements.forEach(function (item, index) {
+          template += `${index + 1}: ${item}\n`;
+        });
         Modal.confirm(
             'Content elements with same field',
-            this.activeMultiUseElements.join(', '),
+            template,
             Severity.info,
             [
               {
