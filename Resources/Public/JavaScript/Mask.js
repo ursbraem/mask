@@ -764,17 +764,29 @@ define([
       },
       checkEmptyRadioItems: function (fields) {
         fields.every(function (item) {
-          if (mask.isCoreField(item)) {
+          if (this.isCoreField(item)) {
             return true;
           }
-          if (item.name === 'radio' && item.tca['config.items'].split(',').length < 2) {
-            mask.fieldErrors.emptyRadioItems.push(item);
+          if (item.name === 'radio') {
+            const items = item.tca['config.items'].split("\n");
+            if (items.length < 2) {
+              this.fieldErrors.emptyRadioItems.push(item);
+            } else {
+              items.every(function (radioItem) {
+                const parts = radioItem.split(',');
+                if (parts.length < 2 || !this.isNumeric(parts[1])) {
+                  this.fieldErrors.emptyRadioItems.push(item);
+                  return false;
+                }
+                return true;
+              }.bind(this));
+            }
           }
           if (item.fields.length > 0) {
-            mask.checkEmptyRadioItems(item.fields);
+            this.checkEmptyRadioItems(item.fields);
           }
           return true;
-        });
+        }.bind(this));
       },
       handleClone: function (item) {
         // Create a fresh copy of item
@@ -859,6 +871,14 @@ define([
       },
       isEmptyObject: function (obj) {
         return Object.keys(obj).length === 0 && obj.constructor === Object;
+      },
+      isNumeric: function (str) {
+        // we only process strings!
+        if (typeof str != "string") {
+          return false
+        }
+        return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+            !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
       },
       checkAllowedCharacters: function (key) {
         key = key.toLowerCase();
