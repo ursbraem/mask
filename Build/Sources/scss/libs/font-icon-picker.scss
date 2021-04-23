@@ -15,14 +15,10 @@
 }
 
 .icons-selector {
-    display: inline-block;
+    width: 100%;
+    display: block;
     vertical-align: middle;
     text-align: left;
-}
-
-.icons-selector, .icons-selector *, .icons-selector:after, .icons-selector :after, .icons-selector:before, .icons-selector :before {
-    -webkit-box-sizing: content-box;
-    box-sizing: content-box;
 }
 
 .icons-selector * {
@@ -35,13 +31,19 @@
     vertical-align: baseline;
 }
 
+.icons-selector + select {
+    position: absolute !important;
+    pointer-events: none;
+}
+
 .icons-selector .selector-button {
     width: 39px;
     height: 100%;
-    display: block;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    float: left;
+    flex-shrink: 0;
 }
 
 .icons-selector i {
@@ -54,11 +56,11 @@
 }
 
 .icons-selector .selected-icon {
-    display: block;
-    width: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
-    float: left;
-    text-align: center;
 }
 
 .icons-selector .selected-icon i {
@@ -70,28 +72,29 @@
 .icons-selector.selector-popup-wrap, .icons-selector .selector-popup-wrap {
     position: absolute;
     z-index: 10000;
-    width: 352px;
+    width: 354px;
     height: auto;
 }
 
 .icons-selector .selector-popup {
     margin-top: -1px;
     padding: 5px;
-    width: 342px;
+    width: 354px;
     height: auto;
     background-color: #fefefe;
     position: absolute;
 }
 
 .icons-selector .selector {
-    width: 100px;
-    height: 40px;
+    width: 100%;
+    height: 32px;
+    display: flex;
 }
 
 .icons-selector .selector-category select, .icons-selector .selector-search input[type=text] {
     border: 0;
     line-height: 20px;
-    padding: 10px 2.5%;
+    padding: 5px 2.5%;
     width: 100%;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -101,23 +104,11 @@
 }
 
 .icons-selector .selector-category select {
-    height: 40px;
+    height: 32px;
 }
 
 .icons-selector .selector-category select option {
     padding: 10px;
-}
-
-.icons-selector input::-webkit-input-placeholder {
-    text-transform: uppercase;
-}
-
-.icons-selector input:-ms-input-placeholder, .icons-selector input::-ms-input-placeholder {
-    text-transform: uppercase;
-}
-
-.icons-selector input::placeholder {
-    text-transform: uppercase;
 }
 
 .icons-selector .selector-search {
@@ -127,7 +118,7 @@
 .icons-selector .selector-search i {
     position: absolute;
     right: 10px;
-    top: 7px;
+    top: 4px;
 }
 
 .icons-selector .fip-icons-container {
@@ -135,6 +126,8 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .icons-selector .fip-icons-container .loading {
@@ -146,11 +139,12 @@
 }
 
 .icons-selector .fip-box {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 2px;
-    width: 60px;
+    width: 62px;
     line-height: 42px;
-    text-align: center;
     cursor: pointer;
     vertical-align: top;
     height: 40px;
