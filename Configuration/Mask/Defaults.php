@@ -20,7 +20,7 @@ return [
             'config.type' => 'input',
             'config.eval.double2' => 1
         ],
-        'sql' => 'double(11,2) DEFAULT \'0.00\' NOT NULL'
+        'sql' => 'float DEFAULT \'0\' NOT NULL'
     ],
     FieldType::INTEGER => [
         'tca_in' => [
@@ -108,7 +108,7 @@ return [
         'tca_out' => [
             'config.type' => 'check'
         ],
-        'sql' => 'tinyint(2) DEFAULT \'0\' NOT NULL'
+        'sql' => 'int(11) DEFAULT \'0\' NOT NULL'
     ],
     FieldType::SELECT => [
         'tca_in' => [
