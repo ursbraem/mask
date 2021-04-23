@@ -11,8 +11,10 @@
     <div v-if="activeMultiUseElements.length">
         <div class="callout callout-info">
             <div class="media">
+                <div class="media-left"><span class="fa-stack fa-lg callout-icon"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x"></i></span></div>
                 <div class="media-body">
-                    <p class="mb-0"><b><f:translate key="tx_mask.content.multiuse"/></b><br><f:translate key="tx_mask.content.multiuse.description"/> <a href="#" @click.prevent="openMultiUsageModal" class="btn btn-xs btn-default"><f:translate key="tx_mask.showMultiuseElements"/></a></p>
+                    <p><b><f:translate key="tx_mask.content.multiuse"/></b><br><f:translate key="tx_mask.content.multiuse.description"/></p>
+                    <p class="mb-0"><a href="#" @click.prevent="openMultiUsageModal" class="btn btn-xs btn-primary"><f:translate key="tx_mask.showMultiuseElements"/></a></p>
                 </div>
             </div>
         </div>

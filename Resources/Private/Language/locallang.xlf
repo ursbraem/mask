@@ -779,7 +779,7 @@ title3, value3, icon3, description3
 				<source>This field is in use in more than one content element.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.multiuse.description">
-				<source>If you change this field, changes will affect these content elements:</source>
+				<source>If you change this field, changes will affect other content elements.</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.newcontentelement">
 				<source>New content element was created.</source>
