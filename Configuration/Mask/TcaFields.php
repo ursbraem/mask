@@ -665,7 +665,6 @@ return [
     ],
     'ctrl.label' => [
         'type' => 'text',
-        'target' => 'inlineLabel',
         'label' => 'tx_mask.all.label',
         'description' => 'tx_mask.field.inline.inline_label',
         'code' => 'label',
@@ -673,7 +672,6 @@ return [
     ],
     'ctrl.iconfile' => [
         'type' => 'text',
-        'target' => 'inlineIcon',
         'label' => 'tx_mask.field.inline.inline_icon.label',
         'description' => 'tx_mask.field.inline.inline_icon',
         'code' => 'iconfile',

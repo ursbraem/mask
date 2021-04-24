@@ -440,8 +440,8 @@ class AjaxController extends ActionController
             }
 
             if ($fieldType->equals(FieldType::INLINE)) {
-                $newField['tca']['ctrl.iconfile'] = $field['inlineIcon'] ?? '';
-                $newField['tca']['ctrl.label'] = $field['inlineLabel'] ?? '';
+                $newField['tca']['ctrl.iconfile'] = $field['ctrl']['iconfile'] ?? $field['inlineIcon'] ?? '';
+                $newField['tca']['ctrl.label'] = $field['ctrl']['label'] ?? $field['inlineLabel'] ?? '';
             }
 
             if ($fieldType->isParentField()) {

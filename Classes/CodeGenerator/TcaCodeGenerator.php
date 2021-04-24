@@ -61,53 +61,61 @@ class TcaCodeGenerator
             if (!AffixUtility::hasMaskPrefix($table)) {
                 continue;
             }
-            // Generate Table TCA
-            $processedTca = $this->processTableTca($table, $subJson);
-            $parentTable = $this->fieldHelper->getFieldType($table);
-
-            // Adjust TCA-Template
-            $tableTca = self::getTcaTemplate();
-            $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
-            $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
-
-            $tableTca['ctrl']['title'] = $table;
-            $tableTca['ctrl']['label'] = $processedTca['label'];
-            $tableTca['ctrl']['iconfile'] = 'EXT:mask/Resources/Public/Icons/Extension.svg';
-
-            // hide table in list view
-            $tableTca['ctrl']['hideTable'] = true;
-            $tableTca['types']['1']['showitem'] = $processedTca['showitem'] . $appendLanguageTab . $appendAccessTab;
-
-            $tableTca['columns']['l10n_parent']['config']['foreign_table'] = $table;
-            $tableTca['columns']['l10n_parent']['config']['foreign_table_where'] = "AND $table.pid=###CURRENT_PID### AND $table.sys_language_uid IN (-1, 0)";
-
-            $tableTca['columns']['parentid']['config']['foreign_table'] = $parentTable;
-            $tableTca['columns']['parentid']['config']['foreign_table_where'] = "AND $parentTable.pid=###CURRENT_PID### AND $parentTable.sys_language_uid IN (-1, ###REC_FIELD_sys_language_uid###)";
-
-            // Add palettes
-            foreach ($subJson['palettes'] ?? [] as $key => $palette) {
-                $tableTca['palettes'][$key] = $this->generatePalettesTca($palette, $table);
-            }
-
-            // Add some stuff we need to make irre work like it should
-            $GLOBALS['TCA'][$table] = $tableTca;
-
-            // set label for inline if defined
-            $inlineLabel = $json['tt_content']['tca'][$table]['inlineLabel'] ?? '';
-            if ($inlineLabel && in_array($inlineLabel, array_keys($subJson['tca']))) {
-                $GLOBALS['TCA'][$table]['ctrl']['label'] = $inlineLabel;
-            }
-
-            // set icon for inline
-            $inlineIcon = $json['tt_content']['tca'][$table]['inlineIcon'] ?? '';
-            if ($inlineIcon) {
-                $GLOBALS['TCA'][$table]['ctrl']['iconfile'] = $inlineIcon;
-            }
-
-            // Generate Field TCA
-            $fieldTCA = $this->generateFieldsTca($table);
-            ExtensionManagementUtility::addTCAcolumns($table, $fieldTCA);
+            // Enhance boilerplate table tca with user settings
+            $GLOBALS['TCA'][$table] = $this->generateTableTca($table, $subJson);
+            ExtensionManagementUtility::addTCAcolumns($table, $this->generateFieldsTca($table));
         }
+    }
+
+    /**
+     * @param string $table
+     * @param array $subJson
+     * @return array
+     */
+    public function generateTableTca(string $table, array $subJson): array
+    {
+        $json = $this->storageRepository->load();
+
+        // Generate Table TCA
+        $processedTca = $this->processTableTca($table, $subJson);
+        $parentTable = $this->fieldHelper->getFieldType($table);
+
+        // Adjust TCA-Template
+        $tableTca = self::getTcaTemplate();
+        $appendLanguageTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,--palette--;;language';
+        $appendAccessTab = ',--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access';
+
+        $tableTca['ctrl']['title'] = $table;
+        $tableTca['ctrl']['label'] = $processedTca['label'];
+        $tableTca['ctrl']['iconfile'] = 'EXT:mask/Resources/Public/Icons/Extension.svg';
+
+        // Hide table in list view
+        $tableTca['ctrl']['hideTable'] = true;
+        $tableTca['types']['1']['showitem'] = $processedTca['showitem'] . $appendLanguageTab . $appendAccessTab;
+
+        $tableTca['columns']['l10n_parent']['config']['foreign_table'] = $table;
+        $tableTca['columns']['l10n_parent']['config']['foreign_table_where'] = "AND $table.pid=###CURRENT_PID### AND $table.sys_language_uid IN (-1, 0)";
+
+        $tableTca['columns']['parentid']['config']['foreign_table'] = $parentTable;
+        $tableTca['columns']['parentid']['config']['foreign_table_where'] = "AND $parentTable.pid=###CURRENT_PID### AND $parentTable.sys_language_uid IN (-1, ###REC_FIELD_sys_language_uid###)";
+
+        // Add palettes
+        foreach ($subJson['palettes'] ?? [] as $key => $palette) {
+            $tableTca['palettes'][$key] = $this->generatePalettesTca($palette, $table);
+        }
+
+        // Set label for inline if defined
+        $inlineLabel = $json['tt_content']['tca'][$table]['ctrl']['label'] ?? $json['tt_content']['tca'][$table]['inlineLabel'] ?? '';
+        if ($inlineLabel && in_array($inlineLabel, array_keys($subJson['tca']))) {
+            $tableTca['ctrl']['label'] = $inlineLabel;
+        }
+
+        // Set icon for inline
+        $inlineIcon = $json['tt_content']['tca'][$table]['ctrl']['iconfile'] ?? $json['tt_content']['tca'][$table]['inlineIcon'] ?? '';
+        if ($inlineIcon) {
+            $tableTca['ctrl']['iconfile'] = $inlineIcon;
+        }
+        return $tableTca;
     }
 
     /**
@@ -386,7 +394,8 @@ class TcaCodeGenerator
                 $columns[$tcakey]['inlineIcon'],
                 $columns[$tcakey]['imageoverlayPalette'],
                 $columns[$tcakey]['cTypes'],
-                $columns[$tcakey]['allowedFileExtensions']
+                $columns[$tcakey]['allowedFileExtensions'],
+                $columns[$tcakey]['ctrl']
             );
 
             // Unset label if it is from palette fields
