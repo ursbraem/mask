@@ -271,7 +271,8 @@ class StorageRepository implements SingletonInterface
         foreach ($fields as $field) {
             $fieldname = $field['key'];
             if (AffixUtility::hasMaskPrefix($field['key']) && isset($defaults[$field['name']]['sql'])) {
-                $json[$table]['sql'][$fieldname][$table][$fieldname] = $defaults[$field['name']]['sql'];
+                // Keep existing value. For new fields use defaults.
+                $json[$table]['sql'][$fieldname][$table][$fieldname] = $field['sql'] ?? $defaults[$field['name']]['sql'];
             }
             if (isset($field['fields'])) {
                 $inlineTable = $field['name'] === FieldType::INLINE ? $field['key'] : $table;

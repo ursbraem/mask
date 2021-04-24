@@ -321,7 +321,8 @@ define([
             description: item.description,
             name: item.name,
             tca: Object.assign({}, item.tca),
-            fields: mask.getPostFields(item.fields)
+            fields: mask.getPostFields(item.fields),
+            sql: item.sql
           });
         });
         return postFields;

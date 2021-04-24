@@ -354,8 +354,16 @@ class AjaxController extends ActionController
         return new JsonResponse($json);
     }
 
-    protected function addFields($fields, $table, $elementKey = '', $parent = null)
+    /**
+     * @param array $fields
+     * @param string $table
+     * @param string $elementKey
+     * @param null $parent
+     * @return array
+     */
+    protected function addFields(array $fields, string $table, string $elementKey = '', $parent = null)
     {
+        $storage = $this->storageRepository->load();
         $nestedFields = [];
         foreach ($fields as $key => $field) {
             $newField = [
@@ -391,6 +399,11 @@ class AjaxController extends ActionController
             }
 
             $newField['isMaskField'] = AffixUtility::hasMaskPrefix($newField['key']);
+
+            if (!$fieldType->isGroupingField() && $newField['isMaskField']) {
+                $newField['sql'] = $storage[$table]['sql'][$newField['key']][$table][$newField['key']];
+            }
+
             $newField['name'] = (string)$fieldType;
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
