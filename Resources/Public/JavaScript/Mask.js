@@ -557,6 +557,7 @@ define([
                   async function (response) {
                     const result = await response.resolve();
                     mask.fields = result.fields;
+                    mask.addParentReferenceToFields({}, mask.fields);
                   }
               )
         }));
@@ -579,6 +580,12 @@ define([
         Promise.all(requests).then(function () {
           mask.loaded = true;
         });
+      },
+      addParentReferenceToFields: function (parent, fields) {
+        fields.forEach(function (field) {
+          field.parent = parent;
+          this.addParentReferenceToFields(field, field.fields);
+        }.bind(this));
       },
       loadTca: function () {
         // Fetch fieldtypes and available tca
