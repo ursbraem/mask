@@ -33,6 +33,7 @@ define([
                             <field
                                 v-if="type.group == group"
                                 v-for="type in fieldTypes"
+                                :key="type.name"
                                 :type="type"
                                 :add-field="addField"
                             ></field>
