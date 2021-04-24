@@ -831,16 +831,17 @@ define([
       },
       onMove: function (e) {
         const draggedField = e.draggedContext.element;
-        const parent = e.relatedContext.component.$parent;
+        let parent = e.relatedContext.component.$parent;
         const depth = parent.depth;
         const index = parent.index;
         let parentName = '';
 
         if (depth > 0) {
           parentName = parent.$parent.list[index].name;
+          parent = parent.$parent.list[index]
         }
 
-        return this.validateMove(parent.$parent.list[index], parentName, draggedField);
+        return this.validateMove(parent, parentName, draggedField);
       },
       validateMove: function (parent, parentName, draggedField) {
         if (parentName !== '') {
