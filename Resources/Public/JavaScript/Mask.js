@@ -814,7 +814,7 @@ define([
             fields = parent.fields;
           }
         }
-        if (this.validateMove(parentName, newField)) {
+        if (this.validateMove(parent, parentName, newField)) {
           const index = fields.indexOf(this.global.activeField) + 1;
           fields.splice(index, 0, newField);
           this.global.activeField = newField;
@@ -833,9 +833,9 @@ define([
           parentName = parent.$parent.list[index].name;
         }
 
-        return this.validateMove(parentName, draggedField);
+        return this.validateMove(parent.$parent.list[index], parentName, draggedField);
       },
-      validateMove: function (parentName, draggedField) {
+      validateMove: function (parent, parentName, draggedField) {
         if (parentName !== '') {
           // Elements palette and tab are not allowed in palette
           if (['palette', 'tab'].includes(draggedField.name) && parentName === 'palette') {
@@ -843,7 +843,7 @@ define([
           }
 
           // Existing fields are not allowed as new inline field
-          if (parentName === 'inline' && !draggedField.newField) {
+          if (parentName === 'inline' && !draggedField.newField && parent.key !== draggedField.parent.key) {
             return false;
           }
 
