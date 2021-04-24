@@ -810,18 +810,20 @@ define([
       addField: function (type) {
         const newField = this.handleClone(type);
         const parent = this.global.activeField.parent;
-        let fields = this.fields;
+        let parentKey = '';
         let parentName = '';
+        let fields = this.fields;
         if (typeof parent === 'undefined' || parent.length === 0) {
           newField.parent = {};
         } else {
           parentName = parent.name;
+          parentKey = parent.key;
           newField.parent = parent;
           if (typeof parent.fields !== 'undefined') {
             fields = parent.fields;
           }
         }
-        if (this.validateMove(parent, parentName, newField)) {
+        if (this.validateMove(parentKey, parentName, newField)) {
           const index = fields.indexOf(this.global.activeField) + 1;
           fields.splice(index, 0, newField);
           this.global.activeField = newField;
@@ -835,34 +837,45 @@ define([
         const depth = parent.depth;
         const index = parent.index;
         let parentName = '';
+        let parentKey = '';
 
         if (depth > 0) {
           parentName = parent.$parent.list[index].name;
-          parent = parent.$parent.list[index]
+          parentKey = parent.$parent.list[index].key;
         }
 
-        return this.validateMove(parent, parentName, draggedField);
+        return this.validateMove(parentKey, parentName, draggedField);
       },
-      validateMove: function (parent, parentName, draggedField) {
-        if (parentName !== '') {
+      validateMove: function (newParentKey, newParentName, draggedField) {
+        if (newParentName !== '') {
           // Elements palette and tab are not allowed in palette
-          if (['palette', 'tab'].includes(draggedField.name) && parentName === 'palette') {
+          if (newParentName === 'palette' && ['palette', 'tab'].includes(draggedField.name)) {
             return false;
           }
 
-          // Existing fields are not allowed as new inline field
-          if (parentName === 'inline' && !draggedField.newField && parent.key !== draggedField.parent.key) {
+          // Existing fields are not allowed as new inline field, but allow moving items inside
+          if (newParentName === 'inline' && !draggedField.newField && newParentKey !== draggedField.parent.key) {
             return false;
           }
 
           // Palettes or inline fields with elements are not allowed in inline fields
-          if (parentName === 'inline' && ['palette', 'inline'].includes(draggedField.name) && draggedField.fields.length > 0) {
+          if (newParentName === 'inline' && ['palette', 'inline'].includes(draggedField.name) && draggedField.fields.length > 0) {
             return false;
           }
         }
 
+        // Existing fields in inline can't be dragged out besides in palette
+        if (
+            draggedField.parent.name === 'inline'
+            && !draggedField.newField
+            && newParentKey !== draggedField.parent.key
+            && (newParentName !== 'palette' || newParentName === '')
+        ) {
+          return false;
+        }
+
         // Linebreaks are only allowed in palette
-        if (draggedField.name === 'linebreak' && parentName !== 'palette') {
+        if (draggedField.name === 'linebreak' && newParentName !== 'palette') {
           return false;
         }
 
