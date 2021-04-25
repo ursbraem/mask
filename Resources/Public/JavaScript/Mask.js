@@ -253,6 +253,9 @@ define([
         this.saving = true;
         this.validate();
         if (!this.hasErrors) {
+          mask.mode = 'edit';
+          mask.global.deletedFields = [];
+          mask.global.activeField = {};
           const payload = {
             element: this.getPostElement(),
             fields: JSON.stringify(this.getPostFields(this.fields)),
@@ -265,7 +268,23 @@ define([
                 const res = await response.resolve();
                 mask.showMessages(res);
                 mask.loadElements();
-                mask.saving = false;
+                // load element fields
+                mask.loadTca().then(function () {
+                  new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+                      .withQueryArguments({
+                        type: payload.type,
+                        key: payload.element.key
+                      })
+                      .get()
+                      .then(
+                          async function (response) {
+                            const result = await response.resolve();
+                            mask.fields = result.fields;
+                            mask.addParentReferenceToFields({}, mask.fields);
+                            mask.saving = false;
+                          }
+                      )
+                });
               }
             );
         } else {
@@ -921,7 +940,7 @@ define([
         return isExisting;
       },
       availableTcaForActiveField: function (type) {
-        if (this.isEmptyObject(this.availableTca)) {
+        if (this.isEmptyObject(this.availableTca) || this.isEmptyObject(this.global.activeField)) {
           return [];
         }
         return this.availableTca[this.global.activeField.name][type].filter(function (item) {
