@@ -672,7 +672,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 'config' => [
                                     'type' => 'input'
                                 ],
-                                'exclude' => 1
                             ],
                             'tx_mask_field2' => [
                                 'key' => 'field2',
@@ -681,7 +680,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 'config' => [
                                     'type' => 'input'
                                 ],
-                                'exclude' => 1
                             ],
                             'header' => [
                                 'key' => 'header',
@@ -807,7 +805,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 ],
                                 'description' => '',
                                 'name' => 'inline',
-                                'exclude' => 1,
                             ],
                         ],
                     ],
@@ -827,7 +824,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 'order' => 1,
                                 'description' => '',
                                 'name' => 'string',
-                                'exclude' => 1,
                                 'config' => [
                                     'type' => 'input'
                                 ]
@@ -881,7 +877,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 'key' => 'timestamp',
                                 'name' => 'timestamp',
                                 'description' => '',
-                                'exclude' => 1,
                                 'config' => [
                                     'type' => 'input',
                                     'renderType' => 'inputDateTime',
@@ -935,7 +930,6 @@ class StorageRepositoryTest extends BaseTestCase
                             'tx_mask_inline_field' => [
                                 'key' => 'inline_field',
                                 'description' => '',
-                                'exclude' => 1,
                                 'name' => 'inline',
                                 'config' => [
                                     'type' => 'inline',
@@ -1014,7 +1008,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 ],
                                 'key' => 'palette',
                                 'description' => '',
-                                'exclude' => 1,
                                 'name' => 'palette'
                             ],
                             'tx_mask_field' => [
@@ -1024,7 +1017,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 'name' => 'string',
                                 'key' => 'field',
                                 'description' => '',
-                                'exclude' => 1,
                                 'inlineParent' => [
                                     'element1' => 'tx_mask_palette'
                                 ],
@@ -1201,7 +1193,6 @@ class StorageRepositoryTest extends BaseTestCase
                                 ],
                                 'key' => 'palette_2',
                                 'description' => '',
-                                'exclude' => 1,
                                 'name' => 'palette'
                             ],
                             'tx_mask_field_1' => [
@@ -1223,7 +1214,6 @@ class StorageRepositoryTest extends BaseTestCase
                                     'element2' => 1
                                 ],
                                 'description' => '',
-                                'exclude' => 1,
                                 'name' => 'string'
                             ],
                             'header' => [

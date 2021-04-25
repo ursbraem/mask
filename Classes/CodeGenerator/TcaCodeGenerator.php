@@ -404,6 +404,8 @@ class TcaCodeGenerator
             }
 
             $columns[$tcakey] = MaskUtility::removeBlankOptions($columns[$tcakey]);
+            // Exlcude all fields for editors by default
+            $columns[$tcakey]['exclude'] = 1;
         }
         return $columns;
     }

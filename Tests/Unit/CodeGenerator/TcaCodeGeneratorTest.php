@@ -453,12 +453,14 @@ class TcaCodeGeneratorTest extends BaseTestCase
                         'config' => [
                             'type' => 'input'
                         ],
+                        'exclude' => 1
                     ],
                     'tx_mask_field_2' => [
                         'config' => [
                             'type' => 'input',
                             'eval' => 'trim'
                         ],
+                        'exclude' => 1
                     ]
                 ]
             ],
@@ -492,12 +494,14 @@ class TcaCodeGeneratorTest extends BaseTestCase
                             'format' => 'typoscript',
                             'renderType' => 't3editor'
                         ],
+                        'exclude' => 1
                     ],
                     'tx_mask_field_2' => [
                         'config' => [
                             'type' => 'input',
                             'eval' => 'trim'
                         ],
+                        'exclude' => 1
                     ]
                 ]
             ],
@@ -533,12 +537,14 @@ class TcaCodeGeneratorTest extends BaseTestCase
                         'config' => [
                             'type' => 'input'
                         ],
+                        'exclude' => 1
                     ],
                     'tx_mask_field_2' => [
                         'config' => [
                             'type' => 'input',
                             'eval' => 'trim'
                         ],
+                        'exclude' => 1
                     ]
                 ]
             ],
@@ -566,6 +572,7 @@ class TcaCodeGeneratorTest extends BaseTestCase
                             'type' => 'inline',
                             'foreign_table' => 'tx_mask_field_1'
                         ],
+                        'exclude' => 1
                     ],
                 ]
             ],
@@ -611,6 +618,7 @@ class TcaCodeGeneratorTest extends BaseTestCase
                                 'upper' => 1640822400
                             ]
                         ],
+                        'exclude' => 1
                     ],
                     'tx_mask_field_2' => [
                         'config' => [
@@ -621,6 +629,7 @@ class TcaCodeGeneratorTest extends BaseTestCase
                                 'upper' => 1640896200
                             ]
                         ],
+                        'exclude' => 1
                     ]
                 ]
             ],
@@ -659,6 +668,7 @@ class TcaCodeGeneratorTest extends BaseTestCase
                                 ]
                             ]
                         ],
+                        'exclude' => 1
                     ],
                     'tx_mask_field_1_parent' => [
                         'config' => [
@@ -706,6 +716,7 @@ class TcaCodeGeneratorTest extends BaseTestCase
                             'type' => 'input',
                             'eval' => 'trim'
                         ],
+                        'exclude' => 1
                     ],
                 ]
             ],

@@ -312,7 +312,6 @@ class StorageRepository implements SingletonInterface
                 $fieldAdd = TcaConverterUtility::convertFlatTcaToArray($field['tca']);
                 $fieldAdd['key'] = AffixUtility::removeMaskPrefix($field['key']);
                 $fieldAdd['description'] = $field['description'] ?? '';
-                $fieldAdd['exclude'] = 1; // TODO Can this be moved to TcaCodeGenerator, as it's always 1?
             } else {
                 $fieldAdd['key'] = $field['key'];
                 $fieldAdd['coreField'] = 1;
