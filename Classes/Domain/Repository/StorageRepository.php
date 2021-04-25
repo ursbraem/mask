@@ -254,8 +254,6 @@ class StorageRepository implements SingletonInterface
         // Set element
         $jsonAdd[$table]['elements'][$elementKey] = $element;
 
-        // TODO Find label for existing fields with empty labels
-
         $jsonAdd = $this->setSql($jsonAdd, $fields, $table);
 
         // Create JSON tca Array:

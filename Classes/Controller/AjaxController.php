@@ -350,8 +350,30 @@ class AjaxController extends ActionController
         $key = $params['key'];
         $field = $this->storageRepository->loadField($table, $key);
         $json['field'] = $this->addFields([$key => $field], $table)[0];
+        $json['field']['label'] = $this->findFirstNonEmptyLabel($table, $key);
 
         return new JsonResponse($json);
+    }
+
+    /**
+     * This method searches for an existing label of a multiuse field
+     *
+     * @param string $table
+     * @param string $key
+     */
+    protected function findFirstNonEmptyLabel(string $table, string $key)
+    {
+        $label = '';
+        $json = $this->storageRepository->load();
+        foreach ($json[$table]['elements'] as $element) {
+            if (in_array($key, $element['columns'])) {
+                $label = $element['labels'][array_search($key, $element['columns'])];
+                if ($label !== '') {
+                    break;
+                }
+            }
+        }
+        return $label;
     }
 
     /**
@@ -604,7 +626,7 @@ class AjaxController extends ActionController
     protected function getMultiUseForField($key, $elementKey)
     {
         $type = $this->fieldHelper->getFieldType($key, $elementKey);
-        $multiUseElements = $this->fieldHelper->getStorageRepository()->getElementsWhichUseField($key, $type);
+        $multiUseElements = $this->storageRepository->getElementsWhichUseField($key, $type);
 
         // Filter elements with same element key
         $multiUseElements = array_filter(
