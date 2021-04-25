@@ -67,6 +67,7 @@ define([
             }
             // Reset current tab
             this.global.currentTab = 'general';
+            this.validateKey(this.global.activeField);
           },
           setParentActive(index) {
             this.global.activeField = this.fields[index];

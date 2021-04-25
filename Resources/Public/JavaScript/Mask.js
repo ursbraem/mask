@@ -395,6 +395,10 @@ define([
             );
       },
       validateKey: function (field) {
+        if (this.isEmptyObject(this.global.activeField)) {
+          return;
+        }
+
         // Force mask prefix if not a core field
         if (!this.isActiveCoreField && !this.hasMaskPrefix(field.key)) {
           field.key = this.global.maskPrefix;
