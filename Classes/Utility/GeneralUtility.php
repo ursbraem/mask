@@ -84,26 +84,6 @@ class GeneralUtility
     }
 
     /**
-     * replace keys
-     *
-     * @param $data
-     * @param $replace_key
-     * @param string $key
-     * @return array
-     */
-    public static function replaceKey($data, $replace_key, $key = '--key--'): array
-    {
-        foreach ($data as $elem_key => $elem) {
-            if (is_array($elem)) {
-                $data[$elem_key] = self::replaceKey($elem, $replace_key);
-            } elseif ($data[$elem_key] === $key) {
-                $data[$elem_key] = $replace_key;
-            }
-        }
-        return $data;
-    }
-
-    /**
      * Searches an array of strings and returns the first string, that is not a tab
      * @param array $fields
      * @return string $string

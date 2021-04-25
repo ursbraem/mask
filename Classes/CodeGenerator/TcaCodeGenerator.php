@@ -404,7 +404,6 @@ class TcaCodeGenerator
             }
 
             $columns[$tcakey] = MaskUtility::removeBlankOptions($columns[$tcakey]);
-            $columns[$tcakey] = MaskUtility::replaceKey($columns[$tcakey], $tcakey);
         }
         return $columns;
     }

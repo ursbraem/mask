@@ -425,35 +425,4 @@ class GeneralUtilityTest extends UnitTestCase
     {
         self::assertSame($expected, GeneralUtility::getFirstNoneTabField($data));
     }
-
-    public function replaceKeyDataProvider()
-    {
-        return [
-            'Key is replaced recursively' => [
-                [
-                    'value' => '--key--',
-                    'recursive' => [
-                        'value' => '--key--'
-                    ]
-                ],
-                'replace_key',
-                '--key--',
-                [
-                    'value' => 'replace_key',
-                    'recursive' => [
-                        'value' => 'replace_key'
-                    ]
-                ],
-            ]
-        ];
-    }
-
-    /**
-     * @dataProvider replaceKeyDataProvider
-     * @test
-     */
-    public function replaceKey($data, $replaceKey, $replaceMarker, $expected)
-    {
-        self::assertSame($expected, GeneralUtility::replaceKey($data, $replaceKey, $replaceMarker));
-    }
 }
