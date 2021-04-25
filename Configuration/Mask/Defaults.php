@@ -39,7 +39,7 @@ return [
         'tca_out' => [
             'config.type' => 'input',
             'config.renderType' => 'inputLink',
-            'softref' => 'typolink'
+            'config.softref' => 'typolink'
         ],
         'sql' => 'varchar(1024) DEFAULT \'\' NOT NULL'
     ],
