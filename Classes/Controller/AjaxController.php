@@ -408,6 +408,7 @@ class AjaxController extends ActionController
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = TcaConverterUtility::convertTcaArrayToFlat($field['config'] ?? []);
+            $newField['tca'] = $this->cleanUpConfig($newField['tca'], $fieldType);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
 
             if ($fieldType->equals(FieldType::TIMESTAMP)) {
@@ -452,6 +453,27 @@ class AjaxController extends ActionController
             $nestedFields[] = $newField;
         }
         return $nestedFields;
+    }
+
+    /**
+     * This method removes all tca options defined which aren't available in mask.
+     *
+     * @param array $config
+     * @param FieldType $fieldType
+     * @return array
+     */
+    protected function cleanUpConfig(array $config, FieldType $fieldType)
+    {
+        $tabConfig = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Tabs/' . $fieldType . '.php');
+        $tcaOptions = [];
+        foreach ($tabConfig as $options) {
+            foreach ($options as $row) {
+                $tcaOptions = array_merge($tcaOptions, array_keys($row));
+            }
+        }
+        return array_filter($config, function ($key) use ($tcaOptions) {
+            return in_array($key, $tcaOptions);
+        }, ARRAY_FILTER_USE_KEY);
     }
 
     public function fieldTypes(ServerRequestInterface $request): Response
