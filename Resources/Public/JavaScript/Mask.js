@@ -253,9 +253,8 @@ define([
         this.saving = true;
         this.validate();
         if (!this.hasErrors) {
-          mask.mode = 'edit';
-          mask.global.deletedFields = [];
-          mask.global.activeField = {};
+          this.mode = 'edit';
+          this.global.deletedFields = [];
           const payload = {
             element: this.getPostElement(),
             fields: JSON.stringify(this.getPostFields(this.fields)),
@@ -266,26 +265,27 @@ define([
             .then(
               async function (response) {
                 const res = await response.resolve();
-                mask.showMessages(res);
-                mask.loadElements();
+                this.showMessages(res);
+                this.loadElements();
                 // load element fields
-                mask.loadTca().then(function () {
-                  new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
-                      .withQueryArguments({
-                        type: payload.type,
-                        key: payload.element.key
-                      })
-                      .get()
-                      .then(
-                          async function (response) {
-                            const result = await response.resolve();
-                            mask.fields = result.fields;
-                            mask.addParentReferenceToFields({}, mask.fields);
-                            mask.saving = false;
+                new AjaxRequest(TYPO3.settings.ajaxUrls.mask_load_element)
+                    .withQueryArguments({
+                      type: payload.type,
+                      key: payload.element.key
+                    })
+                    .get()
+                    .then(
+                        async function (response) {
+                          const result = await response.resolve();
+                          this.fields = result.fields;
+                          this.addParentReferenceToFields({}, this.fields);
+                          if (!this.isEmptyObject(this.global.activeField)) {
+                            this.findActiveField(this.global.activeField, this.fields);
                           }
-                      )
-                });
-              }
+                          this.saving = false;
+                        }.bind(this)
+                    );
+              }.bind(this)
             );
         } else {
           this.saving = false;
@@ -345,6 +345,24 @@ define([
           });
         });
         return postFields;
+      },
+      /**
+       * This method finds the last active field before saving and sets it again to active.
+       * This is necessary, because the fields are loaded freshly after saving and the reference is gone.
+       * @param activeField
+       * @param fields
+       */
+      findActiveField: function (activeField, fields) {
+        let found = false;
+        fields.forEach(function (field) {
+            if (field.key === activeField.key && (this.isEmptyObject(activeField.parent) && this.isEmptyObject(field.parent) || activeField.parent.key === field.parent.key)) {
+              this.global.activeField = field;
+              found = true;
+            }
+            if (!found) {
+              this.findActiveField(activeField, field.fields);
+            }
+        }.bind(this));
       },
       loadElements: function () {
         return (new AjaxRequest(TYPO3.settings.ajaxUrls.mask_elements)).get()
