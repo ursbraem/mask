@@ -1003,7 +1003,7 @@ define([
       openMultiUsageModal() {
         let template = '';
         this.activeMultiUseElements.forEach(function (item, index) {
-          template += `${index + 1}: ${item}\n`;
+          template += `${index + 1}: ${item.label} (${item.key})\n`;
         });
         Modal.confirm(
             'Content elements with same field',

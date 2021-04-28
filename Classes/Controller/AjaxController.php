@@ -579,7 +579,7 @@ class AjaxController extends ActionController
     }
 
     /**
-     * Checks all fields of an element for muli usage.
+     * Checks all fields of an element for multi usage.
      * These fields CAN NOT be shared: inline, palette, tab, fields in inline.
      * These fields CAN be shared: all other first level fields, all other fields in first level palettes.
      *
@@ -636,15 +636,18 @@ class AjaxController extends ActionController
             }
         );
 
-        // Only return key of element
-        return array_values(
-            array_map(
-                function ($item) {
-                    return $item['key'];
-                },
-                $multiUseElements
-            )
+        $multiUseElements = array_map(
+            function ($item) {
+                return [
+                    'key' => $item['key'],
+                    'label' => $item['label'],
+                ];
+            },
+            $multiUseElements
         );
+
+        // Reset keys and return values
+        return array_values($multiUseElements);
     }
 
     public function icons(ServerRequestInterface $request): Response
