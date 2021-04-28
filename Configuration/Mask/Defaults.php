@@ -170,7 +170,8 @@ return [
     ],
     FieldType::CONTENT => [
         'tca_in' => [
-            'config.appearance.levelLinksPosition' => 'top'
+            'cTypes' => [],
+            'config.appearance.levelLinksPosition' => 'top',
         ],
         'tca_out' => [
             'config.type' => 'inline',

@@ -518,9 +518,6 @@ class AjaxController extends ActionController
                     'l10n_mode' => ''
                 ]
             ];
-            if ($type == FieldType::CONTENT) {
-                $config['tca']['cTypes'] = [];
-            }
             if (isset($defaults[$type]['tca_in'])) {
                 foreach ($defaults[$type]['tca_in'] as $tcaKey => $value) {
                     $config['tca'][$tcaKey] = $value;
