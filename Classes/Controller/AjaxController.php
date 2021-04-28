@@ -610,7 +610,7 @@ class AjaxController extends ActionController
 
             // Get fields in palette
             if ($fieldType->equals(FieldType::PALETTE)) {
-                $paletteFields = $this->storageRepository->loadInlineFields($field['key'], $params['elementKey']);
+                $paletteFields = $this->storageRepository->loadInlineFields($key, $params['elementKey']);
 
                 foreach ($paletteFields as $paletteField) {
                     $paletteFieldType = FieldType::cast($this->getFormType($paletteField['key'], $params['table'], $params['elementKey']));
