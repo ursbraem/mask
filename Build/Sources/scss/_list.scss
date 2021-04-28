@@ -48,7 +48,7 @@
     margin-left: auto;
     margin-right: 20px;
 
-    @media screen and (min-width: $bp-desktop) {
+    @media screen and (min-width: $bp-laptop) {
       font-size: 20px;
     }
   }
@@ -64,7 +64,7 @@
     .icon {
       width: 16px;
 
-      @media screen and (min-width: $bp-desktop) {
+      @media screen and (min-width: $bp-laptop) {
         width: 32px;
       }
     }
@@ -73,7 +73,7 @@
   &__settings-label {
     margin-right: 10px;
 
-    @media screen and (min-width: $bp-desktop) {
+    @media screen and (min-width: $bp-laptop) {
       font-size: 20px;
     }
   }

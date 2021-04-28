@@ -1,5 +1,5 @@
 .mask-elements {
-  @media screen and (min-width: $bp-desktop) {
+  @media screen and (min-width: $bp-laptop) {
     display: flex;
   }
 
@@ -10,7 +10,7 @@
     &--elements {
       margin-bottom: 10px;
 
-      @media screen and (min-width: $bp-desktop) {
+      @media screen and (min-width: $bp-laptop) {
         width: percentage(2/3);
         margin-right: 5px;
         margin-bottom: 0;
@@ -18,7 +18,7 @@
     }
 
     &--templates {
-      @media screen and (min-width: $bp-desktop) {
+      @media screen and (min-width: $bp-laptop) {
         margin-left: 5px;
         width: percentage(1/3);
       }
@@ -28,6 +28,7 @@
   &__header {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     justify-content: space-between;
     box-shadow: 0 8px 5px -5px rgba(#000, 0.2);
     position: relative;
@@ -35,7 +36,7 @@
     padding: 10px;
     background-color: $bg-dark;
 
-    @media screen and (min-width: $bp-desktop) {
+    @media screen and (min-width: $bp-laptop) {
       height: 45px;
       padding: 0 23px 0 5px;
     }
@@ -44,16 +45,27 @@
   &__header-icon-wrap {
     display: flex;
     align-items: center;
+
+    .icon {
+      flex-shrink: 0;
+    }
   }
 
   &__header-icon-label {
-    font-size: 18px;
     margin-left: 10px;
+    margin-right: 10px;
+
+    @media screen and (min-width: $bp-edit-flex) {
+      font-size: 18px;
+    }
   }
 
   &__table-wrap {
-    height: 80vh;
     overflow-y: scroll;
+
+    @media screen and (min-width: $bp-laptop) {
+      height: 80vh;
+    }
   }
 
   &__count {

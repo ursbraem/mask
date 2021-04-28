@@ -1,13 +1,10 @@
 .mask-field-form {
   background: #fff;
-  margin-top: 20px;
-  padding-top: 30px;
   flex-grow: 1;
   margin-bottom: 0;
+  max-width: 969px;
 
   @media screen and (min-width: 1200px) {
     height: 100%;
-    padding: 0;
-    margin-top: 0;
   }
 }

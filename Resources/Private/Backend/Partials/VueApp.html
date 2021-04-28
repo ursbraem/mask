@@ -1,5 +1,5 @@
 <div id="mask">
-    <div v-if="mode === 'edit' || mode === 'new'" class="mask-edit">
+    <div v-if="mode === 'edit' || mode === 'new'">
         <f:render partial="VueEdit" arguments="{_all}"/>
     </div>
     <f:render partial="VueList" arguments="{_all}"/>
