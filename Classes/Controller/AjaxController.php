@@ -430,7 +430,6 @@ class AjaxController extends ActionController
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = TcaConverterUtility::convertTcaArrayToFlat($field['config'] ?? []);
-            $newField['tca'] = $this->cleanUpConfig($newField['tca'], $fieldType);
             $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
 
             if ($fieldType->equals(FieldType::TIMESTAMP)) {
@@ -472,6 +471,7 @@ class AjaxController extends ActionController
                 $newField['fields'] = $this->addFields($field['inlineFields'], $inlineTable, $elementKey, $newField);
             }
 
+            $newField['tca'] = $this->cleanUpConfig($newField['tca'], $fieldType);
             $nestedFields[] = $newField;
         }
         return $nestedFields;
