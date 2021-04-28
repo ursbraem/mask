@@ -524,7 +524,7 @@ return [
         'code' => 'allowed',
         'documentation' => 'ColumnsConfig/Type/Group.html#allowed'
     ],
-    'config.fieldControl.editPopup' => [
+    'config.fieldControl.editPopup.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.editPopup',
@@ -532,7 +532,7 @@ return [
         'code' => 'editPopup',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldcontrol-editpopup'
     ],
-    'config.fieldControl.addRecord' => [
+    'config.fieldControl.addRecord.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.addRecord',
@@ -540,7 +540,7 @@ return [
         'code' => 'addRecord',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldcontrol-addrecord'
     ],
-    'config.fieldControl.listModule' => [
+    'config.fieldControl.listModule.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.listModule',
@@ -548,7 +548,7 @@ return [
         'code' => 'listModule',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldcontrol-listmodule'
     ],
-    'config.fieldControl.elementBrowser' => [
+    'config.fieldControl.elementBrowser.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.elementBrowser',
@@ -556,7 +556,7 @@ return [
         'code' => 'elementBrowser',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldcontrol-elementbrowser',
     ],
-    'config.fieldControl.insertClipboard' => [
+    'config.fieldControl.insertClipboard.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.insertClipboard',
@@ -564,7 +564,14 @@ return [
         'code' => 'insertClipboard',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldcontrol-insertclipboard'
     ],
-    'config.fieldWizard.recordsOverview' => [
+    'config.fieldControl' => [
+        'type' => 'plainText',
+        'label' => 'tx_mask.fieldControl',
+        'description' => 'tx_mask.fieldControl.description',
+        'code' => 'fieldControl',
+        'documentation' => 'ColumnsConfig/Type/Group.html#fieldcontrol',
+    ],
+    'config.fieldWizard.recordsOverview.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.recordsOverview',
@@ -572,13 +579,20 @@ return [
         'code' => 'recordsOverview',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldwizard-recordsoverview'
     ],
-    'config.fieldWizard.tableList' => [
+    'config.fieldWizard.tableList.disabled' => [
         'type' => 'checkbox',
         'invert' => true,
         'label' => 'tx_mask.group.tableList',
         'description' => 'tx_mask.group.tableList.description',
         'code' => 'tableList',
         'documentation' => 'ColumnsConfig/Type/Group.html#fieldwizard-tablelist'
+    ],
+    'config.fieldWizard' => [
+        'type' => 'plainText',
+        'label' => 'tx_mask.fieldWizard',
+        'description' => 'tx_mask.fieldWizard.description',
+        'code' => 'fieldWizard',
+        'documentation' => 'ColumnsConfig/Type/Group.html#fieldwizard',
     ],
     'config.multiple' => [
         'type' => 'checkbox',

@@ -17,18 +17,17 @@ return [
     ],
     Tab::FIELD_CONTROL => [
         [
-            'config.fieldControl.editPopup' => 4,
-            'config.fieldControl.addRecord' => 4,
-            'config.fieldControl.listModule' => 4,
-            'config.fieldControl.elementBrowser' => 4,
-            'config.fieldControl.insertClipboard' => 4
-        ]
-    ],
-
-    Tab::WIZARDS => [
+            'config.fieldControl' => 12,
+            'config.fieldControl.editPopup.disabled' => 4,
+            'config.fieldControl.addRecord.disabled' => 4,
+            'config.fieldControl.listModule.disabled' => 4,
+            'config.fieldControl.elementBrowser.disabled' => 4,
+            'config.fieldControl.insertClipboard.disabled' => 4,
+        ],
         [
-            'config.fieldWizard.recordsOverview' => 6,
-            'config.fieldWizard.tableList' => 6
+            'config.fieldWizard' => 12,
+            'config.fieldWizard.recordsOverview.disabled' => 4,
+            'config.fieldWizard.tableList.disabled' => 4
         ]
     ],
     Tab::LOCALIZATION => [

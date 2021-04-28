@@ -259,7 +259,7 @@
 				<source>Columns</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.check.columns.description">
-				<source>1, 2, 3, …, 31 or inline, 1 being default</source>
+				<source>1-31 or inline. Default: 1</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.content.check.items">
 				<source>Items</source>
@@ -646,7 +646,7 @@ title3, value3, icon3, description3
 				<source>Default</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.string.default.description">
-				<source>Default value set if a new record is created</source>
+				<source>Default value when a new record is created</source>
 			</trans-unit>
 			<trans-unit id="tx_mask.field.string.placeholder">
 				<source>Placeholder</source>
@@ -1063,6 +1063,18 @@ title3, value3, icon3, description3
 			</trans-unit>
 			<trans-unit id="tx_mask.showMultiuseElements">
 				<source>Show content elements</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.fieldControl">
+				<source>Field Control</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.fieldControl.description">
+				<source>If enabled the following options show buttons with special functionalities next to the field.</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.fieldWizard">
+				<source>Field Wizard</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.fieldWizard.description">
+				<source>If enabled the following options render helpful lists and buttons below the field.</source>
 			</trans-unit>
 		</body>
 	</file>

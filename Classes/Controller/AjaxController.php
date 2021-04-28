@@ -386,6 +386,7 @@ class AjaxController extends ActionController
     protected function addFields(array $fields, string $table, string $elementKey = '', $parent = null)
     {
         $storage = $this->storageRepository->load();
+        $defaults = $this->loadDefaults();
         $nestedFields = [];
         foreach ($fields as $key => $field) {
             $newField = [
@@ -430,7 +431,6 @@ class AjaxController extends ActionController
             $newField['icon'] = $this->iconFactory->getIcon('mask-fieldtype-' . $newField['name'])->getMarkup();
             $newField['description'] = $field['description'] ?? '';
             $newField['tca'] = TcaConverterUtility::convertTcaArrayToFlat($field['config'] ?? []);
-            $newField['tca']['l10n_mode'] = $field['l10n_mode'] ?? '';
 
             if ($fieldType->equals(FieldType::TIMESTAMP)) {
                 $default = $newField['tca']['config.default'] ?? false;
@@ -459,6 +459,11 @@ class AjaxController extends ActionController
 
             if ($fieldType->equals(FieldType::CONTENT)) {
                 $newField['tca']['cTypes'] = $field['cTypes'] ?? [];
+            }
+
+            // Set defaults
+            foreach ($defaults[(string)$fieldType]['tca_in'] ?? [] as $tcaKey => $defaultValue) {
+                $newField['tca'][$tcaKey] = $newField['tca'][$tcaKey] ?? $defaultValue;
             }
 
             if ($fieldType->equals(FieldType::INLINE)) {
@@ -501,7 +506,7 @@ class AjaxController extends ActionController
     public function fieldTypes(ServerRequestInterface $request): Response
     {
         $json = [];
-        $defaults = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Defaults.php');
+        $defaults = $this->loadDefaults();
         $grouping = require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/FieldGroups.php');
         foreach (FieldType::getConstants() as $type) {
             $config = [
@@ -518,6 +523,9 @@ class AjaxController extends ActionController
                     'l10n_mode' => ''
                 ]
             ];
+            if ($type == FieldType::CONTENT) {
+                $config['tca']['cTypes'] = [];
+            }
             if (isset($defaults[$type]['tca_in'])) {
                 foreach ($defaults[$type]['tca_in'] as $tcaKey => $value) {
                     $config['tca'][$tcaKey] = $value;
@@ -1100,5 +1108,13 @@ class AjaxController extends ActionController
         foreach ($paths as $path) {
             @unlink($path);
         }
+    }
+
+    /**
+     * @return array
+     */
+    protected function loadDefaults(): array
+    {
+        return require GeneralUtility::getFileAbsFileName('EXT:mask/Configuration/Mask/Defaults.php');
     }
 }

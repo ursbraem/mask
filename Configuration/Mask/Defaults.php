@@ -5,6 +5,7 @@ use MASK\Mask\Enumeration\FieldType;
 return [
     FieldType::STRING => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval.null' => 0
         ],
         'tca_out' => [
@@ -14,6 +15,7 @@ return [
     ],
     FieldType::FLOAT => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval.null' => 0,
         ],
         'tca_out' => [
@@ -24,6 +26,7 @@ return [
     ],
     FieldType::INTEGER => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval.null' => 0
         ],
         'tca_out' => [
@@ -34,6 +37,7 @@ return [
     ],
     FieldType::LINK => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval.null' => 0
         ],
         'tca_out' => [
@@ -45,6 +49,7 @@ return [
     ],
     FieldType::DATE => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval.null' => 0
         ],
         'tca_out' => [
@@ -57,6 +62,7 @@ return [
     ],
     FieldType::DATETIME => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval.null' => 0
         ],
         'tca_out' => [
@@ -69,6 +75,7 @@ return [
     ],
     FieldType::TIMESTAMP => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.eval' => 'date',
             'config.eval.null' => 0
         ],
@@ -81,6 +88,7 @@ return [
     ],
     FieldType::TEXT => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.wrap' => 'virtual',
             'config.format' => '',
             'config.eval.null' => 0
@@ -92,17 +100,18 @@ return [
     ],
     FieldType::RICHTEXT => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.richtextConfiguration' => ''
         ],
         'tca_out' => [
             'config.type' => 'text',
-            'config.enableRichtext' => 1,
-            'config.softref' => 'typolink_tag,images,email[subst],url'
+            'config.enableRichtext' => 1
         ],
         'sql' => 'mediumtext'
     ],
     FieldType::CHECK => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.renderType' => ''
         ],
         'tca_out' => [
@@ -112,6 +121,7 @@ return [
     ],
     FieldType::SELECT => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.renderType' => 'selectSingle'
         ],
         'tca_out' => [
@@ -121,6 +131,7 @@ return [
     ],
     FieldType::RADIO => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.items' => ''
         ],
         'tca_out' => [
@@ -130,11 +141,12 @@ return [
     ],
     FieldType::GROUP => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.internal_type' => 'db',
             'config.allowed' => '',
-            'config.fieldControl.editPopup' => 1,
-            'config.fieldControl.addRecord' => 1,
-            'config.fieldControl.listModule' => 1,
+            'config.fieldControl.editPopup.disabled' => 1,
+            'config.fieldControl.addRecord.disabled' => 1,
+            'config.fieldControl.listModule.disabled' => 1,
         ],
         'tca_out' => [
             'config.type' => 'group'
@@ -143,6 +155,7 @@ return [
     ],
     FieldType::FILE => [
         'tca_in' => [
+            'l10n_mode' => '',
             'imageoverlayPalette' => 1,
             'config.appearance.fileUploadAllowed' => 1
         ],
@@ -153,6 +166,7 @@ return [
     ],
     FieldType::INLINE => [
         'tca_in' => [
+            'l10n_mode' => '',
             'config.appearance.levelLinksPosition' => 'top',
             'config.appearance.showPossibleLocalizationRecords' => 1,
             'config.appearance.showAllLocalizationLink' => 1,
@@ -170,7 +184,7 @@ return [
     ],
     FieldType::CONTENT => [
         'tca_in' => [
-            'cTypes' => [],
+            'l10n_mode' => '',
             'config.appearance.levelLinksPosition' => 'top',
         ],
         'tca_out' => [
