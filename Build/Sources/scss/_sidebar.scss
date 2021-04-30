@@ -16,11 +16,14 @@
     margin-bottom: 0;
   }
 
+  &__toolbar {
+    margin-bottom: 10px;
+  }
+
   &__content {
     background-color: $bg-light;
     padding: 10px;
     border: 1px solid $border-color;
-    border-top: 0;
     flex-grow: 1;
   }
 

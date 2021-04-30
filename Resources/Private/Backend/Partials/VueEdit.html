@@ -1,14 +1,10 @@
 <div v-show="loaded" style="display: none;" class="mask-edit">
     <div class="mask-sidebar">
-        <div class="tabpanel">
-            <ul class="nav nav-tabs">
-                <li>
-                    <div class="btn-toolbar">
-                        <button @click="mode = 'list'" class="btn btn-default btn-sm"><span v-html="icons.close"></span> {f:translate(key: 'tx_mask.close')}</button>
-                        <button class="btn btn-default btn-sm" @click="save"><span v-show="!saving" v-html="icons.save"></span><span v-show="saving" v-html="icons.spinner"></span> {f:translate(key: 'tx_mask.content.save')}</button>
-                    </div>
-                </li>
-            </ul>
+        <div class="mask-sidebar__toolbar">
+            <div class="btn-toolbar">
+                <button @click="mode = 'list'" class="btn btn-default btn-sm"><span v-html="icons.close"></span> {f:translate(key: 'tx_mask.close')}</button>
+                <button class="btn btn-default btn-sm" @click="save"><span v-show="!saving" v-html="icons.save"></span><span v-show="saving" v-html="icons.spinner"></span> {f:translate(key: 'tx_mask.content.save')}</button>
+            </div>
         </div>
         <div class="mask-sidebar__content">
             <div class="mask-sidebar__toggle-wrap">
