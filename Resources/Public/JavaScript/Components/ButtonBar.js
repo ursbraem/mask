@@ -91,7 +91,8 @@ define([
               });
             },
             template: `
-              <div class="mask-elements__btn-group btn-group">
+            <div class="mask-elements__btn-group">
+              <div class="btn-group">
                 <a :ref="element.key + 'html'" class="btn btn-default" @click="hideTooltip('html'); openFluidCodeModal(element);" data-bs-toggle="tooltip" :data-title="language.tooltip.html">
                     <span v-html="htmlIcon"></span>
                 </a>
@@ -108,6 +109,7 @@ define([
                     <span v-html="icons.delete"></span>
                 </a>
               </div>
+            </div>
         `
           }
       )
