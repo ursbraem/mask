@@ -229,7 +229,7 @@ class AjaxController extends ActionController
         } else {
             $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.updatedcontentelement', 'mask'));
         }
-        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
+        return new JsonResponse($this->getMaskFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     /**
@@ -247,7 +247,7 @@ class AjaxController extends ActionController
         $this->storageRepository->persist($this->storageRepository->remove('tt_content', $params['key']));
         $this->generateAction();
         $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask'));
-        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
+        return new JsonResponse($this->getMaskFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     /**
@@ -265,7 +265,7 @@ class AjaxController extends ActionController
             $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.hiddencontentelement', 'mask'));
         }
         $this->generateAction();
-        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
+        return new JsonResponse($this->getMaskFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     public function backendLayouts(ServerRequestInterface $request): Response
@@ -1033,10 +1033,10 @@ class AjaxController extends ActionController
             $severity,
             $storeInSession
         );
-        $this->getFlashMessageQueue()->enqueue($flashMessage);
+        $this->getMaskFlashMessageQueue()->enqueue($flashMessage);
     }
 
-    protected function getFlashMessageQueue()
+    protected function getMaskFlashMessageQueue()
     {
         return $this->flashMessageQueue;
     }
