@@ -1,8 +1,8 @@
 .mask-field-form {
   background: #fff;
-  flex-grow: 1;
   margin-bottom: 0;
-  max-width: 969px;
+  width: 969px;
+  max-width: 100%;
 
   @media screen and (min-width: 1200px) {
     height: 100%;
