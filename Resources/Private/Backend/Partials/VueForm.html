@@ -22,7 +22,7 @@
     <div v-if="global.activeField.name != 'linebreak'" class="mask-field-form__tabpanel" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist" data-store-last-tab="1">
             <li v-for="(tab, key) in fieldTabs" role="presentation" :class="{active: key === global.currentTab, 'has-validation-error': key == 'general' && activeFieldHasKeyError}" v-if="key == 'general' || !isActiveCoreField">
-                <a role="tab" href="#" @click.prevent="global.currentTab = key">
+                <a role="tab" href="#" @click.prevent="global.currentTab = key" :class="{active: key === global.currentTab}">
                     {{ language.tabs[key] }}
                 </a>
             </li>
