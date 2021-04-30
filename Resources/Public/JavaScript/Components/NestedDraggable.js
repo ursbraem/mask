@@ -96,6 +96,7 @@ define([
         :index="index"
         :load-multi-use="loadMultiUse"
         :multi-use-elements="multiUseElements"
+        :field-key="uuid(field)"
         @remove-field="removeField($event)"
     ></field-row>
     <div class="mask-field__dragarea" v-if="isParentField(field)">

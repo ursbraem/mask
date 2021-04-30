@@ -15,16 +15,17 @@ define([
           icons: Object,
           index: Number,
           loadMultiUse: Function,
-          multiUseElements: Object
+          multiUseElements: Object,
+          fieldKey: String
         },
         mounted: function () {
-          Tooltip.initialize('[data-bs-toggle="tooltip"]', {
-            delay: {
-              'show': 50,
-              'hide': 50
-            },
-            trigger: 'hover',
-            container: '#mask'
+          Tooltip.initialize(`.field-row-${this.fieldKey} [data-bs-toggle="tooltip"]`, {
+              delay: {
+                  'show': 500,
+                  'hide': 100
+              },
+              trigger: 'hover',
+              container: 'body'
           });
         },
         methods: {
@@ -45,7 +46,7 @@ define([
           }
         },
         template: `
-    <div class="mask-field__row" @click="global.activeField = field; global.currentTab = 'general'; loadMultiUse();">
+    <div :class="'field-row-' + fieldKey" class="mask-field__row" @click="global.activeField = field; global.currentTab = 'general'; loadMultiUse();">
         <i v-if="isMultiUse" class="mask-field__multiuse fa fa-info-circle"></i>
         <div class="mask-field__image">
             <div v-html="field.icon"></div>
@@ -57,7 +58,7 @@ define([
             <span class="mask-field__key" v-if="!global.sctructuralFields.includes(field.name)">{{ keyWithoutMask(field.key) }}</span>
           </div>
           <div class="mask-field__actions">
-              <a class="btn btn-default btn-sm" @click.stop="$emit('remove-field', index); hideTooltip();" data-bs-toggle="tooltip" :data-title="language.tooltip.deleteField" v-html="icons.delete" :ref="'row' + index"></a>
+              <a class="btn btn-default btn-sm" @click.stop="$emit('remove-field', index); hideTooltip();" data-bs-toggle="tooltip" :title="language.tooltip.deleteField" v-html="icons.delete" :ref="'row' + index"></a>
           </div>
         </div>
     </div>
