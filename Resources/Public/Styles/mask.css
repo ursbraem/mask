@@ -340,11 +340,12 @@
     .mask-sidebar {
       min-height: calc(100vh - 20px);
       margin-bottom: 0; } }
+  .mask-sidebar__toolbar {
+    margin-bottom: 10px; }
   .mask-sidebar__content {
     background-color: #fafafa;
     padding: 10px;
     border: 1px solid #ccc;
-    border-top: 0;
     flex-grow: 1; }
   .mask-sidebar textarea {
     max-width: 100%; }
