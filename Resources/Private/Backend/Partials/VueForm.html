@@ -64,6 +64,7 @@
                         <form-field
                             v-for="(column, tcaKey) in row"
                             :key="global.activeField.uid + '.' + tcaKey + ticks"
+                            :id="global.activeField.uid + '.' + tcaKey"
                             :global="global"
                             :icons="icons"
                             :tca-fields="tcaFields"

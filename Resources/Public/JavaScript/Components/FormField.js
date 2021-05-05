@@ -13,7 +13,8 @@ define([
           global: Object,
           icons: Object,
           fieldErrors: Object,
-          forceRenderer: Function
+          forceRenderer: Function,
+          id: String
         },
         data: function () {
           return {
@@ -64,9 +65,6 @@ define([
               return true;
             }
             return ['string', 'text', 'richtext'].includes(this.global.activeField.name);
-          },
-          focusDatePicker: function (key) {
-            this.$refs[key].focus();
           },
         },
         computed: {
@@ -134,17 +132,17 @@ define([
             <div class="t3js-formengine-field-item">
               <span class="formengine-field-item-description text-muted" v-if="field.description">{{ field.description }}</span>
               <div v-if="type == 'text'" class="form-control-wrap">
-                <input :id="tcaKey" class="form-control" :placeholder="field.placeholder" v-model="global.activeField.tca[tcaKey]">
+                <input :id="id" class="form-control" :placeholder="field.placeholder" v-model="global.activeField.tca[tcaKey]">
               </div>
               <div v-if="type == 'textarea'" class="form-control-wrap">
-                <textarea :id="tcaKey" class="form-control" :placeholder="field.placeholder" :rows="field.rows" v-model="global.activeField.tca[tcaKey]"></textarea>
+                <textarea :id="id" class="form-control" :placeholder="field.placeholder" :rows="field.rows" v-model="global.activeField.tca[tcaKey]"></textarea>
               </div>
               <div v-if="type == 'number'" class="form-control-wrap">
-                <input v-model="global.activeField.tca[tcaKey]" :id="tcaKey" :placeholder="field.placeholder" :min="field.min" :max="field.max" :step="field.step" class="form-control" type="number">
+                <input v-model="global.activeField.tca[tcaKey]" :id="id" :placeholder="field.placeholder" :min="field.min" :max="field.max" :step="field.step" class="form-control" type="number">
               </div>
               <div v-if="type == 'checkbox'" class="form-control-wrap">
                 <div class="checkbox checkbox-type-toggle form-check form-switch" :class="{'checkbox-invert': field.invert}">
-                    <input :id="tcaKey" class="checkbox-input form-check-input" v-model="global.activeField.tca[tcaKey]" type="checkbox" :true-value="valueOn" :false-value="valueOff" @change="switchDependsOn(tcaKey, field.dependsOn)">
+                    <input :id="id" class="checkbox-input form-check-input" v-model="global.activeField.tca[tcaKey]" type="checkbox" :true-value="valueOn" :false-value="valueOff" @change="switchDependsOn(tcaKey, field.dependsOn)">
                     <label class="checkbox-label form-check-label" :for="tcaKey">
                         <span class="checkbox-label-text form-check-label-text">[{{ global.activeField.tca[tcaKey] ? global.activeField.tca[tcaKey] : 0 }}]</span>
                     </label>
@@ -157,17 +155,17 @@ define([
               </div>
               <div v-if="type == 'date'" class="form-control-wrap">
                 <div v-if="global.typo3Version == 10" class="input-group">
-                  <input v-model="global.activeField.tca[tcaKey]" :ref="tcaKey" :data-date-type="dateType" class="t3js-datetimepicker form-control t3js-clearable">
+                  <input :id="id" v-model="global.activeField.tca[tcaKey]" :ref="tcaKey" :data-date-type="dateType" class="t3js-datetimepicker form-control t3js-clearable">
                   <span class="input-group-btn">
-                      <label @click="focusDatePicker(tcaKey)" class="btn btn-default" v-html="icons.date"></label>
+                      <label :for="id" class="btn btn-default" v-html="icons.date"></label>
                   </span>
                 </div>
                 <div v-else class="input-group">
                      <div class="form-control-clearable form-control">
-                        <input v-model="global.activeField.tca[tcaKey]" :ref="tcaKey" :data-date-type="dateType" class="t3js-datetimepicker form-control t3js-clearable flatpickr-input">
+                        <input :id="id" v-model="global.activeField.tca[tcaKey]" :ref="tcaKey" :data-date-type="dateType" class="t3js-datetimepicker form-control t3js-clearable flatpickr-input">
                     </div>
                     <input type="hidden">
-                    <label class="btn btn-default" @click="focusDatePicker(tcaKey)" v-html="icons.date"></label>
+                    <label class="btn btn-default" :for="id" v-html="icons.date"></label>
                 </div>
               </div>
               <div class="form-wizards-wrap" v-if="type == 'radio'">
