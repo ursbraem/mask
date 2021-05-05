@@ -94,5 +94,9 @@ return [
     'mask_field_groups' => [
         'path' => '/mask/fieldGroups',
         'target' => AjaxController::class . '::fieldGroups'
+    ],
+    'mask_versions' => [
+        'path' => '/mask/versions',
+        'target' => AjaxController::class . '::versions'
     ]
 ];

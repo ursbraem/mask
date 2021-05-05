@@ -55,6 +55,7 @@ define([
     },
     data: function () {
       return {
+        version: '',
         mode: 'list',
         type: '',
         sidebar: 'fields',
@@ -82,6 +83,7 @@ define([
           existingFieldKeyFields: []
         },
         global: {
+          typo3Version: 10,
           activeField: {},
           clonedField: {},
           richtextConfiguration: {},
@@ -175,6 +177,16 @@ define([
               async function (response) {
                 const missing = await response.resolve();
                 mask.missingFilesOrFolders = missing.missing;
+              }
+          ));
+
+      // fetch mask and typo3 version
+      promises.push((new AjaxRequest(TYPO3.settings.ajaxUrls.mask_versions)).get()
+          .then(
+              async function (response) {
+                const versions = await response.resolve();
+                mask.version = versions.mask;
+                mask.global.typo3Version = versions.typo3;
               }
           ));
 

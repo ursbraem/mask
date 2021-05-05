@@ -40,10 +40,12 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Service\ImageService;
@@ -878,6 +880,17 @@ class AjaxController extends ActionController
         $presets = array_combine($presets, $presets);
         $config = array_merge($config, $presets);
         return new JsonResponse($config);
+    }
+
+    public function versions(ServerRequestInterface $request): Response
+    {
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+        return new JsonResponse(
+            [
+                'typo3' => $typo3Version->getMajorVersion(),
+                'mask' => ExtensionManagementUtility::getExtensionVersion('mask')
+            ]
+        );
     }
 
     protected function getFormType($fieldKey, $type, $elementKey = '')
