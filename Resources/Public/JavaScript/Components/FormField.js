@@ -13,6 +13,7 @@ define([
           global: Object,
           icons: Object,
           fieldErrors: Object,
+          forceRenderer: Function
         },
         data: function () {
           return {
@@ -38,9 +39,7 @@ define([
                 },
                 function () {
                   // Destroy bootstrap datepicker and remove data attributes added by TYPO3 DateTimePicker
-                  $(this.$refs[this.tcaKey]).datetimepicker('destroy');
-                  $(this.$refs[this.tcaKey]).removeData(['dateType', 'DateTimePicker']);
-                  this.bootDateTimePicker();
+                  this.forceRenderer();
                 }
             );
           }
@@ -157,11 +156,18 @@ define([
                 </select>
               </div>
               <div v-if="type == 'date'" class="form-control-wrap">
-                <div class="input-group">
+                <div v-if="global.typo3Version == 10" class="input-group">
                   <input v-model="global.activeField.tca[tcaKey]" :ref="tcaKey" :data-date-type="dateType" class="t3js-datetimepicker form-control t3js-clearable">
                   <span class="input-group-btn">
                       <label @click="focusDatePicker(tcaKey)" class="btn btn-default" v-html="icons.date"></label>
                   </span>
+                </div>
+                <div v-else class="input-group">
+                     <div class="form-control-clearable form-control">
+                        <input v-model="global.activeField.tca[tcaKey]" :ref="tcaKey" :data-date-type="dateType" class="t3js-datetimepicker form-control t3js-clearable flatpickr-input">
+                    </div>
+                    <input type="hidden">
+                    <label class="btn btn-default" @click="focusDatePicker(tcaKey)" v-html="icons.date"></label>
                 </div>
               </div>
               <div class="form-wizards-wrap" v-if="type == 'radio'">

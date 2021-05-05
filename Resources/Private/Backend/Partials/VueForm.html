@@ -63,13 +63,14 @@
                     <div class="row">
                         <form-field
                             v-for="(column, tcaKey) in row"
-                            :key="global.activeField.uid + '.' + tcaKey"
+                            :key="global.activeField.uid + '.' + tcaKey + ticks"
                             :global="global"
                             :icons="icons"
                             :tca-fields="tcaFields"
                             :tca-key="tcaKey"
                             :column="column"
                             :field-errors="fieldErrors"
+                            :force-renderer="forceRenderer"
                         ></form-field>
                     </div>
                 </div>

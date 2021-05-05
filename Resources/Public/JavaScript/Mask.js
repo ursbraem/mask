@@ -95,7 +95,8 @@ define([
         },
         loaded: false,
         missingFilesOrFolders: false,
-        saving: false
+        saving: false,
+        ticks: 0,
       }
     },
     mounted: function () {
@@ -216,13 +217,14 @@ define([
         mask.loaded = true;
       });
 
-      // TODO in v11 this is a regular event (no jquery)
       // Trigger input change on TYPO3 datepicker change event.
-      $(document).on('formengine.dp.change', function () {
-        document.querySelectorAll('.t3js-datetimepicker').forEach(function (input) {
-          input.dispatchEvent((new Event('input')));
+      if (this.global.typo3Version === 10) {
+        $(document).on('formengine.dp.change', function () {
+          document.querySelectorAll('.t3js-datetimepicker').forEach(function (input) {
+            input.dispatchEvent((new Event('input')));
+          });
         });
-      });
+      }
     },
     watch: {
       element: {
@@ -1043,6 +1045,12 @@ define([
                 }
               },
             ]);
+      },
+      /**
+       * Update tick to force rerender of date inputs
+       */
+      forceRenderer() {
+        this.ticks += 1;
       }
     },
     computed: {
