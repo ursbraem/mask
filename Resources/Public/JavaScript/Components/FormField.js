@@ -144,10 +144,10 @@ define([
                 <input v-model="global.activeField.tca[tcaKey]" :id="tcaKey" :placeholder="field.placeholder" :min="field.min" :max="field.max" :step="field.step" class="form-control" type="number">
               </div>
               <div v-if="type == 'checkbox'" class="form-control-wrap">
-                <div :class="['checkbox', 'checkbox-type-toggle', {'checkbox-invert': field.invert}]">
-                    <input :id="tcaKey" v-model="global.activeField.tca[tcaKey]" type="checkbox" class="checkbox-input" :true-value="valueOn" :false-value="valueOff" @change="switchDependsOn(tcaKey, field.dependsOn)">
-                    <label class="checkbox-label" :for="tcaKey">
-                        <span class="checkbox-label-text">[{{ global.activeField.tca[tcaKey] ? global.activeField.tca[tcaKey] : 0 }}]</span>
+                <div class="checkbox checkbox-type-toggle form-check form-switch" :class="{'checkbox-invert': field.invert}">
+                    <input :id="tcaKey" class="checkbox-input form-check-input" v-model="global.activeField.tca[tcaKey]" type="checkbox" :true-value="valueOn" :false-value="valueOff" @change="switchDependsOn(tcaKey, field.dependsOn)">
+                    <label class="checkbox-label form-check-label" :for="tcaKey">
+                        <span class="checkbox-label-text form-check-label-text">[{{ global.activeField.tca[tcaKey] ? global.activeField.tca[tcaKey] : 0 }}]</span>
                     </label>
                 </div>
               </div>
