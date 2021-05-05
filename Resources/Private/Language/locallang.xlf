@@ -861,6 +861,9 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.all.fieldkey">
 				<source>Element key</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.all.fieldLabel">
+				<source>Element label</source>
+			</trans-unit>
 			<trans-unit id="tx_mask.all.fieldkey.description">
 				<source>unique, lowercase</source>
 			</trans-unit>
@@ -1075,6 +1078,24 @@ title3, value3, icon3, description3
 			</trans-unit>
 			<trans-unit id="tx_mask.fieldWizard.description">
 				<source>If enabled the following options render helpful lists and buttons below the field.</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.multistep.chooseLabel">
+				<source>Choose element label</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.multistep.chooseKey">
+				<source>Choose element key</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.multistep.text1">
+				<source>You can change the label later on in "Element Meta Data".</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.multistep.text2">
+				<source>You can change the key later on in "Element Meta Data".</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.multistep.placeholder1">
+				<source>My Element Label</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.multistep.placeholder2">
+				<source>my_element_key</source>
 			</trans-unit>
 		</body>
 	</file>

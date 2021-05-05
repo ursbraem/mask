@@ -869,6 +869,17 @@ class AjaxController extends ActionController
         $language['icon'] = LocalizationUtility::translate('tx_mask.all.icon', 'mask');
         $language['color'] = LocalizationUtility::translate('tx_mask.all.color', 'mask');
         $language['usage'] = LocalizationUtility::translate('tx_mask.content.count', 'mask');
+        $language['elementKey'] = LocalizationUtility::translate('tx_mask.all.fieldkey', 'mask');
+        $language['elementLabel'] = LocalizationUtility::translate('tx_mask.all.fieldLabel', 'mask');
+
+        $language['multistep'] = [
+            'chooseKey' => LocalizationUtility::translate('tx_mask.multistep.chooseKey', 'mask'),
+            'chooseLabel' => LocalizationUtility::translate('tx_mask.multistep.chooseKey', 'mask'),
+            'text1' => LocalizationUtility::translate('tx_mask.multistep.text1', 'mask'),
+            'text2' => LocalizationUtility::translate('tx_mask.multistep.text2', 'mask'),
+            'placeholder1' => LocalizationUtility::translate('tx_mask.multistep.placeholder1', 'mask'),
+            'placeholder2' => LocalizationUtility::translate('tx_mask.multistep.placeholder2', 'mask'),
+        ];
 
         return new JsonResponse($language);
     }

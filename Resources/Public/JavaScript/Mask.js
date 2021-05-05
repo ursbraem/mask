@@ -537,16 +537,22 @@ define([
         this.type = 'tt_content';
         this.element = this.getNewElement();
 
-        /** Step 1: Choose element label */
-        MultiStepWizard.addSlide('new-mask-element-step-1', 'Choose element label', '', Severity.info, null, function (slide) {
-          let html = '';
-          html += '<p>You can change the label later on in "Element Meta Data".</p>';
-          html += '<label class="control-label" for="mask-step-label">Element label</label>';
-          html += '<input id="mask-step-label" class="form-control" placeholder="My Element Label"/>';
-          slide.html(html);
+        const stepLabels = [null, null];
+        if (this.isTYPO3v11) {
+          stepLabels[0] = this.language.multistep.chooseLabel;
+          stepLabels[1] = this.language.multistep.chooseKey;
+        }
 
+        /** Step 1: Choose element label */
+        MultiStepWizard.addSlide('new-mask-element-step-1', this.language.multistep.chooseLabel, '', Severity.info, stepLabels[0], (slide) => {
           MultiStepWizard.blurCancelStep();
           MultiStepWizard.lockPrevStep();
+
+          let html = '';
+          html += '<p>' + this.language.multistep.text1 + '</p>';
+          html += '<label class="control-label" for="mask-step-label">' + this.language.elementLabel + '</label>';
+          html += '<input id="mask-step-label" class="form-control" placeholder="' + this.language.multistep.placeholder1 + '"/>';
+          slide.html(html);
 
           const elementLabel = MultiStepWizard.setup.$carousel.closest('.modal').find('#mask-step-label');
           elementLabel.focus();
@@ -557,11 +563,15 @@ define([
         });
 
         /** Step 2: Choose element key. Generate suggestion from chosen label. */
-        MultiStepWizard.addSlide('new-mask-element-step-2', 'Choose element key', '', Severity.info, null, (slide) => {
+        MultiStepWizard.addSlide('new-mask-element-step-2', this.language.multistep.chooseKey, '', Severity.info, stepLabels[1], (slide) => {
+          // In v10 the buttons disappear, that's why we don't unlock here.
+          if (this.isTYPO3v11) {
+            MultiStepWizard.unlockPrevStep();
+          }
           let html = '';
-          html += '<p>You can change the key later on in "Element Meta Data".</p>';
-          html += '<label class="control-label" for="mask-step-label">Element key</label>';
-          html += '<input id="mask-step-key" class="form-control" placeholder="my_element_key"/>';
+          html += '<p>' + this.language.multistep.text2 + '</p>';
+          html += '<label class="control-label" for="mask-step-key">' + this.language.elementKey + '</label>';
+          html += '<input id="mask-step-key" class="form-control" placeholder="' + this.language.multistep.placeholder2 + '"/>';
           slide.html(html);
 
           const elementKey = MultiStepWizard.setup.$carousel.closest('.modal').find('#mask-step-key');
@@ -587,8 +597,11 @@ define([
             this.loaded = true;
             MultiStepWizard.dismiss();
           });
-        }).done(function () {
+        }).done(() => {
           MultiStepWizard.show();
+          if (this.isTYPO3v11) {
+            MultiStepWizard.setup.forceSelection = false;
+          }
         });
       },
       openEdit: function (type, element) {
@@ -1137,6 +1150,9 @@ define([
       },
       fieldsVisible: function () {
         return this.sidebar === 'fields';
+      },
+      isTYPO3v11: function () {
+        return this.global.typo3Version === 11;
       }
     }
   });
