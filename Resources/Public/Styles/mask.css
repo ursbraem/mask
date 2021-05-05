@@ -363,8 +363,11 @@
     position: relative; }
     .mask-sidebar__toggle:first-child {
       border-right: 1px solid #ccc; }
-    .mask-sidebar__toggle.active, .mask-sidebar__toggle:hover {
+    .mask-sidebar__toggle:hover {
       background-color: #eaf4fd; }
+    .mask-sidebar__toggle.active {
+      background-color: #eaf4fd;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); }
 
 .mask-field-list {
   background: none;
