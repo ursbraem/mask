@@ -76,8 +76,11 @@ class CTypeList extends AbstractList
                 }
             }
 
-            $dataString = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['ajax'][0] ?? '';
-            if (preg_match_all('/tx_mask_\w+/', $dataString, $pregResult) && count($pregResult[0]) > 1) {
+            // This works since TYPO3 10.4.16 or v11.2
+            if (isset($params['inlineParentTableName'])) {
+                $table = $params['inlineParentTableName'];
+            // Else we have to figure out from url
+            } else if (preg_match_all('/tx_mask_\w+/', ($GLOBALS['TYPO3_REQUEST']->getParsedBody()['ajax'][0] ?? ''), $pregResult) && count($pregResult[0]) > 1) {
                 // Get the second last entry
                 $table = $pregResult[0][count($pregResult[0]) - 2];
             } else {
