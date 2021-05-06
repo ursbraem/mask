@@ -4,7 +4,8 @@
   width: 969px;
   max-width: 100%;
 
-  @media screen and (min-width: 1200px) {
-    height: 100%;
+  &__inner {
+    position: sticky;
+    top: 10px;
   }
 }
