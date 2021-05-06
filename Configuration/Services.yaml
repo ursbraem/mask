@@ -7,6 +7,12 @@ services:
   MASK\Mask\:
     resource: '../Classes/*'
 
+  MASK\Mask\Controller\WizardController:
+    public: true
+
+  MASK\Mask\Controller\AjaxController:
+    public: true
+
   MASK\Mask\CodeGenerator\TyposcriptCodeGenerator:
     public: true
 

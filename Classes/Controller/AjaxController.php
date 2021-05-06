@@ -47,12 +47,11 @@ use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class AjaxController extends ActionController
+class AjaxController
 {
     /**
      * @var FieldHelper
@@ -231,7 +230,7 @@ class AjaxController extends ActionController
         } else {
             $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.updatedcontentelement', 'mask'));
         }
-        return new JsonResponse($this->getMaskFlashMessageQueue()->getAllMessagesAndFlush());
+        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     /**
@@ -249,7 +248,7 @@ class AjaxController extends ActionController
         $this->storageRepository->persist($this->storageRepository->remove('tt_content', $params['key']));
         $this->generateAction();
         $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.deletedcontentelement', 'mask'));
-        return new JsonResponse($this->getMaskFlashMessageQueue()->getAllMessagesAndFlush());
+        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     /**
@@ -267,7 +266,7 @@ class AjaxController extends ActionController
             $this->addFlashMessage(LocalizationUtility::translate('tx_mask.content.hiddencontentelement', 'mask'));
         }
         $this->generateAction();
-        return new JsonResponse($this->getMaskFlashMessageQueue()->getAllMessagesAndFlush());
+        return new JsonResponse($this->getFlashMessageQueue()->getAllMessagesAndFlush());
     }
 
     public function backendLayouts(ServerRequestInterface $request): Response
@@ -1057,10 +1056,10 @@ class AjaxController extends ActionController
             $severity,
             $storeInSession
         );
-        $this->getMaskFlashMessageQueue()->enqueue($flashMessage);
+        $this->getFlashMessageQueue()->enqueue($flashMessage);
     }
 
-    protected function getMaskFlashMessageQueue()
+    protected function getFlashMessageQueue()
     {
         return $this->flashMessageQueue;
     }

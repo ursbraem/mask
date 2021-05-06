@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 // Add mask as global fluid namespace
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['mask'][] = 'MASK\\Mask\\ViewHelpers';
@@ -24,20 +24,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRe
         \TYPO3\CMS\Backend\Form\FormDataProvider\TcaColumnsProcessCommon::class
     ]
 ];
-
-if (TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_BE) {
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \TYPO3\CMS\Core\Page\PageRenderer::class
-    )->addRequireJsConfiguration(
-        [
-            'paths' => [
-                'sortablejs' => \TYPO3\CMS\Core\Utility\PathUtility::getAbsoluteWebPath(
-                    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mask', 'Resources/Public/JavaScript/Contrib/sortable')
-                )
-            ]
-        ]
-    );
-}
 
 // Update wizards
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['convertTemplatesToUppercase'] = \MASK\Mask\Updates\ConvertTemplatesToUppercase::class;
