@@ -18,6 +18,7 @@ define([
               addField: Function,
               onMove: Function,
               handleClone: Function,
+              typo3Version: Number
             },
             template: `
                 <div class="mask-field-group" data-bs-toggle="tooltip">
@@ -36,6 +37,7 @@ define([
                                 :key="type.name"
                                 :type="type"
                                 :add-field="addField"
+                                :typo3-version="typo3Version"
                             ></field>
                         </draggable>
                     </ul>

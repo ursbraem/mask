@@ -10,11 +10,12 @@ define([
         props: {
           type: Object,
           addField: Function,
+          typo3Version: Number
         },
         mounted: function () {
           Tooltip.initialize(`.field-selectable-${this.type.name} [data-bs-toggle="tooltip"]`, {
               delay: {
-                  'show': 500,
+                  'show': 50,
                   'hide': 100
               },
               trigger: 'hover',
@@ -23,7 +24,11 @@ define([
         },
         methods: {
           hideTooltip() {
-            Tooltip.hide($(this.$refs[this.type.name]));
+            if (this.typo3Version === 11) {
+              Tooltip.hide(this.$refs[this.type.name]);
+            } else {
+              Tooltip.hide($(this.$refs[this.type.name]));
+            }
           },
         },
         template: `
