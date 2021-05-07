@@ -19,6 +19,7 @@ namespace MASK\Mask\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -41,10 +42,14 @@ class MaskController
     protected $view;
 
     protected PageRenderer $pageRenderer;
+    protected UriBuilder $uriBuilder;
 
-    public function __construct(ModuleTemplate $moduleTemplate)
-    {
+    public function __construct(
+        ModuleTemplate $moduleTemplate,
+        UriBuilder $uriBuilder
+    ) {
         $this->moduleTemplate = $moduleTemplate;
+        $this->uriBuilder = $uriBuilder;
     }
 
     /**
@@ -76,7 +81,9 @@ class MaskController
      */
     protected function initializeView(string $templateName): void
     {
+        $settingsUrl = $this->uriBuilder->buildUriFromRoute('tools_toolssettings');
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->view->assign('settingsUrl', $settingsUrl);
         $this->view->getRequest()->setControllerExtensionName('mask');
         $this->view->getRenderingContext()->setControllerAction($templateName);
         $this->view->getRenderingContext()->getTemplatePaths()->fillDefaultsByPackageName('mask');
