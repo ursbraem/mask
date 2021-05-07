@@ -400,8 +400,6 @@ define([
               }
             );
             mask.loadMultiUse();
-        } else {
-          this.global.activeField.tca = Object.assign({}, this.defaultTca[this.global.activeField.name]);
         }
       },
       loadMultiUse: function () {
@@ -959,6 +957,10 @@ define([
           icon: '',
           color: '#000000'
         };
+      },
+      resetActiveField: function () {
+        this.global.activeField.tca = Object.assign({}, this.defaultTca[this.global.activeField.name]);
+        Notification.success('', this.language.reset);
       },
       isEmptyObject: function (obj) {
         return Object.keys(obj).length === 0 && obj.constructor === Object;

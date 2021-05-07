@@ -846,6 +846,7 @@ class AjaxController
         $language['alert'] = LocalizationUtility::translate('tx_mask.alert', 'mask');
         $language['fieldsMissing'] = LocalizationUtility::translate('tx_mask.fieldsMissing', 'mask');
         $language['missingCreated'] = LocalizationUtility::translate('tx_mask.all.createdmissingfolders', 'mask');
+        $language['reset'] = LocalizationUtility::translate('tx_mask.reset_settings_success', 'mask');
 
         $language['deleteModal'] = [
             'title' => LocalizationUtility::translate('tx_mask.field.titleDelete', 'mask'),

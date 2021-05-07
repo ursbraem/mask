@@ -1097,6 +1097,12 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.multistep.placeholder2">
 				<source>my_element_key</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.reset_settings">
+				<source>Reset to default</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.reset_settings_success">
+				<source>Settings reset to default</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
