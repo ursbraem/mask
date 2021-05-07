@@ -652,7 +652,6 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-between;
-  box-shadow: 0 8px 5px -5px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 100;
   padding: 10px;
@@ -673,7 +672,7 @@
   margin-right: 10px; }
   @media screen and (min-width: 860px) {
     .mask-elements__header-icon-label {
-      font-size: 18px; } }
+      font-size: 16px; } }
 
 .mask-elements__table-wrap {
   overflow-y: scroll; }
