@@ -8,7 +8,7 @@
             :disabled="!global.activeField.newField"
             @change="validateKey(global.activeField); loadField();"
             id="form_choosefield"
-            class="form-control"
+            class="form-control form-select"
         >
             <optgroup class="c-divider" label="New">
                 <option :value="global.maskPrefix">

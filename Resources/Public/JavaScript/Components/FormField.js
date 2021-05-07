@@ -149,7 +149,7 @@ define([
                 </div>
               </div>
               <div v-if="type == 'select'" class="form-control-wrap">
-                <select v-model="global.activeField.tca[tcaKey]" class="form-control">
+                <select v-model="global.activeField.tca[tcaKey]" class="form-control form-select">
                     <option v-for="(item, key) in field.items" :value="key">{{ item }} <span v-if="key !== ''">[{{ key }}]</span></option>
                 </select>
               </div>
