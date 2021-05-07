@@ -57,8 +57,14 @@
                             <f:render partial="Form/Description"/>
                         </div>
                         <div class="form-group col-sm-6">
+                            <label class="t3js-formengine-label">
+                                {f:translate(key: 'tx_mask.reset_settings')}
+                            </label>
+                            <div class="t3js-formengine-field-item">
+                                <span class="formengine-field-item-description text-muted">{f:translate(key: 'tx_mask.reset_settings_description')}</span>
+                            </div>
                             <div class="reset-button">
-                                <a @click="resetActiveField" class="btn btn-default">{f:translate(key: 'tx_mask.reset_settings')}</a>
+                                <a @click="resetActiveField" class="btn btn-default">{f:translate(key: 'tx_mask.reset_button')}</a>
                             </div>
                         </div>
                     </div>

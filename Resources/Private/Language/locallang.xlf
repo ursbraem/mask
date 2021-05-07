@@ -1100,6 +1100,12 @@ title3, value3, icon3, description3
 			<trans-unit id="tx_mask.reset_settings">
 				<source>Reset to default</source>
 			</trans-unit>
+			<trans-unit id="tx_mask.reset_settings_description">
+				<source>Click this button to reset all settings of this field to the default values.</source>
+			</trans-unit>
+			<trans-unit id="tx_mask.reset_button">
+				<source>Reset</source>
+			</trans-unit>
 			<trans-unit id="tx_mask.reset_settings_success">
 				<source>Settings reset to default</source>
 			</trans-unit>
