@@ -13,11 +13,23 @@
 
   &__image {
     margin-right: 10px;
+
+    @media screen and (min-width: $bp-desktop) {
+      width: 85px;
+    }
   }
 
   &__text {
     font-size: 11px;
     line-height: 1.2;
     margin-bottom: 0;
+
+    @media screen and (min-width: $bp-edit-flex) {
+      font-size: 12px;
+    }
+
+    @media screen and (min-width: $bp-desktop) {
+      font-size: 11px;
+    }
   }
 }
