@@ -7,7 +7,7 @@ services:
   MASK\Mask\:
     resource: '../Classes/*'
 
-  MASK\Mask\Controller\WizardController:
+  MASK\Mask\Controller\MaskController:
     tags: [ 'backend.controller' ]
 
   MASK\Mask\Controller\AjaxController:

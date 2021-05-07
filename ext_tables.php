@@ -8,7 +8,7 @@ defined('TYPO3') or die();
     'after:extensionmanager',
     null,
     [
-        'routeTarget' => \MASK\Mask\Controller\WizardController::class . '::mainAction',
+        'routeTarget' => \MASK\Mask\Controller\MaskController::class . '::mainAction',
         'access' => 'admin',
         'name' => 'tools_mask',
         'icon' => 'EXT:mask/Resources/Public/Icons/module-mask_wizard.svg',
