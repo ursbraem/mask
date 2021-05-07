@@ -1,7 +1,7 @@
 <div id="mask">
     <div v-if="mode === 'edit' || mode === 'new'">
-        <f:render partial="VueEdit" arguments="{_all}"/>
+        <f:render partial="Edit" arguments="{_all}"/>
     </div>
-    <f:render partial="VueList" arguments="{_all}"/>
+    <f:render partial="List" arguments="{_all}"/>
     <splashscreen :loaded="loaded"></splashscreen>
 </div>

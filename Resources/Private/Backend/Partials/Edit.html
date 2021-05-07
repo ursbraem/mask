@@ -27,7 +27,7 @@
                 </div>
                 <div v-show="metaVisible">
                     <div v-if="type == 'tt_content'">
-                        <f:render partial="VueElement" arguments="{storage: storage}"/>
+                        <f:render partial="Element" arguments="{storage: storage}"/>
                     </div>
                     <div v-else>{{ element.title }}</div>
                 </div>
@@ -55,6 +55,6 @@
         </div>
     </div>
     <div class="form-group mask-field-form">
-        <f:render partial="VueForm"/>
+        <f:render partial="Form"/>
     </div>
 </div>

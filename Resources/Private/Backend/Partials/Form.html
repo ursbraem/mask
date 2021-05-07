@@ -33,28 +33,28 @@
 
                     <div class="row" v-if="chooseFieldVisible">
                         <div class="form-group col-sm-6">
-                            <f:render partial="General/VueKeySelect"/>
+                            <f:render partial="Form/KeySelect"/>
                         </div>
                     </div>
 
                     <div v-if="overrideLabelVisible" class="row">
                         <div class="form-group col-sm-6">
-                            <f:render partial="General/VueOverrideLabel"/>
+                            <f:render partial="Form/OverrideLabel"/>
                         </div>
                     </div>
 
                     <div class="row" v-if="keyFieldVisible || maskFieldGeneralTabOpen">
                         <div v-if="keyFieldVisible" :class="['form-group', 'col-sm-6', {'has-error': activeFieldHasKeyError}]">
-                            <f:render partial="General/VueKey"/>
+                            <f:render partial="Form/Key"/>
                         </div>
                         <div v-if="maskFieldGeneralTabOpen" :class="['form-group', 'col-sm-6', {'has-error': activeTabHasEmptyLabel}]">
-                            <f:render partial="General/VueLabel"/>
+                            <f:render partial="Form/Label"/>
                         </div>
                     </div>
 
                     <div v-if="maskFieldGeneralTabOpen" class="row">
                         <div class="form-group col-sm-6">
-                            <f:render partial="General/VueDescription"/>
+                            <f:render partial="Form/Description"/>
                         </div>
                     </div>
 
