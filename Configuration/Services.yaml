@@ -8,10 +8,10 @@ services:
     resource: '../Classes/*'
 
   MASK\Mask\Controller\WizardController:
-    public: true
+    tags: [ 'backend.controller' ]
 
   MASK\Mask\Controller\AjaxController:
-    public: true
+    tags: [ 'backend.controller' ]
 
   MASK\Mask\CodeGenerator\TyposcriptCodeGenerator:
     public: true

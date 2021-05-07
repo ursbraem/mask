@@ -20,7 +20,6 @@ namespace MASK\Mask\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -42,14 +41,10 @@ class WizardController
     protected $view;
 
     protected PageRenderer $pageRenderer;
-    protected ModuleTemplateFactory $moduleTemplateFactory;
 
-    public function __construct(
-        PageRenderer $pageRenderer,
-        ModuleTemplateFactory $moduleTemplateFactory
-    ) {
-        $this->pageRenderer = $pageRenderer;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
+    public function __construct(ModuleTemplate $moduleTemplate)
+    {
+        $this->moduleTemplate = $moduleTemplate;
     }
 
     /**
@@ -57,10 +52,9 @@ class WizardController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        $this->moduleTemplate = $this->moduleTemplateFactory->create($request);
-
+        $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $this->initializeView('Wizard/Main');
-        $this->pageRenderer->addRequireJsConfiguration(
+        $pageRenderer->addRequireJsConfiguration(
             [
                 'paths' => [
                     'sortablejs' => PathUtility::getAbsoluteWebPath(
@@ -69,8 +63,8 @@ class WizardController
                 ]
             ]
         );
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Mask/Mask');
-        $this->pageRenderer->addCssFile('EXT:mask/Resources/Public/Styles/mask.css');
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/Mask/Mask');
+        $pageRenderer->addCssFile('EXT:mask/Resources/Public/Styles/mask.css');
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
     }
