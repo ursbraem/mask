@@ -56,7 +56,7 @@
                         <div class="form-group col-sm-6">
                             <f:render partial="Form/Description"/>
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div v-if="!['palette', 'tab'].includes(global.activeField.name)" class="form-group col-sm-6">
                             <label class="t3js-formengine-label">
                                 {f:translate(key: 'tx_mask.reset_settings')}
                             </label>
